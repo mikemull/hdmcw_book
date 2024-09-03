@@ -1,0 +1,144 @@
+
+# Episode 4: Virtual Memory  {.unnumbered}
+
+A program uses memory in a few different ways.  As we've seen in our simple programs, the machine code and data
+we define in the program occupy memory.  In more sophisticated programs, you might define variables on the fly or call subroutines
+which causes memory to be allocated on the _stack_.  In other cases you might
+explicitly create a chunk of memory to be used for a data structure, which is allocated on the _heap_.
+
+The stack and heap aren't special types of memory-- ultimately they are in the same physical memory-- but they are structures
+tailored to the way they are being used.  The stack, as the name implies, is conceptually a last-in first-out (LIFO)
+queue usually used for smaller chunks of memory that are transient.  The heap by contrast is used for large chunks of memory,
+and it's designed for that purpose.  The important thing here though is that both of these sections of memory can grow
+(and shrink) as a program does its thing.
+
+If my computer only ran one program at a time we could just use all of the available memory and hope that we don't run out.
+That was sort of how my old PC worked.  However, since you've used a computer you probably know they run more than one thing
+at a time.  You might be reading this on a browser, listening to JPEGMAFIA, while you ignore the document you're supposed
+to be writing (i mean, i am).  While you're ignoring it, you probably don't want the contents of that document, brilliant as they are, to
+take up memory.  The same goes for the 40 browser tabs you have open (again, me).
+
+We'd like to accomplish two things: use the memory in the most efficient way that allows everything to work, and also make sure that
+the memory we're allocating doesn't interfere with the memory other programs are allocating.  This is what the virtual
+memory system, which is part operating system kernel and part hardware, does for us.
+
+Virtual memory has two implications that we've already hinted at.  One is that the memory addresses we see in __lldb__ or __objdump__ are
+_virtual_.  This is a little hard to grok but for now let's just say that every location in my computer has a physical address,
+and what we see ain't it.  The other is that sometimes the contents of memory are temporarily _swapped out_ to a storage device, in my case
+the SSD.
+
+Before looking at more details, let's go back to our silly beeping program, which i will call __beep__ (i have a knack for naming).  The __beep__
+code gets assembled and linked similarly to the __adder__ program, but it has the added virtue (in this situation) that it does not stop
+running.  If we start it up from a shell, it will have a _process id_ that we can get with the __ps__ command.
+
+```console
+foo@bar:~$ ps ul
+USER       PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND            UID  PPID CPU PRI NI WCHAN
+mikemull 36135  99.2  0.0 410592880   1072 s005  R+    3:24PM   0:03.67 ./beep             501   904   0  31  0 -       
+mikemull 14686   0.6  0.3 421959888  72352 s046  S+    8:53AM   2:00.81 /Applications/qu   501 14674   0  31  0 -     
+mikemull 14592   0.0  0.0 410240480   1056 s046  Ss    8:53AM   0:00.02 /bin/bash --init   501  1197   0  31  0 -         
+mikemull   904   0.0  0.0 410789376   3664 s005  S    18Jul24   0:01.22 -bash              501   898   0  31  0 -     
+```
+
+I'll have more to say about processes soon, but for now let's just say that __beep__ is running, and so it's in memory.
+
+Now that i know __beep__'s process id, i'm now going to run _another_ program called __vmmap__, [^1] which is gonna spew out __so much
+stuff__ (300+ lines on my system, so i'll drop quite a lot of it).
+
+```console
+foo@bar:~$ vmmap 36135
+
+Process:         beep [36135]
+Path:            /Users/USER/Documents/*/beep
+...
+Parent Process:  bash [904]
+
+...
+
+Physical footprint:         913K
+Physical footprint (peak):  929K
+Idle exit:                  untracked
+----
+
+Virtual Memory Map of process 36135 (beep)
+Output report format:  2.4  -- 64-bit process
+VM page size:  16384 bytes
+
+==== Non-writable regions for process 36135
+REGION TYPE                    START - END         [ VSIZE  RSDNT  DIRTY   SWAP] PRT/MAX SHRMOD PURGE    REGION DETAIL
+__TEXT                      102810000-102814000    [   16K    16K     0K     0K] r-x/r-x SM=COW          /Users/USER/Documents/*/beep
+__LINKEDIT                  102814000-102818000    [   16K    16K     0K     0K] r--/r-- SM=COW          /Users/USER/Documents/*/beep
+dyld private memory         102c5c000-102c60000    [   16K     0K     0K     0K] ---/--- SM=NUL  
+shared memory               102c68000-102c6c000    [   16K    16K    16K     0K] r--/r-- SM=SHM  
+MALLOC metadata             102c6c000-102c70000    [   16K    16K    16K     0K] r--/rwx SM=SHM          MallocHelperZone_0x102c6c000 zone structure
+MALLOC guard page           102c74000-102c78000    [   16K     0K     0K     0K] ---/rwx SM=SHM  
+... 
+MALLOC metadata             102ca4000-102ca8000    [   16K    16K    16K     0K] r--/rwx SM=PRV  
+MALLOC metadata             102ca8000-102cac000    [   16K    16K    16K     0K] r--/rwx SM=SHM          DefaultMallocZone_0x102ca8000 zone structure
+STACK GUARD                 1695f0000-16cdf4000    [ 56.0M     0K     0K     0K] ---/rwx SM=NUL          stack guard for thread 0
+__TEXT                      19b468000-19b4b8000    [  320K   320K     0K     0K] r-x/r-x SM=COW          /usr/lib/libobjc.A.dylib
+__TEXT                      19b4b8000-19b541000    [  548K   532K     0K     0K] r-x/r-x SM=COW          /usr/lib/dyld
+__TEXT                      19b541000-19b546000    [   20K    20K     0K     0K] r-x/r-x SM=COW          /usr/lib/system/libsystem_blocks.dylib
+
+...
+
+==== Writable regions for process 36135
+REGION TYPE                    START - END         [ VSIZE  RSDNT  DIRTY   SWAP] PRT/MAX SHRMOD PURGE    REGION DETAIL
+dyld private memory         102c1c000-102c5c000    [  256K    48K    48K     0K] rw-/rwx SM=PRV  
+Kernel Alloc Once           102c60000-102c68000    [   32K    16K    16K     0K] rw-/rwx SM=PRV  
+MALLOC metadata             102c70000-102c74000    [   16K    16K    16K     0K] rw-/rwx SM=SHM  
+... 
+MALLOC metadata             102cac000-102cb0000    [   16K    16K    16K     0K] rw-/rwx SM=SHM  
+MALLOC_TINY                 127600000-127700000    [ 1024K    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x102c6c000
+MALLOC_SMALL                127800000-128000000    [ 8192K    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x102c6c000
+Stack                       16cdf4000-16d5f0000    [ 8176K    32K    32K     0K] rw-/rwx SM=PRV          thread 0
+__DATA                      202394000-2023975a0    [   13K    13K    13K     0K] rw-/rw- SM=COW          /usr/lib/libobjc.A.dylib
+__DATA                      2023975a0-2023975b8    [    24     24     24     0K] rw-/rw- SM=COW          /usr/lib/system/libsystem_blocks.dylib
+
+...
+
+==== Legend
+SM=sharing mode:  
+	COW=copy_on_write PRV=private NUL=empty ALI=aliased 
+	SHM=shared ZER=zero_filled S/A=shared_alias
+PURGE=purgeable mode:  
+	V=volatile N=nonvolatile E=empty   otherwise is unpurgeable
+
+==== Summary for process 36135
+ReadOnly portion of Libraries: Total=538.3M resident=68.3M(13%) swapped_out_or_unallocated=470.0M(87%)
+Writable regions: Total=529.4M written=288K(0%) resident=416K(0%) swapped_out=0K(0%) unallocated=529.0M(100%)
+...
+
+```
+
+The command __vmmap__ is short for _virtual memory map_, which is what it prints out.
+There's a bunch of info here, even in my extremely elided version.  Let's take a look at the highlights.
+
+Our ~15 line assembly language program
+has a "physical footprint" of nearly a megabyte, which is weird.
+The part that our code uses is covered by the first line of the non-writable regions
+(__\_\_TEXT                      102810000-102814000__)
+Most of the rest here is either dynamic libraries (the .dylib things) or things related to stack and heap memory (memory on
+the heap is usually allocated with the C library function _malloc()_, hence all the MALLOC_ stuff).
+Note also near the top it says __VM page size:  16384 bytes__.  The idea of a _page_ is essential to virtual
+memory.  What this means is that the virtual memory space is divided up into 16 K chunks (the page size is always
+a power of 2).  When our program attempts to access something at a particular virtual memory address two things
+happen.  The virtual address is translated to a physical address, and then there's a check to see if the _page_ in which
+that instruction or data lives is already resident in physical memory.  That happens in the hardware because it
+needs to be as fast as possible.  However, if the page is not resident, the hardware just returns a _page fault_
+which indicates to the operating system that it needs to retrieve the data from the SSD.
+
+Another couple of things to notice here: in the "Writable" section there's a big gap between the MALLOC_SMALL section
+and the Stack section (like, a billion).  That's because usually the virtual memory space is set up so that the stack
+grows downward and the heap grows upward, address-wise.  Also notice there is the __SHRMOD__ (share mode) column, and for many things
+especially the "dylib" entries, the share mode is "SM=COW".  No bovine connection, COW means "copy on write".  This is
+a common optimization that basically means you share the memory until a process wants to modify something then you make a copy
+of it specifically for that process.  Since a process is unlikely to modify the code of a system library it's fairly safe to
+assume these will remain COWs.
+
+There's a ton more to virtual memory, but i think we've got enough to go on.  We haven't really discussed the mechanics of how
+this virtually memory map gets built, but this gives us an idea of how code and data gets into memory so that the program
+can start execution.  In the [next episode](hdmcw-processes.html) we'll go deeper into the idea of _processes_.
+
+
+[^1]: I discovered this through [Julia Evans's blog](https://jvns.ca/blog/2018/01/26/mac-memory-maps/)

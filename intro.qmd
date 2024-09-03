@@ -1,0 +1,24 @@
+# Introduction {.unnumbered}
+
+This is my book in which i attempt to figure out how my computer works.  My computer is a 
+Macbook Air with an M2 chip, 24 GB of RAM, and a 1 TB SSD.  I chose to use my actual computer for this project for a few reasons.
+One is that I have unfettered access to this computer.  Another is that it's an interesting and fairly modern (in 2024)
+piece of hardware.  Mostly though, i wanted to use a specific computer because i want to talk about real hardware
+and not abstractions.
+
+My motive really _is_ to figure out how my 🤬 computer works.  When i first got into computers way back in the 1970s
+i was as interested in the hardware as the software, and there wasn't really that big of a separation between the two.
+(I still have a paper manual with the assembly language of the BIOS of my first computer).
+In the last 40 years the hardware has become vastly more complicated and the software has of necessity become more
+abstract and conceptually distant from the hardware.
+
+I see this as a programming book, and if there's an audience for it they are mostly programmers.  I often don't
+explain things that are fairly technical, and i sometimes _do_ explain things that you already know.  The latter
+happens because i'm trying to convince myself of something.  Also the tone is mostly informal, sarcastic,
+dad-jokey, and nerd-positive.  I hope that the structure and sequence of the
+"episodes" make sense, but it's dictated by what i want to learn next and the questions that arise when i'm trying to
+figure things out.
+
+Since this is a project of self-directed learning undertaken by someone who's not a hardware expert, or even an operating 
+system expert, there will probably be mistakes and oversimplifications.  If you have constructive comments, or non-constructive 
+criticisms that i might find amusing, please feel free to <a href="https://giraffasaur.us/coords">contact me</a>.

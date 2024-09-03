@@ -1,0 +1,80 @@
+
+# Episode 1: Prank {.unnumbered}
+
+When I was 20 years old my roommate Gary and I would go to computer stores to check out the latest wares.  These were not like Apple Stores.  Back then retail computer stores were serious places, intended for business people looking for systems to run spreadsheets and word processors (also, exclusively IBM PCs and clones)[^1] . Gary and I wore shorts and Ocean Pacific t-shirts.  We had mullets.  Picture Beavis and Butthead walking into a bank.[^2]
+
+The computers were usually powered on and we could type commands into them (this was before mice and windowing systems).  The sales people would either ignore us, or watch us warily to make sure we weren’t there to steal floppy disks.  Sometimes they’d engage us in conversation, but they didn’t want to be busy with us when somebody came in who might actually result in a commission.  What they didn’t know is that we already owned one of these computers, and we knew our way around it fairly well.  It's hard to believe in modern times, but owning a personal computer then was a rarity, sort of like owning a short-wave radio or a Geiger counter.
+
+The operating system of the time was MS-DOS 2.x.  The computer might be running a spreadsheet program or the like, but we could exit and get to the C:\> prompt.  DOS 2 shipped with a little-known program called debug.com.  As the name implies, the program was intended for debugging.  You could do things like disassemble parts of a running program, or do hex dumps.  But also you could write new programs in the 8086 assembly language.
+
+It would be a couple of years still before we had access to cheap compilers, so I was fairly adept at assembly.  I could type in simple programs and run them, certain they’d work, so we’d occasionally leave little Easter eggs for the store’s staff.  These were all harmless, but at least once I wrote a short script that would wait for some period of time, then start sending the BEL character (ASCII 7, Ctrl-G)  to the screen on an infinite loop, causing a constant stream of beeps.  We’d start it, then exit the store knowing that a panicked sales person was going to be rebooting the machine soon.
+
+Sure, it was kind of a dick move, but the point of this story is that I felt at the time like I knew how computers worked.  After 40 years as a professional software engineer, I’m not so sure anymore.  I understand them well enough to have shipped working software, but developments in processor technology and operating systems have made the actual machine more and more of a black box.  In addition, the style of engineering that is common now separates programmers from hardware (language runtimes in Docker containers running on virtual machines controlled by hypervisors in some unseen box in the cloud).  This blog is my attempt to understand computers again.
+
+First, let’s try to recreate that prank program above.  I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip.  The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: [https://github.com/below/HelloSilicon](https://github.com/below/HelloSilicon)
+
+
+```
+//
+//
+//  Send BEL to stdout ad infinitum or Ctrl-C
+//
+.global _start             // Provide program starting address to linker
+.align 4
+
+_start: 
+
+  MOV X4, #(20 * 4294967296)
+loop:
+  SUBS X4, X4, #1
+  B.NE loop
+
+beep4eva:
+  MOV X0, #1      // 1 = StdOut
+  ADR X1, bel     // string to print
+  MOV X2, #1      // length of our string
+  MOV X16, #4     // MacOS write system call
+  SVC 0
+
+  B beep4eva
+
+bel:      .byte  0x07
+
+```
+
+So let's break this down a bit.  First, i put a large number (20 * 4294967296) into register _X4_, which begs two questions: (1) why? and (2) what is a register?
+The answer to the first question is that i want the program to loop a large number of times to simulate waiting.  Empirically, i found that 2^32 = 4294967296 iterations
+take about a second, so this number would take ~20 seconds (really, about 25 but who's counting?).  Chances are there's some system service to delay or wait,
+but i'm trying to duplicate what we did back in the olden days.
+
+If you don't know what a register is, think of it as a place in the CPU to temporarily store a small number of bits (64 here).  I'll go more into the ARM registers
+at a later point because they seem interesting and at the moment i don't know enough about them, but for now [here's a good description](https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40)
+
+So at this point we have a big number in the _X4_ register.  The next line in the program is not an instruction, but rather a _label_.  This is a way to
+tell the assembler that we're eventually going to want to jump back to the following instruction.  That next instruction is **SUBS**.  This instruction subtracts
+the last operand (1) from the second operand (_X4_) and puts the result in the first operand (also _X4_).  Note that the basic subtract operation is **SUB** but
+the _S_ suffix here indicates that "the condition flags are updated on the result of the operation".  That's important here because the next instruction (**B.NE**)
+is going to use the condition flag to decide whether or not to branch to the _loop_ label (ie, back to the **SUBS**).  That is the whole delay loop.
+
+The next section (starting with the _beep4eva_ label) is the fun part, an infinite loop that writes the BEL character to stdout forever.  This code is a
+tiny bit arcane however.  Three of the instructions are just moving constant values into particular registers.  These are essentially parameters for a
+call into the operating system services.  The **ADR** instruction is effectively loading the memory address of our output data (the byte with the _bel_ label at
+the bottom).  The **SVC** instruction is a bit harder to explain.  This stands for "supervisor call".  The ARM docs describe it this way
+
+> The SVC instruction causes an exception. This means that the processor mode changes to Supervisor, the CPSR is saved to the Supervisor mode SPSR, and execution branches to the SVC vector.
+
+Riiiiiight.  Anyway, what happens here is that the processor goes into a special privileged mode and branches to code in the operating system kernel.  This is not
+radically different than what happened on DOS 2.x except that there wasn't really a privileged mode.  Back then, you'd invoke an "interrupt", which would start executing some OS (or BIOS) code to do some system function, then return to where it was.  Current CPUs still have interrupts. They are a mechanism by which, as the name implies, important system functions can interrupt the execution of a program to perform some system task then return control to the program. I'll talk more about this later.
+
+That's about it.  Of course, on my M2 Mac this doesn't make the shrill beeping noise that old PCs did.  In fact it might not even make a sound depending on 
+your settings.  On my machine it currently makes a sort of pleasant metronome sound.
+
+My PC back in the 80s and my Macbook now, like most computers since the 1950s, would hold this program in memory and then fetch the instructions.  That will be
+the topic of [Episode 2](hdmcw-memory.html).
+
+One difficulty with trying to figure out how your computer works is where to stop.  I've decided i won't get too much into circuitry or electronics, because
+(1) i don't know much about them and (2) once you start down that rabbit hole you can't stop until you start talking about quantum mechanics.  If you want
+to check out some books on computer architecture, i'd recommend [Essentials of Computer Architecture](https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196) by Douglas Comer, and [Code](https://codehiddenlanguage.com/) by Charles Petzold.  I don't have any recommendations for learning quantum mechanics.
+
+[^1]: Except for Radio Shack, where you could by the TRS-80 and a bag of resistors.
+[^2]: Sorry, i don't have a more recent cultural reference.  Is there a Gen Z version of Beavis and Butthead?

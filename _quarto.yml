@@ -1,0 +1,30 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "How Does My &#x1F92C; Computer Work"
+  author: "Mike Mull"
+  date: "9/2/2024"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - hdmcw-prank.qmd
+    - hdmcw-memory.qmd
+    - hdmcw-programs.qmd
+    - hdmcw-virtual.qmd
+    - hdmcw-processes.qmd
+    - hdmcw-threads.qmd
+    - hdmcw-scheduler.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

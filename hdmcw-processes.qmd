@@ -1,0 +1,159 @@
+
+# Episode 5: Processes {.unnumbered}
+
+The operating system on my computer is the standard Mac OS (Sonoma, 14.5), which Apple now calls Darwin OS.  The kernel, called XNU for "X is Not Unix",
+apparently combines bits of FreeBSD and something called OSFMK, which in turn has remnants of Mach.  Or something like that.  It's roughly Unix.
+Like other Unices, Mac OS uses an interesting way to start programs, based on the kernel system calls _fork_ and _exec_
+(actually _exec_ is a family of several functions that take slightly different arguments). [^1]
+
+Programs are an abstraction for the instructions that we create for the computer, but a _process_ is the the thing that the operating
+system actually creates to run the program.  To give you a taste for what's going on, lets revisit the output from the __ps__ command
+for the __beep__ program from the last episode.
+
+```console
+foo@bar:~$ ps ul
+USER       PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND            UID  PPID CPU PRI NI WCHAN
+mikemull 36135  99.2  0.0 410592880   1072 s005  R+    3:24PM   0:03.67 ./beep             501   904   0  31  0 -       
+mikemull 14686   0.6  0.3 421959888  72352 s046  S+    8:53AM   2:00.81 /Applications/qu   501 14674   0  31  0 -     
+mikemull 14592   0.0  0.0 410240480   1056 s046  Ss    8:53AM   0:00.02 /bin/bash --init   501  1197   0  31  0 -         
+mikemull   904   0.0  0.0 410789376   3664 s005  S    18Jul24   0:01.22 -bash              501   898   0  31  0 -     
+```
+
+The column PID is the _process ID_ and PPID is the _parent_ process ID.  You can see that __beep__ has the bash shell as a parent
+process (PID=904).  This is the effect of fork/exec.  The parent process runs _fork()_ to
+basically make a copy of itself, then _exec()_ loads in our Mach-O file and writes it over the new process.  Put another way,
+the _fork_ sets up
+a new virtual memory space, and then _exec_ puts the numbers (code and data) into that memory space.
+
+To the operating system, a program is a process (or a collection of processes).  Another implication of the fork/exec
+pair is that my computer (most computers) can run more than one process, although we're going to have to clarify what that means in
+detail at a later point.  For, now i'll just say that once a process has been started it might either be running or sitting in a queue
+_waiting_ to run.  That means a couple of things: one is that the operating system has to keep track of the state of processes
+and also that there are situations where parts of the program (code or data) might be removed from physical memory in order to
+make room for other processes.
+
+Notice in the above output that in the column STAT, the __beep__ program has an R, while the others have an S.  The R to no one's surprise
+stands for "Running", while S stands for "Sleeping".  A process that's sleeping is not currently being executed, either because the
+processor is busy with another program or because the process is waiting for input/output to complete.  As was suggested in the last episode, each of these
+processes has its own virtual memory space.  That means that one process can't write something to memory that would effect another
+process.  (Sort of.  It it possible for processes to share memory as a method of inter-process communication.)
+
+Now i'm going to switch gears for a while from writing silly assembly language programs to writing silly _C_ programs.  Here
+is a very simply program that does _only_ the _fork()_ call.
+
+```C
+#include <stdio.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+static char *sub_process_name = "./work";
+
+int main(int argc, char *argv[])
+{
+    pid_t process;
+
+    sleep(30);
+    
+    process = fork();  // Make the child process
+
+    if (process < 0)
+    {
+        perror("fork");
+        return 2;
+    }
+
+    sleep(30);
+
+    return 0;
+}
+```
+I added the sleep calls so that I can run a command to save the __vmmap__ output from the parent process before and after the _fork()_
+call, and also get the __vmmap__ output from the child process.  The only changes in the virtual memory map after the __fork()__
+are in the writable section.  For example, before the fork the MALLOC_TINY section looks like this:
+
+```
+MALLOC_TINY                 141e00000-141f00000    [ 1024K    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x102bcc000
+```
+
+After the __fork()__ it looks like this:
+
+```
+MALLOC_TINY                 141e00000-141f00000    [ 1024K    32K    32K     0K] rw-/rwx SM=SHM          MallocHelperZone_0x102bcc000
+```
+
+The only difference is in the share mode, which changes from private to shared memory.  In the _child_ process, this section looks like:
+
+```
+MALLOC_TINY                 141e00000-141f00000    [ 1024K    32K    32K     0K] rw-/rwx SM=COW          MallocHelperZone_0x102bcc000
+```
+
+Again it looks the same except the share mode is copy-on-write now.  You can probably see what's happening here.  When the
+child process is created, the initially private heap memory is shared with the child process.  That means the child can
+read that memory, but it doesn't need to be duplicated unless the child attempts to write to that section.  This is important
+because, since the OS is making a copy of the parent process we wouldn't want it to duplicate data that in most cases will
+not be used.
+
+Now, let's get really crazy and not only __exec()__ a new program, but we're gonna do it twice!
+
+```C
+int main(int argc, char *argv[])
+{
+    pid_t process;
+
+    for (int i=0; i < 2; i++) {
+        process = fork();  // Make the child process
+
+        if (process < 0)
+        {
+            perror("fork");
+            return 2;
+        }
+
+        if (process == 0)
+        {
+            argv[0] = "./beep_4vr/beep";
+            execv(argv[0], argv);
+            perror("execv"); // Ne need to check execv() return value. If it returns, you know it failed.
+            return 2;
+        }
+    }
+
+    return 0;
+}
+
+```
+
+If we run this and then look at the processes, we'll see something like this:
+
+```console 
+foo@bar:~$ ps ul
+
+USER       PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND            UID  PPID CPU PRI NI WCHAN
+mikemull 32751 100.0  0.0 410592880   1072 s043  R     1:58PM   0:01.91 ./beep_4vr/beep    501     1   0  31  0 -     
+mikemull 32752  99.7  0.0 410592880   1072 s043  R     1:58PM   0:01.92 ./beep_4vr/beep    501     1   0  31  0 -     
+...
+```
+
+You'll notice a couple of things here maybe.  One is that the parent process ID is set to 1 for both processes.  This happens
+because the process from which we started our beeping children has already exited so the new parent becomes the __init__
+process [^2].  The other thing, which is more interesting i think, is that _both_ of the processes are in the running (R) state.
+Wot!  Our CPU is running two programs simultaneously!  It's magic!  Well, yes and no [^3].  You probably already know what's 
+happening, but we'll talk about it soon.
+
+The kernel has to maintain a lot of information about each process, information about the owner of the process, time
+accumulated both in wall-clock and CPU terms, file descriptors, mutexes, etc.  It keeps track of child processes,
+the virtual memory map, and priority values.  Keeping track of processes is arguably the key function of the operating system and it's
+pretty complex.  But it's about to get even trickier.  For one, i've mostly skipped over the part where the operating
+system gives various processes their turn on the CPU, a function called _scheduling_.  For two, the idea of CPU has changed
+quite a lot since i first started working with computers.  In the [next Episode](hdmcw-cores.html),
+we'll talk about one of the main changes: _cores_.
+
+
+[^1]: Mac OS/XNU actually has a function called _posix_spawn()_ that i think might be able to start processes
+without fork.  However, i don't think it effects what too much of what i want to say about processes.
+[^2]: The __init__ process is the first process forked after bootup.  When the parent process exits like this, the
+children are said to be _orphaned_ so i guess the init process is adopting them.  Note also that since the __beep__
+program does not exit, these processes must be killed to be stopped.  If you're uncomfortable with killing orphans,
+don't blame me-- i did not make up these terms.
+[^3]: Yes, in the sense that it's fairly miraculous that we're running programs on what are basically rocks.
