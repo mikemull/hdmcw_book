@@ -72,9 +72,6 @@ your settings.  On my machine it currently makes a sort of pleasant metronome so
 My PC back in the 80s and my Macbook now, like most computers since the 1950s, would hold this program in memory and then fetch the instructions.  That will be
 the topic of [Episode 2](hdmcw-memory.html).
 
-One difficulty with trying to figure out how your computer works is where to stop.  I've decided i won't get too much into circuitry or electronics, because
-(1) i don't know much about them and (2) once you start down that rabbit hole you can't stop until you start talking about quantum mechanics.  If you want
-to check out some books on computer architecture, i'd recommend [Essentials of Computer Architecture](https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196) by Douglas Comer, and [Code](https://codehiddenlanguage.com/) by Charles Petzold.  I don't have any recommendations for learning quantum mechanics.
 
 [^1]: Except for Radio Shack, where you could by the TRS-80 and a bag of resistors.
 [^2]: Sorry, i don't have a more recent cultural reference.  Is there a Gen Z version of Beavis and Butthead?
