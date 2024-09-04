@@ -80,14 +80,19 @@ priority.  There seems to be a separate _root bucket_ for each quality of servic
 the priority value i mentioned above, but has to do with the degree of interactivity.  For example, if you're running
 an interactive application, you want to make sure that once a thread becomes runnable it gets on the CPU quickly,
 but also it might not need to run for as long as, say, a background job.  The slice if time that a thread gets, what
-Apple calls a _quantum_ is also dependent on the clutch/QoS.  It looks like the scheduler starts with what's called
-a worst case execution latency (WCEL)
+Apple calls a _quantum_ is also dependent on the clutch/QoS.
+
+It looks like the scheduler starts with what's called a worst case execution latency (WCEL) for each root bucket,
+which is based on the QoS type.  For example, the interactive bucket has a worst-case latency of 37.5 ms while
+the background bucket has a worst-case of 200 ms.  The bucket from which to get the next thread is determined
+by the "earliest deadline first", so as the nanoseconds pass the interactive bucket will be near it's deadline
+more often, but eventually the background bucket deadline will be earliest.
 
 The document linked above describes the thread group like this:
 
 > Thread groups represent a collection of threads working on behalf of a specific workload.
 
-I think this mean all of the threads launched from a particular process.  This level is said to use a variant
+I think this means all of the threads launched from a particular process.  This level is said to use a variant
 of the BSD ULE scheduler[^1], though i don't know why.  There's apparently an "interactivity score" that's part
 of this scheduler that will again try to achieve low latency for interactive applications.
 
