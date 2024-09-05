@@ -54,7 +54,7 @@ Timestamp	    Narrative
 ```
 
 This tells us a few things.  One is that our thread seems to be getting slices of 1/2 to 1 ms of CPU time.  Also, note
-that the the scheduler says it's _preempting_ our thread.  You'll maybe hear the term _premptive scheduling_, which
+that the the scheduler says it's _preempting_ our thread.  You'll maybe hear the term _preemptive scheduling_, which
 means that the scheduler is taking some action to stop the running thread and switch to running something else.
 In this case it's servicing an interrupt, which as i mentioned some time ago is a bit of code that has to run
 to, say, update a timer or read something from a device. Finally, notice that the narrative says that our thread is running _at priority 31_.  This is a CPU priority
