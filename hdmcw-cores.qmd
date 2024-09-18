@@ -1,13 +1,5 @@
----
-title: "Episode 6: Cores"
-format:
-  html:
-    code-fold: true
-    theme: cyborg
-    max-width: "1800"
-    embed-resources: true
-jupyter: python3
----
+
+# Episode 6: Cores {.unnumbered}
 
 This episode and the next two will cover topics so interrelated i'm not sure which order to put them in.  We've already touched on the idea that
 my computer, like most modern computers, runs multiple programs at the same time.  In fact, if you're not an old like me then pointing out this

@@ -1,4 +1,3 @@
-# Preface {.unnumbered}
 
 This is my book in which i attempt to figure out how my computer works.  My computer is a 
 Macbook Air with an M2 chip, 24 GB of RAM, and a 1 TB SSD.  I chose to use my actual computer for this project for a few reasons.
