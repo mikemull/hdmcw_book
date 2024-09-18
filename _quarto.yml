@@ -14,8 +14,10 @@ book:
     - hdmcw-programs.qmd
     - hdmcw-virtual.qmd
     - hdmcw-processes.qmd
+    - hdmcw-cores.qmd
     - hdmcw-threads.qmd
     - hdmcw-scheduler.qmd
+    - hdmcw-io.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -25,6 +27,5 @@ format:
     theme: cosmo
   pdf:
     documentclass: scrreprt
-
 
 
