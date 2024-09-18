@@ -1,7 +1,7 @@
 # Preface {.unnumbered}
 
 This is a book in which i attempt to figure out how my computer works.  My computer is a 
-Macbook Air with an M2 chip, 24 GB of RAM, and a 1 TB SSD.  I chose to use my actual computer for this project for a few reasons.
+Macbook Air with an M2 chip, 24 GB of RAM, and a 1 TB SSD.  I chose to use my actual computer for a few reasons.
 One is that I have unfettered access.  Another is that it's an interesting and fairly modern (in 2024)
 piece of hardware.  Also, I wanted to use a specific computer because i want to talk about real hardware
 and not abstractions.

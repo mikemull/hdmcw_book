@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Before i discuss input/output proper, i’m going to show you how to do something that <strong>YOU SHOULD DEFINITELY NEVER EVER DO</strong>. So, Apple has this thing that’s part of Mac OS (since El Capitan) called System Integrity Protection, or SIP. It’s very useful for protecting your Mac from malicious hackers because it limits what can be done even by the most priliveged user. However, it also makes trying to figure out how your computer works kind of a bummer, because it limits what can be done even by the most privileged user. In particular, it makes it nearly impossible to trace system calls.</p>
+<p>Before i discuss input/output proper, i’m going to show you how to do something that <strong>YOU SHOULD DEFINITELY NEVER EVER DO</strong>. So, Apple has this thing that’s part of Mac OS (since El Capitan) called <em>System Integrity Protection</em>, or SIP. It’s very useful for protecting your Mac from malicious hackers because it limits what can be done by even by the most priliveged user. However, it also makes trying to figure out how your computer works kind of a bummer, because it limits what can be done even by the most privileged user. In particular, it makes it nearly impossible to trace system calls.</p>
 <p>Keeping in mind that <strong>YOU SHOULD DEFINITELY NEVER EVER DISABLE SIP</strong>, here’s how you do it. First, you need to boot into <em>Recovery Mode</em>. If you forgot how to boot into Recovery Mode and you Google it, you’ll probably find something about how you need to restart the computer and then press ⌘-R. After you try this 3 or 4 times you’ll figure out that it doesn’t work on an M2 Mac. On the Apple silicon Macbooks, the trick is to hold down the power button/Touch ID until it says something about “Loading Options”. In Recovery mode one of the menus will have an option to start a Terminal. At the terminal command line, type:</p>
 <pre class="console"><code>csrutil disable</code></pre>
 <p>You’ll get a message that says something like “Are you sure you want hackers to destroy your computer, steal your identity, and use your credit cards to buy weapons on the dark web?”, to which you answer “Y”. Reboot. But not really, because you’re not really doing this.</p>
@@ -270,7 +270,7 @@ csops(0x8D0, 0x0, 0x16B5663AC)       = 0 0
 mprotect(0x104CA8000, 0x40000, 0x3)      = 0 0
 read me
 read(0x0, "read me\n\0", 0xA)        = 8 0</code></pre>
-<p>where i’ve dropped a bunch of initial system calls. You can see that it eventually calls the _read()__ system call in the XNU kernel. We can sort of see this in the <strong>lldb</strong> debugger too. If we stop at the line making the <strong>read()</strong> call to the standard C library, then step instruction by instruction, we eventually end up here:</p>
+<p>where i’ve dropped a bunch of initial system calls. You can see that it eventually calls the <strong>read()</strong> system call in the XNU kernel. We can sort of see this in the <strong>lldb</strong> debugger too. If we stop at the line making the <strong>read()</strong> call to the standard C library, then step instruction by instruction, we eventually end up here:</p>
 <pre class="console"><code>    frame #0: 0x00000001935f19ac libsystem_kernel.dylib`read
 libsystem_kernel.dylib`read:
 -&gt;  0x1935f19ac &lt;+0&gt;:  mov    x16, #0x3
