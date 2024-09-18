@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -109,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -178,6 +198,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">References</span></a>
   </div>
 </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
     </ul>
     </div>
 </nav>
@@ -214,9 +235,26 @@ ul.task-list li input[type="checkbox"] {
 <p>Of course, there were professional computer programmers by that time (one college friend wrote Ada code for a defense contractor, and also was hired to write a Forth interpreter). There were mainframes running Cobol, and Digital mini-computers, and Unix machines in research environments. But in the PC world there was much less distinction between hardware and software. There were just computers. While some people were much more adept at hardware and others at software, being a “programmer” in that world implied a fairly deep knowledge of the whole system.</p>
 <p>The decades since have seen more and more abstraction, which was accelerated by the emergence of cloud platforms. Now toward the end of my career, I work with sophisticated senior engineers who have never run a compiler, let alone written the bit-twiddling assembly language that was common back in the 80s. Quite often the machine on which a developer is writing code bears little resemblance to the underlying hardware of the server to which the application is being deployed. The extent to which many programmers think about hardware might only be at the level of estimating the requirements and limits of CPU or memory.</p>
 <p>Which is cool. I mean, if it doesn’t affect the performance or function of your application why clutter your brain with the details of CPUs, memory, and device drivers? Unless you want to, which i do. I’m still fascinated by the actual, physical computing device. But in the 40 years since i bought my first PC, the devices have changed radically even if the fundamental computing architecture is similar. I will probably never achieve the level of comfort i had with those early machines, but this book is my attempt to reeducate myself about as much of the hardware and operating system as i can. I’m sharing it in the hope that there are one or two other weirdos out there who might also get a kick out of it.</p>
-<p>One difficulty with trying to figure out how your computer works is where to stop. At one time i thought i might try to dive down all the way to the circuitry, maybe even the <em>physics</em> of the CPU. Ultimately i decided to stay at a slightly higher level because (1) i don’t know much about those things and (2) once you start down that rabbit hole you can’t stop until you start talking about quantum mechanics. If you want to check out some books on computer architecture, i’d recommend <a href="https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196">Essentials of Computer Architecture</a> by Douglas Comer, and <a href="https://codehiddenlanguage.com/">Code</a> by Charles Petzold. I don’t have any recommendations for learning quantum mechanics.</p>
+<p>One difficulty with trying to figure out how your computer works is where to stop. At one time i thought i might try to dive down all the way to the circuitry, maybe even the <em>physics</em> of the CPU. Ultimately i decided to stay at a slightly higher level because (1) i don’t know much about those things and (2) once you start down that rabbit hole you can’t stop until you start talking about quantum mechanics. If you want to check out some books on computer architecture, i’d recommend <a href="https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196">Essentials of Computer Architecture</a> by Douglas Comer <span class="citation" data-cites="comer2017essentials">(<a href="references.html#ref-comer2017essentials" role="doc-biblioref">Comer 2017</a>)</span>, and <a href="https://codehiddenlanguage.com/">Code</a> by Charles Petzold <span class="citation" data-cites="petzold2000code">(<a href="references.html#ref-petzold2000code" role="doc-biblioref">Petzold 2000</a>)</span>. I don’t have any recommendations for learning quantum mechanics.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-arpaci2018operating" class="csl-entry" role="listitem">
+Arpaci-Dusseau, Remzi H, and Andrea C Arpaci-Dusseau. 2018. <span>“Operating Systems: Three Easy Pieces.”</span>
+</div>
+<div id="ref-comer2017essentials" class="csl-entry" role="listitem">
+Comer, Douglas. 2017. <em>Essentials of Computer Architecture</em>. Chapman; Hall/CRC.
+</div>
+<div id="ref-eclecticlight" class="csl-entry" role="listitem">
+Oakley, Howard. 2024. <span>“The Eclectic Light Company.”</span> 2024. <a href="https://eclecticlight.co/">https://eclecticlight.co/</a>.
+</div>
+<div id="ref-petzold2000code" class="csl-entry" role="listitem">
+Petzold, Charles. 2000. <em>Code: The Hidden Language of Computer Hardware and Software</em>. Microsoft Press.
+</div>
+<div id="ref-smith2020programming" class="csl-entry" role="listitem">
+Smith, Stephen. 2020. <em>Programming with 64-Bit ARM Assembly Language: Single Board Computer Development for Raspberry Pi and Mobile Devices</em>. Apress.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -641,8 +679,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="index.html">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span>
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -1,3 +1,4 @@
+
 # Introduction {.unnumbered}
 
 About 45 years ago i discovered computers.  There were a few personal computers on the market already.
@@ -50,4 +51,4 @@ One difficulty with trying to figure out how your computer works is where to sto
 i might try to dive down all the way to the circuitry, maybe even the _physics_ of the CPU. Ultimately i
 decided to stay at a slightly higher level because
 (1) i don't know much about those things and (2) once you start down that rabbit hole you can't stop until you start talking about quantum mechanics.  If you want
-to check out some books on computer architecture, i'd recommend [Essentials of Computer Architecture](https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196) by Douglas Comer, and [Code](https://codehiddenlanguage.com/) by Charles Petzold.  I don't have any recommendations for learning quantum mechanics.
+to check out some books on computer architecture, i'd recommend [Essentials of Computer Architecture](https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196) by Douglas Comer [@comer2017essentials], and [Code](https://codehiddenlanguage.com/) by Charles Petzold [@petzold2000code].  I don't have any recommendations for learning quantum mechanics.

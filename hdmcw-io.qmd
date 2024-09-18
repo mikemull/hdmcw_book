@@ -3,8 +3,8 @@
 
 Before i discuss input/output proper, i'm going to show you how to do something that
 __YOU SHOULD DEFINITELY NEVER EVER DO__.  So, Apple has this thing that's part of
-Mac OS (since El Capitan) called System Integrity Protection, or SIP.  It's very useful for protecting
-your Mac from malicious hackers because it limits what can be done even by the most
+Mac OS (since El Capitan) called _System Integrity Protection_, or SIP.  It's very useful for protecting
+your Mac from malicious hackers because it limits what can be done by even by the most
 priliveged user.  However, it also makes trying to figure out how your computer works
 kind of a bummer, because it limits what can be done even by the most privileged user.
 In particular, it makes it nearly impossible to trace system calls.
@@ -57,7 +57,7 @@ read me
 read(0x0, "read me\n\0", 0xA)		 = 8 0
 ```
 
-where i've dropped a bunch of initial system calls.  You can see that it eventually calls the _read()__ system call in the XNU kernel.
+where i've dropped a bunch of initial system calls.  You can see that it eventually calls the __read()__ system call in the XNU kernel.
 We can sort of see this in the __lldb__ debugger too.  If we stop at the line making the __read()__ call to the standard C library,
 then step instruction by instruction, we eventually end up here:
 

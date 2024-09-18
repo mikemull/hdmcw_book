@@ -6,6 +6,7 @@ book:
   title: "How Does My &#x1F92C; Computer Work"
   author: "Mike Mull"
   date: "9/2/2024"
+  cover-image: cover.png
   chapters:
     - index.qmd
     - intro.qmd
@@ -19,6 +20,7 @@ book:
     - hdmcw-scheduler.qmd
     - hdmcw-io.qmd
     - references.qmd
+    - --
 
 bibliography: references.bib
 
