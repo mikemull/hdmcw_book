@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – How Does My 🤬 Computer Work</title>
+<title>Episode 9: Input/Output (I/O) – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +64,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-io.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./hdmcw-scheduler.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -99,7 +115,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-io.html">Episode 9: Input/Output (I/O)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -186,13 +202,13 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
+  <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -209,7 +225,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title">Episode 9: Input/Output (I/O)</h1>
 </div>
 
 
@@ -226,9 +242,120 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" role="list">
+<p>Before i discuss input/output proper, i’m going to show you how to do something that <strong>YOU SHOULD DEFINITELY NEVER EVER DO</strong>. So, Apple has this thing that’s part of Mac OS (since El Capitan) called System Integrity Protection, or SIP. It’s very useful for protecting your Mac from malicious hackers because it limits what can be done even by the most priliveged user. However, it also makes trying to figure out how your computer works kind of a bummer, because it limits what can be done even by the most privileged user. In particular, it makes it nearly impossible to trace system calls.</p>
+<p>Keeping in mind that <strong>YOU SHOULD DEFINITELY NEVER EVER DISABLE SIP</strong>, here’s how you do it. First, you need to boot into <em>Recovery Mode</em>. If you forgot how to boot into Recovery Mode and you Google it, you’ll probably find something about how you need to restart the computer and then press ⌘-R. After you try this 3 or 4 times you’ll figure out that it doesn’t work on an M2 Mac. On the Apple silicon Macbooks, the trick is to hold down the power button/Touch ID until it says something about “Loading Options”. In Recovery mode one of the menus will have an option to start a Terminal. At the terminal command line, type:</p>
+<pre class="console"><code>csrutil disable</code></pre>
+<p>You’ll get a message that says something like “Are you sure you want hackers to destroy your computer, steal your identity, and use your credit cards to buy weapons on the dark web?”, to which you answer “Y”. Reboot. But not really, because you’re not really doing this.</p>
+<p>My reason for doing this is to trace system calls using <strong>dtruss</strong>, which is sort of like <strong>strace</strong> on Linux. Suppose for example you had this very simple C program that reads from standard input:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span> argv<span class="op">[])</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buffer<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    read<span class="op">(</span>STDIN_FILENO<span class="op">,</span> buffer<span class="op">,</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you compile this and run it with <strong>dtruss</strong> you’ll see something like this:</p>
+<pre class="consoled"><code>clang --debug readstdin.c
+sudo dtruss ./a.out
 
+...
+proc_info(0x2, 0x8D0, 0xD)       = 64 0
+csops_audittoken(0x8D0, 0x10, 0x16B565F20)       = 0 0
+sysctl([unknown, 3, 0, 0, 0, 0] (2), 0x16B566278, 0x16B566270, 0x196A5ED3D, 0x15)        = 0 0
+sysctl([CTL_KERN, 138, 0, 0, 0, 0] (2), 0x16B566308, 0x16B566300, 0x0, 0x0)      = 0 0
+csops(0x8D0, 0x0, 0x16B5663AC)       = 0 0
+mprotect(0x104CA8000, 0x40000, 0x3)      = 0 0
+read me
+read(0x0, "read me\n\0", 0xA)        = 8 0</code></pre>
+<p>where i’ve dropped a bunch of initial system calls. You can see that it eventually calls the _read()__ system call in the XNU kernel. We can sort of see this in the <strong>lldb</strong> debugger too. If we stop at the line making the <strong>read()</strong> call to the standard C library, then step instruction by instruction, we eventually end up here:</p>
+<pre class="console"><code>    frame #0: 0x00000001935f19ac libsystem_kernel.dylib`read
+libsystem_kernel.dylib`read:
+-&gt;  0x1935f19ac &lt;+0&gt;:  mov    x16, #0x3
+    0x1935f19b0 &lt;+4&gt;:  svc    #0x80</code></pre>
+<p>Basically this code loads the system call number for <strong>read()</strong> (0x3) into the X16 register, then invokes the <strong>SVC</strong> instruction. As mentioned earlier, this instruction jumps to code in the kernel (to a function called <strong>handle_svc()</strong>). Note that the X1 and X2 registers already contain the number of characters to read and the buffer address respectively.</p>
+<p>Now let’s try a slightly more complicated program that reads from a file:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span> argv<span class="op">[])</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>fptr<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    fptr <span class="op">=</span> fopen<span class="op">(</span><span class="st">"foo.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> buffer<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>buffer<span class="op">,</span> <span class="dv">10</span><span class="op">,</span> fptr<span class="op">);</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> buffer<span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>fptr<span class="op">);</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="console"><code>echo "and the bunnymen" &gt; foo.txt
+clang --debug readfile.c
+sudo dtruss ./a.out
+
+...
+mprotect(0x1032E8000, 0x40000, 0x3)      = 0 0
+getrlimit(0x1008, 0x16CF27498, 0x0)      = 0 0
+open_nocancel("foo.txt\0", 0x0, 0x0)         = 3 0
+fstat64(0x3, 0x16CF27470, 0x0)       = 0 0
+read_nocancel(0x3, "and the bunnymen\n\0", 0x1000)       = 17 0
+fstat64(0x1, 0x16CF273B0, 0x0)       = 0 0
+ioctl(0x1, 0x4004667A, 0x16CF273FC)      = 0 0
+lseek(0x3, 0xFFFFFFFFFFFFFFF8, 0x1)      = 9 0
+close_nocancel(0x3)      = 0 0
+write_nocancel(0x1, "and the b\0", 0x9)      = 9 0</code></pre>
+<p>As you can see this invokes a series of system calls, <strong>open_nocancel()</strong>, <strong>read_nocancel()</strong>, <strong>ioctl()</strong>, etc.</p>
+<p>Anyway, the point i’m trying to make here is that input/out usually goes through the OS kernel, or at least that’s what i’m used to. In Linux for example, the device drivers run in kernel space because they need access to privileged things. As i currently understand it, MacOS basically did that too up until Version 10.15, using what are called <em>kernel extensions</em> or <em>kexts</em>, and an API called <strong>IOKit</strong>. Then they introduced something called <a href="https://developer.apple.com/system-extensions/">System Extensions</a> and a framework called <strong>DriverKit</strong>, which lets you make extensions including device drivers that run in user space. I can see some of these on my machine:</p>
+<pre class="console"><code>$ ps -eo user,command | grep DriverExtensions
+
+_driverkit       /System/Library/DriverExtensions/com.apple.DriverKit-IOUserDockChannelSerial.dext/com.apple.DriverKit-IOUserDockChannelSerial com.apple.IOUserDockChannelSerial 0x100000bc0 com.apple.DriverKit-IOUserDockChannelSerial
+_driverkit       /System/Library/DriverExtensions/com.apple.AppleUserHIDDrivers.dext/com.apple.AppleUserHIDDrivers com.apple.driverkit.AppleUserHIDDrivers 0x100000bc1 com.apple.AppleUserHIDDrivers
+_driverkit       /System/Library/DriverExtensions/IOUserBluetoothSerialDriver.dext/IOUserBluetoothSerialDriver com.apple.IOUserBluetoothSerialDriver 0x100000ce9 com.apple.IOUserBluetoothSerialDriver</code></pre>
+<p>However, it seems like they’re still in the process of transitioning drivers because many seem to still be kexts.</p>
+<p>I/O is surprisingly tricky, probably because there’s a lot of abstraction necessary to make every possible device fit into the same model. The range of devices goes from input-only things like keyboards and mice, output-only things like displays and printers, and read/write devices like disks and SSDs. There’s been a lot of effort put into standardization of I/O interfaces and protocols to make matters a little simpler (eg, USB 3, PCIe, SATA), but it’s still hard to handle everything.</p>
+<p>Consider the “System Report” that you can generate from the “About This Mac” view:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="topcase.png" class="img-fluid figure-img"></p>
+<figcaption>SPI System Report</figcaption>
+</figure>
 </div>
+<p>The <em>possible</em> device include Bluetooth, Ethernet, PCI, NVME, SATA, USB4, etc. Selected here is SPI, the <em>Serial Peripheral Interface</em>, a sort of standard synchronous serial protocol, which you can see covers the internal keyboard/trackpad of my laptop.</p>
+<p>Mac OS also has a tool called <strong>ioreg</strong>, which displays information in the <em>IOKit registry</em>. This produces a huge amount of information, so unless you already know the name of some class in the hierarchy of IOKit drivers, you might have to do searching. For example if i get everything in the <em>IOService</em> plane, i can search for information about a particular device.</p>
+<pre class="consoled"><code>ioreg -l -p IOService &gt; ioserv</code></pre>
+<p>In that file if i search for that serial number in the output of the <strong>ioreg</strong> command, i find this structure:</p>
+<pre class="console"><code>AppleDeviceManagementHIDEventService  &lt;class AppleDeviceManagementHIDEventService, id 0x1000008db, registered, matched, active, busy 0 (0 ms), retain 9&gt;
+    | |   |         |       | {
+    | |   |         |       |   "IOClass" = "AppleDeviceManagementHIDEventService"
+    | |   |         |       |   "HardwareID" = 2
+    | |   |         |       |   "Transport" = "FIFO"
+    | |   |         |       |   "IOPersonalityPublisher" = "com.apple.driver.AppleTopCaseDriverV2"
+    | |   |         |       |   "IOMatchedAtBoot" = Yes
+    | |   |         |       |   "Built-In" = Yes
+    | |   |         |       |   "Product" = "Apple Internal Keyboard / Trackpad"
+    | |   |         |       |   "IOProviderClass" = "IOHIDInterface"
+    | |   |         |       |   "Manufacturer" = "Apple"
+    | |   |         |       |   "WakeReason" = "Host (0x01)"
+    | |   |         |       |   "DeviceUsagePairs" = ({"DeviceUsagePage"=65280,"DeviceUsage"=11})
+    | |   |         |       |   "IOProbeScore" = 2200
+    | |   |         |       |   "VendorIDSource" = 0
+    | |   |         |       |   "HIDServiceSupport" = Yes
+    | |   |         |       |   "CountryCode" = 0
+    | |   |         |       |   "CFBundleIdentifierKernel" = "com.apple.driver.AppleTopCaseHIDEventDriver"
+    | |   |         |       |   "VendorID" = 0
+    | |   |         |       |   "VersionNumber" = 0
+    | |   |         |       |   "IOMatchCategory" = "IODefaultMatchCategory"
+    | |   |         |       |   "CFBundleIdentifier" = "com.apple.driver.AppleTopCaseHIDEventDriver"
+...</code></pre>
+<p>If i look for a driver being loaded in the system logs, i see this from a recent reboot:</p>
+<pre class="console"><code>(base) $ log show --style syslog | grep -i kernelmanagerd | grep -i topcase
+
+2024-09-12 10:11:06.002116-0700  localhost kernelmanagerd[61]: Received kext load notification: com.apple.driver.AppleTopCaseHIDEventDriver</code></pre>
+<p>This indicates that <strong>kernelmanagerd</strong>, which is the program used to load kernel extensions is loading the driver for the internal keyboard and trackpad.</p>
+<p>Consider the simple program above that reads from standard input. In my case, the “standard input” is the keyboard on my Macbook, which is handled by the driver discussed above. A lot has to happen before i can even start typing stuff, and the kernel has to know that this particular device is the one that maps to file descriptor 0, unless i plug in a USB keyboard or pair a Bluetooth keyboard and now two devices can send data characters to stdin.</p>
+<p>Since MacOS/Darwin/XNU is sort of Unix it follows the general “everything is a file” philosophy of Unix to some extent. You can see this if you look in the <strong>/dev</strong> directory, which is where Unix-like systems keeps file system entities that correspond to devices. You’ll see a bunch of stuff in there, most of which are terminal (tty<em>) or pseudo-terminal (pty</em>) entries. There are also files corresponding to disk devices, but we’ll cover those more in the next episode on files.</p>
 
 
 
@@ -655,11 +782,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-io.html" class="pagination-link" aria-label="Episode 9: Input/Output (I/O)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 9: Input/Output (I/O)</span>
+      <a href="./hdmcw-scheduler.html" class="pagination-link" aria-label="Episode 8: Schedulers">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 8: Schedulers</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./hdmcw-io.html" rel="next">
 <link href="./hdmcw-threads.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -109,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Preface</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -150,6 +150,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 6: Cores</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./hdmcw-threads.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 7: Threads</span></a>
   </div>
@@ -158,6 +164,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-scheduler.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Episode 8: Schedulers</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -220,7 +232,7 @@ ul.task-list li input[type="checkbox"] {
 00:08.723.148   Servicing an interrupt handler, and preempting _pthread_start  0x9e0edb (a.out, pid: 10456) for 416 ns. 
 00:08.723.149   Ran _pthread_start  0x9e0edb (a.out, pid: 10456) at priority 31 for 459.42 µs.  
 00:08.723.608   Servicing an interrupt handler, and preempting _pthread_start  0x9e0edb (a.out, pid: 10456) for 5.21 µs.    </code></pre>
-<p>This tells us a few things. One is that our thread seems to be getting slices of 1/2 to 1 ms of CPU time. Also, note that the the scheduler says it’s <em>preempting</em> our thread. You’ll maybe hear the term <em>premptive scheduling</em>, which means that the scheduler is taking some action to stop the running thread and switch to running something else. In this case it’s servicing an interrupt, which as i mentioned some time ago is a bit of code that has to run to, say, update a timer or read something from a device. Finally, notice that the narrative says that our thread is running <em>at priority 31</em>. This is a CPU priority value used by MacOS to determine how to prioritize our thread with respect to other threads.</p>
+<p>This tells us a few things. One is that our thread seems to be getting slices of 1/2 to 1 ms of CPU time. Also, note that the the scheduler says it’s <em>preempting</em> our thread. You’ll maybe hear the term <em>preemptive scheduling</em>, which means that the scheduler is taking some action to stop the running thread and switch to running something else. In this case it’s servicing an interrupt, which as i mentioned some time ago is a bit of code that has to run to, say, update a timer or read something from a device. Finally, notice that the narrative says that our thread is running <em>at priority 31</em>. This is a CPU priority value used by MacOS to determine how to prioritize our thread with respect to other threads.</p>
 <p>Scheduling in general is one of the most complicated parts of the operating system. I’ve read through the Linux scheduler many times trying to get a feel for it, and there have been many articles written about how it works and its limitations. Not so much with the Mac OS scheduler. Fortunately, the XNU source is available, but it’s hard to follow and what i can follow is complicated.</p>
 <p>It <em>looks</em> like in Mac OS (as opposed to, say, Ios) the key scheduler is something called the <em>clutch scheduler</em>. I <em>think</em> they’re using the word <em>clutch</em> in the sense of a clutch of eggs (“a group of eggs that is laid by a bird at one time”), but i confess that’s a guess. Here’s what they say about it in the XNU repo:</p>
 <blockquote class="blockquote">
@@ -679,8 +691,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-io.html" class="pagination-link" aria-label="Episode 9: Input/Output (I/O)">
+        <span class="nav-page-text">Episode 9: Input/Output (I/O)</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

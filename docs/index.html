@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -110,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Preface</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -151,6 +151,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 6: Cores</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./hdmcw-threads.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 7: Threads</span></a>
   </div>
@@ -159,6 +165,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-scheduler.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 8: Schedulers</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -172,15 +184,7 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -215,8 +219,6 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
 <p>This is my book in which i attempt to figure out how my computer works. My computer is a Macbook Air with an M2 chip, 24 GB of RAM, and a 1 TB SSD. I chose to use my actual computer for this project for a few reasons. One is that I have unfettered access to this computer. Another is that it’s an interesting and fairly modern (in 2024) piece of hardware. Mostly though, i wanted to use a specific computer because i want to talk about real hardware and not abstractions.</p>
 <p>My motive really <em>is</em> to figure out how my 🤬 computer works. When i first got into computers way back in the 1970s i was as interested in the hardware as the software, and there wasn’t really that big of a separation between the two. (I still have a paper manual with the assembly language of the BIOS of my first computer). In the last 40 years the hardware has become vastly more complicated and the software has of necessity become more abstract and conceptually distant from the hardware.</p>
 <p>I see this as a programming book, and if there’s an audience for it they are mostly programmers. I often don’t explain things that are fairly technical, and i sometimes <em>do</em> explain things that you already know. The latter happens because i’m trying to convince myself of something. Also the tone is mostly informal, sarcastic, dad-jokey, and nerd-positive. I hope that the structure and sequence of the “episodes” make sense, but it’s dictated by what i want to learn next and the questions that arise when i’m trying to figure things out.</p>
@@ -225,7 +227,6 @@ ul.task-list li input[type="checkbox"] {
 <p>To learn more about Quarto books visit <a href="https://quarto.org/docs/books" class="uri">https://quarto.org/docs/books</a>.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – How Does My 🤬 Computer Work</title>
+<title>Episode 6: Cores – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-io.html" rel="prev">
+<link href="./hdmcw-threads.html" rel="next">
+<link href="./hdmcw-processes.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -99,7 +81,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-cores.html">Episode 6: Cores</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -168,7 +150,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
+  <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Episode 6: Cores</span></a>
   </div>
 </li>
@@ -192,7 +174,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -209,7 +191,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title">Episode 6: Cores</h1>
 </div>
 
 
@@ -226,11 +208,49 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" role="list">
-
+<p>This episode and the next two will cover topics so interrelated i’m not sure which order to put them in. We’ve already touched on the idea that my computer, like most modern computers, runs multiple programs at the same time. In fact, if you’re not an old like me then pointing out this fact may not even make sense to you. It was even possible back in the days of my first PC (Unix was already over a decade old, even though Linux was still a ways off) but it wasn’t really a feature of the early personal computers <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>There are really (at least) two different things happening. The first is an idea variously called <em>multitasking</em>, <em>multiprogramming</em>, or <em>time-sharing</em>. Although these have slightly different flavors, they all refer to giving multiple programs slices of time on a single processor, a concept that goes back to at least the 1960s. So, basically, it’s a cool trick to make it <em>seem</em> like the computer is running multiple things. Sometimes the term <em>time-sharing</em> is meant only to imply that multiple users can use the same computer at the same time, but i’ll probably use it along with the other terms to mean a type of <em>concurrency</em>.</p>
+<p>Before discussing the second variation of “running multiple programs”, i need to introduce the concept of <em>threads</em>. As we saw in the last episode, the operating system treats running programs as <em>processes</em>, but the thing that executes on the processor is a thread. Every process has at least one thread, but as we’ll see a program often has numerous threads. Threads will be the topic of the next episode. The concurrency techniques introduced in the last paragraph depend on the ability to switch quickly from one thread to another, so fast that you don’t notice, an operating system function called <em>scheduling</em>, which will be the topic of the after-next episode. Note also that i’m talking specifically here about what are called <em>system threads</em> or <em>kernel threads</em>. There are implementations of <em>user space</em> threads, such as in the Python <strong>asyncio</strong> framework, but i don’t plan to talk about that (doesn’t mean i won’t). Also, sometimes the term <em>task</em> is used interchangeably with thread.</p>
+<p>The other type of thing that happens is when the computer literally runs multiple programs at the same time, using multiple processors. This is a type of <em>parallelism</em>. Computer architects figured out pretty early on that running multiple things would be helped by simply having more than one CPU<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> that could use the same memory. This idea in general is called <em>symmetric multiprocessing</em>, and again this idea goes back to the 1960s <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In the 1990s, by which time the idea of operating system threads was already common, two different ideas emerged about how to run multiple threads. A paper from 1997<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> says:</p>
+<blockquote class="blockquote">
+<p>Researchers have proposed two alternative microarchitectures that exploit multiple threads of control: simultaneous multithreading (SMT) and chip multiprocessors (CMP).</p>
+</blockquote>
+<p>Both of these things are still around. SMT is the idea behind Intel’s <em>hyperthreading</em>, and the CMP concept is our topic here: <em>cores</em>. In fact, in some processors both are used at the same time, ie, multiple cores with SMT, although interestingly Apple’s ARM-based chips like my M2 do not (which might be good because it’s mind-bendingly complicated). Incidentally, one of the authors of the above paper is Kunle Olukotun, a Stanford professor who is sometimes called the “father of the multi-core processor”.</p>
+<p>Around 2000 or thereabouts, commercial chip manufacturers introduced chips that had multiple processing units on the same chunk of silicon as described in the paper. At first we had <em>dual core</em> systems and then <em>quad core</em>, but eventually that naming convention faded. As of this writing Intel makes a chip with 288 cores<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, though i don’t know if that’s the most.</p>
+<p>The M2 chip in my computer is what they called a <em>system on a chip</em> (SoC) because almost all of the necessary circuitry is part of a single piece of silcon (except the DRAM). The chip has 8 cores, but they’re not all the same. There are 4 high-performance cores and 4 energy efficient cores (so i guess it’s duo-quad core?). Interesting, Apple apparently calls this <em>asynmmetric multiprocessing</em> since even though it’s using the same memory the sysem will allocate threads to different cores depending on their performance needs. We saw a first hint of the multiple cores in the last episode where <strong>ps</strong> command showed two processes running at the same time. In general, which cores things run on is transparent to both the user and the programmer, although there are ways to influence which type gets selected for a given process. See the <strong>taskpolicy</strong> command or the <strong>setpriority()</strong> system call.</p>
+<p>The Activity Monitor app on the Mac has a nifty view that will show the CPU usage history per core. For example:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="cpuhist1.png" class="img-fluid figure-img"></p>
+<figcaption>image</figcaption>
+</figure>
 </div>
+<p>This is fairly casual usage– a bit o’ browsin’ a bit o’ writin’. You can see that the efficiency cores seems to get used fairly consistently, while the performance cores have more spiky usage. On the other hand, here’s what it looks like if i start a pytorch training run:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="cpuhist2.png" class="img-fluid figure-img"></p>
+<figcaption>image</figcaption>
+</figure>
+</div>
+<p>Definitely lights up the performance cores, but also lights up <em>everything</em>. The green parts in the chart are the fraction of core time devoted to the user program code, and the red parts are the fraction used by operating system functions.</p>
+<p>I havent’ been able to find anything that says exactly how the efficiency and performance cores differ, but one major difference is that that they have different clock speeds, 2.42 GHz and 3.49 GHz respectively. I haven’t really talked about clocks, and probably you already know the term. If you’re unsure about the idea, think of it as an electrical pulse that synchronizes operations in the core. Each core can execute a certain number of instructions per clock cycle, so the clock speed (higher frequency = more cycles = more instructions) dictates how quickly the core can process instructions (my old PC had a clock of around 4 MHz!).</p>
+<p>One thing i definitely did <strong>not</strong> know (until i read about it on the amazing <a href="https://eclecticlight.co/2024/07/02/how-to-discover-what-apple-silicon-cpu-cores-are-doing/">Eclectic Light</a> website), is that the clock frequency actually <em>varies</em>. For example, if i run this command as described in the linked article:</p>
+<pre class="console"><code>sudo powermetrics -i 100 -o power.txt -n 10 -s cpu_power</code></pre>
+<p>I see in the output that the CPU 0 frequency (one of the efficiency cores) ranges from a low of 1053 MHz to a high of 1760 MHz. Apparently this is a way of conserving power, and hence battery life on laptops. Of course whatever’s running will go slower with a slower clock, but that probably doesn’t matter if a program is not CPU-bound. This apparently goes by the name <em>dynamic frequency scaling</em> or <em>CPU throttling</em>.</p>
+<p>The benefit of multiple cores is obviously that tasks don’t have to share the CPU so things speed up. This has the effect of making different programs more responsive (eg, you can update the formulas in your spreadsheet and still scroll Reddit). It also has the benefit that a single application can utilize multiple cores in parallel, for example pytorch uses multiple processes to get data to feed to the GPU. The penalty paid is complexity. The separate cores are using the same bus to fetch/store stuff, and the two types of cores share L2 cache, so there has to be some coordination between them.</p>
+<p>Most of that complexity is in the hardware so you rarely have to think about it. However, programs often <em>do</em> have to be aware of the existence of multiple cores. At the least the operating system must, so that it can schedule tasks efficiently but we’ll get into the details of that later. Quite often though, the programs that you’re running regularly (browsers, word processors) will also create multiple <em>threads</em> of execution to take advantage of the multiple cores. That adds another type of complexity because threads created within a process are using the same memory space. No big deal so long as you’re only <em>reading</em> memory, but once the threads start writing data to memory, programming gets hard. Like, really difficult sometimes. Like, i mean, should we even really do this? Maybe we can come to some conclusions in Episode 7.</p>
 
 
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>DOS eventually allowed what were called <em>terminate-and-stay-resident</em> (TSR) programs, which would stay in memory after they were started but they still had to be manually switched to.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Which, i mean, is it really <em>central</em> at that point?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>As do i, to be fair.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://ieeexplore.ieee.org/abstract/document/612253">A single-chip multiprocessor</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor">https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -655,11 +675,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-io.html" class="pagination-link" aria-label="Episode 9: Input/Output (I/O)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 9: Input/Output (I/O)</span>
+      <a href="./hdmcw-processes.html" class="pagination-link" aria-label="Episode 5: Processes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 5: Processes</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./hdmcw-threads.html" class="pagination-link" aria-label="Episode 7: Threads">
+        <span class="nav-page-text">Episode 7: Threads</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
