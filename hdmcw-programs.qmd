@@ -181,5 +181,5 @@ That will be the subject of the [next episode](hdmcw-virtual.html).
 
 [^1]: Pun intended.
 [^2]: Everyone says _opcode_.  It just sounds cooler.
-[^3]: I think __as__ just calls __clang__, which is part of the [LLVM](https://llvm.org/) toolset (as is __objdump__).
+[^3]: __as__ just calls __clang__, which is part of the [LLVM](https://llvm.org/) toolset (as is __objdump__).
 [^4]: No, it's not.
