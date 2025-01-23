@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./hdmcw-virtual.html" rel="next">
-<link href="./hdmcw-memory.html" rel="prev">
+<link href="./hdmcw-assembly-registers.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -126,8 +126,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Assembling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 2: Memory</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -170,6 +182,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 10: Files (WIP)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -280,7 +298,7 @@ Disassembly of section __TEXT,__text:
       24: f90000a2      str x2, [x5]
       28: d4200040      brk #0x2
 </code></pre>
-<p>Nice. That’s our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the “text section”) So, were done, right! We can just run this and… wait no, sorry, this is not an <em>executable</em> file. To make an actual runnable program we have to use a second program, the <em>linker</em>, which naturally is called <strong>ld</strong>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The command for the linker is also fairly short in this case:</p>
+<p>Nice. That’s our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the “text section”) So, were done, right! We can just run this and… wait no, sorry, this is not an <em>executable</em> file. To make an actual runnable program we have to use a second program, the <em>linker</em>, which naturally is called <strong>ld</strong>. The command for the linker is also fairly short in this case:</p>
 <pre class="console"><code>foo@bar:~$ ld -o adder adder.o -e _start -arch arm64 </code></pre>
 <p>First, it’s using <strong>-o adder</strong> to say that we want the executable program to be called <strong>adder</strong>. Then it takes the name of our object file as input. Now, normally the <strong>ld</strong> command sort of gets mental. It often takes numerous arguments for libraries, directories to look in, optimization levels, etc.</p>
 <p>The option <strong>-e _start</strong> tells the linker where the executable starts, and here we need to go back to the source code. Recall that in both of our programs so far we’ve had this bit at the beginning:</p>
@@ -289,7 +307,7 @@ Disassembly of section __TEXT,__text:
 
 _start: 
 </code></pre>
-<p>Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
+<p>q Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
 <pre class="console"><code>foo@bar:~$ objdump --syms adder
 
 adder:  file format mach-o arm64
@@ -301,7 +319,7 @@ SYMBOL TABLE:
 0000000100000000 g     F __TEXT,__text __mh_execute_header
 0000000100003f70 g     F __TEXT,__text _start
 </code></pre>
-<p>Right there is the “_start” symbol, and hey, it has the address that we saw in the last episode corresponding to the first instruction. That’s an amazing coincidence.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Why does the linker need to know where the start of our program is? Doesn’t it just start at, like, 0? The linker’s job is to combine various files into an executable program. In this case, we’ve only got one object file, so the other files that are getting linked are system-level libraries. However, in most complex programs there will be many object files and so the linker needs to know the entry point for the combined files. That’s why the “_start” symbol is a <em>global</em> symbol. If you were writing, say, C code the global start symbol would be in the runtime library.</p>
+<p>Right there is the “_start” symbol, and hey, it has the address that we saw in the last episode corresponding to the first instruction. That’s an amazing coincidence.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Why does the linker need to know where the start of our program is? Doesn’t it just start at, like, 0? The linker’s job is to combine various files into an executable program. In this case, we’ve only got one object file, so the other files that are getting linked are system-level libraries. However, in most complex programs there will be many object files and so the linker needs to know the entry point for the combined files. That’s why the “_start” symbol is a <em>global</em> symbol. If you were writing, say, C code the global start symbol would be in the runtime library.</p>
 <p>If we look at the final runnable program (<strong>adder</strong>), we’ll see that it’s way larger than the object file (<strong>adder.o</strong>) even though the latter holds all of the code we wrote.</p>
 <pre class="console"><code>foo@bar:~$ ls -l
 total 96
@@ -319,8 +337,7 @@ total 96
 <li id="fn1"><p>Pun intended.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Everyone says <em>opcode</em>. It just sounds cooler.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>I think <strong>as</strong> just calls <strong>clang</strong>, which is part of the <a href="https://llvm.org/">LLVM</a> toolset (as is <strong>objdump</strong>).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>I assume it’s not called <strong>ln</strong> because that was already taken. It’s kind of like that <a href="https://www.youtube.com/watch?v=NA6CaeSY8fs">Demetri Martin joke about oranges and carrots</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>No, it’s not.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>No, it’s not.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -747,8 +764,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-memory.html" class="pagination-link" aria-label="Episode 2: Memory">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 2: Memory</span>
+      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Etude: Registers">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Etude: Registers</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

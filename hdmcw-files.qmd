@@ -1,0 +1,40 @@
+# Episode 10: Files (WIP) {.unnumbered}
+
+Files have been the key metaphor for computer data since, like, the 1950s.  Conceptually they seem
+simple: a collection of bits stored on some semi-permanent device with some associated metadata that identifies
+that collection of bits as an isolated thing with a name.  But that description is simplistic.  Files
+are deep eldritch magic.
+
+First, there are the details of that semi-permanent storage device.  Over my years in the biz that has been
+everything from paper tape to the NAND Flash device (devices?) that make up my computer's 1 TB SSD.  They
+are usually read/write although i've had read-only devices.  There has to be some low-level way for code to
+read and write bits to specified places on those devices.  Typically there's a piece of controller hardware
+that facilitates the process of taking bits from memory and moving them to storage.  I _think_ that in my
+computer this is an NMVE controller, based on this from the System Report:
+
+![NVMExpress System Report](nvme.png)
+
+I confess this confuses me a bit, because i was under the impression that NVME is designed for PCIe bus devices,
+whereas the "Physical Connection" listed for the NVME controller is "Apple Fabric".
+
+SSDs and hard drives are _block devices_, meaning that reading and writing are done in chunks (blocks) of some specified size.
+
+You can't talk about files without talking about the _file system_, which for my computer is the 
+Apple File System (APFS).  Informally, we sometimes think of the file system as the way that directories 
+are organized, but it's much more 
+(the [Apple File System Reference](https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf)
+document is 181 pages long).  As with most things related to Macs, the best thing written about APFS is on
+The Eclectic Light Company:
+
+[APFS: Files and clones](https://eclecticlight.co/2024/03/20/apfs-files-and-clones/)
+
+[APFS: Directories and Names](https://eclecticlight.co/2024/03/25/apfs-directories-and-names/)
+
+[APFS: Containers and Volumes](https://eclecticlight.co/2024/04/02/apfs-containers-and-volumes/)
+
+Why do we need this elaborate system to manage files?   The idea of a file as a metaphor might make you
+think (if you are of a certain age) as a set of related documents, all tucked into a _folder_, which is then
+placed in a file cabinet in some sequential order, maybe alphabetical.  New documents belonging in that folder
+are added to it and the folder goes back in the cabinet in it's proper place.
+
+Computer files don't work that way.  It's true that bytes are written 

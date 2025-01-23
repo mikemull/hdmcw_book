@@ -11,7 +11,9 @@ book:
     - index.qmd
     - intro.qmd
     - hdmcw-prank.qmd
+    - hdmcw-setup.qmd
     - hdmcw-memory.qmd
+    - hdmcw-assembly-registers.qmd
     - hdmcw-programs.qmd
     - hdmcw-virtual.qmd
     - hdmcw-processes.qmd
@@ -19,6 +21,7 @@ book:
     - hdmcw-threads.qmd
     - hdmcw-scheduler.qmd
     - hdmcw-io.qmd
+    - hdmcw-files.qmd
     - references.qmd
     - --
 
@@ -29,5 +32,4 @@ format:
     theme: cosmo
   pdf:
     documentclass: scrreprt
-
 
