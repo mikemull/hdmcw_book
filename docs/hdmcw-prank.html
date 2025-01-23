@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,7 +50,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-memory.html" rel="next">
+<link href="./hdmcw-setup.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -126,8 +146,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Assembling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Episode 2: Memory</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -174,6 +206,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 10: Files (WIP)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -214,7 +252,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The operating system of the time was MS-DOS 2.x. The computer might be running a spreadsheet program or the like, but we could exit and get to the C:&gt; prompt. DOS 2 shipped with a little-known program called debug.com. As the name implies, the program was intended for debugging. You could do things like disassemble parts of a running program, or do hex dumps. But also you could write new programs in the 8086 assembly language.</p>
 <p>It would be a couple of years still before we had access to cheap compilers, so I was fairly adept at assembly. I could type in simple programs and run them, certain they’d work, so we’d occasionally leave little Easter eggs for the store’s staff. These were all harmless, but at least once I wrote a short script that would wait for some period of time, then start sending the BEL character (ASCII 7, Ctrl-G) to the screen on an infinite loop, causing a constant stream of beeps. We’d start it, then exit the store knowing that a panicked sales person was going to be rebooting the machine soon.</p>
 <p>Sure, it was kind of a dick move, but the point of this story is that I felt at the time like I knew how computers worked. After 40 years as a professional software engineer, I’m not so sure anymore. I understand them well enough to have shipped working software, but developments in processor technology and operating systems have made the actual machine more and more of a black box. In addition, the style of engineering that is common now separates programmers from hardware (language runtimes in Docker containers running on virtual machines controlled by hypervisors in some unseen box in the cloud). This blog is my attempt to understand computers again.</p>
-<p>First, let’s try to recreate that prank program above. I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip. The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: <a href="https://github.com/below/HelloSilicon">https://github.com/below/HelloSilicon</a></p>
+<p>First, let’s try to recreate that prank program above. I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip. The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: <a href="https://github.com/below/HelloSilicon">https://github.com/below/HelloSilicon</a><span class="citation" data-cites="hellosilicon">(<a href="references.html#ref-hellosilicon" role="doc-biblioref">Below 2022</a>)</span></p>
 <pre><code>//
 //
 //  Send BEL to stdout ad infinitum or Ctrl-C
@@ -241,7 +279,7 @@ beep4eva:
 bel:      .byte  0x07
 </code></pre>
 <p>So let’s break this down a bit. First, i put a large number (20 * 4294967296) into register <em>X4</em>, which begs two questions: (1) why? and (2) what is a register? The answer to the first question is that i want the program to loop a large number of times to simulate waiting. Empirically, i found that 2^32 = 4294967296 iterations take about a second, so this number would take ~20 seconds (really, about 25 but who’s counting?). Chances are there’s some system service to delay or wait, but i’m trying to duplicate what we did back in the olden days.</p>
-<p>If you don’t know what a register is, think of it as a place in the CPU to temporarily store a small number of bits (64 here). I’ll go more into the ARM registers at a later point because they seem interesting and at the moment i don’t know enough about them, but for now <a href="https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40">here’s a good description</a></p>
+<p>If you don’t know what a register is, think of it as a place in the CPU to temporarily store a small number of bits (64 here). I’ll go more into the ARM registers at a later point but for now see <span class="citation" data-cites="valsamaras2022">(<a href="references.html#ref-valsamaras2022" role="doc-biblioref">Valsamaras 2022</a>)</span></p>
 <p>So at this point we have a big number in the <em>X4</em> register. The next line in the program is not an instruction, but rather a <em>label</em>. This is a way to tell the assembler that we’re eventually going to want to jump back to the following instruction. That next instruction is <strong>SUBS</strong>. This instruction subtracts the last operand (1) from the second operand (<em>X4</em>) and puts the result in the first operand (also <em>X4</em>). Note that the basic subtract operation is <strong>SUB</strong> but the <em>S</em> suffix here indicates that “the condition flags are updated on the result of the operation”. That’s important here because the next instruction (<strong>B.NE</strong>) is going to use the condition flag to decide whether or not to branch to the <em>loop</em> label (ie, back to the <strong>SUBS</strong>). That is the whole delay loop.</p>
 <p>The next section (starting with the <em>beep4eva</em> label) is the fun part, an infinite loop that writes the BEL character to stdout forever. This code is a tiny bit arcane however. Three of the instructions are just moving constant values into particular registers. These are essentially parameters for a call into the operating system services. The <strong>ADR</strong> instruction is effectively loading the memory address of our output data (the byte with the <em>bel</em> label at the bottom). The <strong>SVC</strong> instruction is a bit harder to explain. This stands for “supervisor call”. The ARM docs describe it this way</p>
 <blockquote class="blockquote">
@@ -252,6 +290,14 @@ bel:      .byte  0x07
 <p>My PC back in the 80s and my Macbook now, like most computers since the 1950s, would hold this program in memory and then fetch the instructions. That will be the topic of <a href="hdmcw-memory.html">Episode 2</a>.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-hellosilicon" class="csl-entry" role="listitem">
+Below, Alexander von. 2022. <span>“HelloSilicon.”</span> 2022. <a href="https://github.com/below/HelloSilicon">https://github.com/below/HelloSilicon</a>.
+</div>
+<div id="ref-valsamaras2022" class="csl-entry" role="listitem">
+Valsamaras, Dimitrios. 2022. <span>“ARM 64 Assembly Series— Basic Definitions and Registers.”</span> 2022. <a href="https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40">https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40</a>.
+</div>
+</div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -688,8 +734,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-memory.html" class="pagination-link" aria-label="Episode 2: Memory">
-        <span class="nav-page-text">Episode 2: Memory</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-setup.html" class="pagination-link" aria-label="Etude: Assembling">
+        <span class="nav-page-text">Etude: Assembling</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +50,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-programs.html" rel="next">
-<link href="./hdmcw-prank.html" rel="prev">
+<link href="./hdmcw-assembly-registers.html" rel="next">
+<link href="./hdmcw-setup.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -126,8 +146,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Assembling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Episode 2: Memory</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Etude: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -174,6 +206,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Episode 10: Files (WIP)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -209,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Back in 1945 John von Neumann wrote a document called <a href="https://web.mit.edu/STS.035/www/PDFs/edvac.pdf"><em>First Draft of a Report on the EDVAC</em></a>, which described a design for a new type of electronic computer. People debate to what extent these were his ideas alone versus what was borrowed from existing designs, but he didn’t give credit to other people and he was pretty famous so we now call what he described the <em>von Neumann architecture</em>. Many real systems would be built from the design in the document, and even today most computers have this architecture. One of the key ideas was that programs would be stored in memory along with data, and the processors of the computer would fetch the instructions from memory. Seems pretty obvious now, but it was a big step forward from, say, plugging wires into boards or flipping switches.</p>
+<p>Back in 1945 John von Neumann wrote a document called <a href="https://web.mit.edu/STS.035/www/PDFs/edvac.pdf"><em>First Draft of a Report on the EDVAC</em></a><span class="citation" data-cites="10.1109/85.238389">(<a href="references.html#ref-10.1109/85.238389" role="doc-biblioref">Neumann 1993</a>)</span>, which described a design for a new type of electronic computer. People debate to what extent these were his ideas alone versus what was borrowed from existing designs, but he didn’t give credit to other people and he was pretty famous so we now call what he described the <em>von Neumann architecture</em>. Many real systems would be built from the design in the document, and even today most computers have this architecture. One of the key ideas was that programs would be stored in memory along with data, and the processors of the computer would fetch the instructions from memory. Seems pretty obvious now, but it was a big step forward from, say, plugging wires into boards or flipping switches.</p>
 <p>So in one way the programs i wrote back in the 80s on 8086/8088 processors were similar to programs I would write now on the ARM64-based M2 in my Mac. The program from the last episode would be stored in memory and the CPU would fetch the instructions to execute. However, in other ways this is one of the most significant differences between then and now.</p>
 <p>For one, there’s a whole heck of a lot more of the stuff. My original IBM PC had 64 KB of memory (yes, K, as in kilobyte). My Mac has 24 GB, which i frequently exceed. When i wanted to upgrade my PC to 128 KB, i went to some dingy electronics shop and bought 9 chips that i had to shove into the motherboard. Throughout the 90s and early 2000s it was common to buy memory memory modules to add to your computer. I’m fairly sure that if i look sideways at the bottom panel of my Mac it voids my warranty.</p>
 <p>Part of the reason why there’s so much more memory is due to advances in chip fabrication, but also there are more bits available for making addresses. The IBM PC that I had back in the day was based on a variant of the 16-bit Intel 8086 chip called the 8088. It used two 16-bit registers to address memory. The mathematically astute will notice that this adds up to 32 bits, <em>but</em> the 8088 actually only used 20 bits (long story), so it had an addressable space of 2^20, or 1 MB. However, only 640 KB of this was available for programs because the rest was used as a video buffer (although if you didn’t mind the screen being jacked up, you <em>could</em> use the video buffer to store data). Different times.</p>
@@ -284,6 +322,11 @@ mys1:  .word  0</code></pre>
 <p>There are still many questions about memory and programs, one of which is “how does the program get into memory?”. Another thing that I’ve glossed over so far is the role of the operating system in all of this, which is what I’ll start to cover that in <a href="hdmcw-programs.html">Episode 3</a></p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-10.1109/85.238389" class="csl-entry" role="listitem">
+Neumann, John von. 1993. <span>“First Draft of a Report on the EDVAC.”</span> <em>IEEE Ann. Hist. Comput.</em> 15 (4): 27–75. <a href="https://doi.org/10.1109/85.238389">https://doi.org/10.1109/85.238389</a>.
+</div>
+</div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -715,13 +758,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-prank.html" class="pagination-link" aria-label="Episode 1: Prank">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 1: Prank</span>
+      <a href="./hdmcw-setup.html" class="pagination-link" aria-label="Etude: Assembling">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Etude: Assembling</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Episode 3: Programs">
-        <span class="nav-page-text">Episode 3: Programs</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Etude: Registers">
+        <span class="nav-page-text">Etude: Registers</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

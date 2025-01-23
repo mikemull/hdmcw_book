@@ -117,7 +117,7 @@ Disassembly of section __TEXT,__text:
 ```
 
 Nice.  That's our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the "text section")  So, were done, right!  We can just run this and... wait no, sorry, this is not an _executable_ file.  To make an actual runnable program we have to
-use a second program, the _linker_, which naturally is called __ld__.[^4]  The command for the linker is also fairly short in this case:
+use a second program, the _linker_, which naturally is called __ld__.  The command for the linker is also fairly short in this case:
 
 ```console
 foo@bar:~$ ld -o adder adder.o -e _start -arch arm64 
@@ -135,7 +135,7 @@ The option __-e \_start__ tells the linker where the executable starts, and here
 _start: 
 
 ```
-
+q
 Using __objdump__ we can look at the _symbol table_ in our binary program file, and we see:
 
 ```console
@@ -152,7 +152,7 @@ SYMBOL TABLE:
 
 ```
 Right there is the "_start" symbol, and hey, it has the address that we saw in the last episode corresponding to the first instruction.
-That's an amazing coincidence.[^5].  Why does the linker need to know where the start of our program is?  Doesn't it just start at, like, 0?
+That's an amazing coincidence.[^4].  Why does the linker need to know where the start of our program is?  Doesn't it just start at, like, 0?
 The linker's job is to combine various files into an executable program.  In this case, we've only got one object file, so the other files that
 are getting linked are system-level libraries.  However, in most complex programs there will be many object files and so the linker
 needs to know the entry point for the combined files.  That's why the "_start" symbol is a _global_ symbol.  If you were writing, say, C code
@@ -182,5 +182,4 @@ That will be the subject of the [next episode](hdmcw-virtual.html).
 [^1]: Pun intended.
 [^2]: Everyone says _opcode_.  It just sounds cooler.
 [^3]: I think __as__ just calls __clang__, which is part of the [LLVM](https://llvm.org/) toolset (as is __objdump__).
-[^4]: I assume it's not called __ln__ because that was already taken.  It's kind of like that [Demetri Martin joke about oranges and carrots](https://www.youtube.com/watch?v=NA6CaeSY8fs).
-[^5]: No, it's not.
+[^4]: No, it's not.

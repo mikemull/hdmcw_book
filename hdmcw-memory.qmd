@@ -1,7 +1,7 @@
 
 # Episode 2: Memory {.unnumbered}
 
-Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf),
+Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf)[@10.1109/85.238389],
 which described a design for a new type of electronic computer.
 People debate to what extent these were his ideas alone versus what was borrowed from existing designs, but he didn't give credit
 to other people and he was pretty famous so we now call what he described the _von Neumann architecture_.  Many

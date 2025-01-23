@@ -11,7 +11,7 @@ It would be a couple of years still before we had access to cheap compilers, so 
 
 Sure, it was kind of a dick move, but the point of this story is that I felt at the time like I knew how computers worked.  After 40 years as a professional software engineer, I’m not so sure anymore.  I understand them well enough to have shipped working software, but developments in processor technology and operating systems have made the actual machine more and more of a black box.  In addition, the style of engineering that is common now separates programmers from hardware (language runtimes in Docker containers running on virtual machines controlled by hypervisors in some unseen box in the cloud).  This blog is my attempt to understand computers again.
 
-First, let’s try to recreate that prank program above.  I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip.  The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: [https://github.com/below/HelloSilicon](https://github.com/below/HelloSilicon)
+First, let’s try to recreate that prank program above.  I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip.  The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: [https://github.com/below/HelloSilicon](https://github.com/below/HelloSilicon)[@hellosilicon]
 
 
 ```
@@ -48,7 +48,7 @@ take about a second, so this number would take ~20 seconds (really, about 25 but
 but i'm trying to duplicate what we did back in the olden days.
 
 If you don't know what a register is, think of it as a place in the CPU to temporarily store a small number of bits (64 here).  I'll go more into the ARM registers
-at a later point because they seem interesting and at the moment i don't know enough about them, but for now [here's a good description](https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40)
+at a later point but for now see [@valsamaras2022]
 
 So at this point we have a big number in the _X4_ register.  The next line in the program is not an instruction, but rather a _label_.  This is a way to
 tell the assembler that we're eventually going to want to jump back to the following instruction.  That next instruction is **SUBS**.  This instruction subtracts
