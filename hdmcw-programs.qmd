@@ -135,7 +135,7 @@ The option __-e \_start__ tells the linker where the executable starts, and here
 _start: 
 
 ```
-q
+
 Using __objdump__ we can look at the _symbol table_ in our binary program file, and we see:
 
 ```console
