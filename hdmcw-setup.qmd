@@ -86,6 +86,31 @@ Finally, this tells the linker to produce a binary in the ARM 64 architecture fo
 
 If the above commands work, you should now have a file called __beep__ that you can run (on MacOS,
 for me anyway, the file already has the execute permission set).  Note though that if you do run
-this the only way to terminate 
+this the only way to terminate the program is with ^C.
+
+As an alternative to running the program directly from the command line, you can also run it
+with the __lldb__ debugger, which is part of the Xcode command line tools if you didn't already
+have it.  This way you can stop the program before it goes into the infinite loop:
+
+```console
+$ lldb ./beep
+(lldb) target create "./beep"
+Current executable set to '/Dev/hdmcw/beep_4vr/beep' (arm64).
+(lldb) b beep4eva
+Breakpoint 1: where = beep`beep4eva, address = 0x0000000100003f9c
+(lldb) run
+Process 10410 launched: '//Dev/hdmcw/beep_4vr/beep' (arm64)
+Process 10410 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
+    frame #0: 0x0000000100003f9c beep`beep4eva
+beep`beep4eva:
+->  0x100003f9c <+0>:  mov    x0, #0x1 ; =1 
+    0x100003fa0 <+4>:  adr    x1, 0x100003fb4 ; bel
+    0x100003fa4 <+8>:  mov    x2, #0x1 ; =1 
+    0x100003fa8 <+12>: mov    x16, #0x4 ; =4 
+Target 0: (beep) stopped.
+(lldb) 
+
+```
 
 [^1]: I assume it's not called __ln__ because that was already taken.  It's kind of like that [Demetri Martin joke about oranges and carrots](https://www.youtube.com/watch?v=NA6CaeSY8fs).
