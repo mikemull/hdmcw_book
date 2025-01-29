@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episode 3: Programs – How Does My 🤬 Computer Work</title>
+<title>Episode 5: Programs – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-programs.html">Episode 3: Programs</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-programs.html">Episode 5: Programs</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -127,67 +127,67 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Etude: Assembling</span></a>
+ <span class="menu-text">Episode 2: Assembling</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 2: Memory</span></a>
+ <span class="menu-text">Episode 3: Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Etude: Registers</span></a>
+ <span class="menu-text">Episode 4: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-programs.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Episode 3: Programs</span></a>
+ <span class="menu-text">Episode 5: Programs</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-virtual.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 4: Virtual Memory</span></a>
+ <span class="menu-text">Episode 6: Virtual Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-processes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 5: Processes</span></a>
+ <span class="menu-text">Episode 7: Processes</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 6: Cores</span></a>
+ <span class="menu-text">Episode 8: Cores</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-threads.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 7: Threads</span></a>
+ <span class="menu-text">Episode 9: Threads</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-scheduler.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 8: Schedulers</span></a>
+ <span class="menu-text">Episode 10: Schedulers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
+ <span class="menu-text">Episode 11: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 10: Files (WIP)</span></a>
+ <span class="menu-text">Episode 12: Files (WIP)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -210,7 +210,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Episode 3: Programs</h1>
+<h1 class="title">Episode 5: Programs</h1>
 </div>
 
 
@@ -307,7 +307,7 @@ Disassembly of section __TEXT,__text:
 
 _start: 
 </code></pre>
-<p>q Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
+<p>Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
 <pre class="console"><code>foo@bar:~$ objdump --syms adder
 
 adder:  file format mach-o arm64
@@ -336,7 +336,7 @@ total 96
 <ol>
 <li id="fn1"><p>Pun intended.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Everyone says <em>opcode</em>. It just sounds cooler.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>I think <strong>as</strong> just calls <strong>clang</strong>, which is part of the <a href="https://llvm.org/">LLVM</a> toolset (as is <strong>objdump</strong>).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><strong>as</strong> just calls <strong>clang</strong>, which is part of the <a href="https://llvm.org/">LLVM</a> toolset (as is <strong>objdump</strong>).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>No, it’s not.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
@@ -764,13 +764,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Etude: Registers">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Etude: Registers</span>
+      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Episode 4: Registers">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 4: Registers</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-virtual.html" class="pagination-link" aria-label="Episode 4: Virtual Memory">
-        <span class="nav-page-text">Episode 4: Virtual Memory</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-virtual.html" class="pagination-link" aria-label="Episode 6: Virtual Memory">
+        <span class="nav-page-text">Episode 6: Virtual Memory</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

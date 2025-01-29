@@ -1,8 +1,8 @@
-# Etude: Assembling {.unnumbered}
+# Episode 2: Assembling {.unnumbered}
 
 In the first episode I showed a program listing in ARM assembly language, but I didn't
 describe how to turn this into a runnable program.  Unfortunately, there's no equivalent
-to debug.com, so you have to type that program into a text file and then run a program
+to __debug.com__, so you have to type the program into a text file and then run a program
 called an _assembler_.  According to computer lore, the term assembler was coined in the 1950s
 but it meant something slightly different but then people and time intervened and now an
 assembler is a thing that assembles assembly language into machine instructions.
@@ -14,12 +14,22 @@ get what you need with the command:
 xcode-select --install
 ```
 
-If this works, you should be able to run the following commands to make an executable
+If this works, you should have the neccessary programs on your computer, though you might
+have to set the PATH variable:
+
+```
+$ export PATH=/Library/Developer/CommandLineTools/usr/bin:$PATH
+$ which as
+/Library/Developer/CommandLineTools/usr/bin/as
+```
+
+Now you should be able to run the following commands to make an executable
 program (assuming the source file is called beep.s):
 
 ```console
 as -o beep.o beep.s
-ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -e _start -arch arm64
+ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` \ 
+-e _start -arch arm64
 ```
 
 The first command runs the __as__ command to product an _object_ file.  We'll talk more about
@@ -84,6 +94,13 @@ _start:
 ```
 Finally, this tells the linker to produce a binary in the ARM 64 architecture format.  This is the default.
 
+Note: quite often you _can_ get away with a much simpler version of the link command, for example
+the following works for me for this program:
+
+```console
+ld -o beep beep.o -e _start
+```
+
 If the above commands work, you should now have a file called __beep__ that you can run (on MacOS,
 for me anyway, the file already has the execute permission set).  Note though that if you do run
 this the only way to terminate the program is with ^C.
@@ -112,5 +129,19 @@ Target 0: (beep) stopped.
 (lldb) 
 
 ```
+
+One last detail.  You'll notice that the first part of most of the assembly language listings
+here will have this directive:
+
+```
+.align 4
+```
+
+This tells the loader to align the instructions on a 4-byte boundary.  The _reason_ for doing
+this will be more apparent after we cover the topic of memory, but for now know that you'll
+probably need this directive to avoid errors when the program runs (you'll probably get
+_Bus Error 100_, which has nothing to do with public transportation). This can be used in both the
+code and data sections of our programs, but we'll go into that in more detail in later chapters.
+
 
 [^1]: I assume it's not called __ln__ because that was already taken.  It's kind of like that [Demetri Martin joke about oranges and carrots](https://www.youtube.com/watch?v=NA6CaeSY8fs).

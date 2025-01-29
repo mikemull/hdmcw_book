@@ -1,7 +1,7 @@
 
-# Etude: Registers {.unnumbered}
+# Episode 4: Registers {.unnumbered}
 
-I've talked about registers in the preceding chapters.  The idea of registers
+I talked about registers in the preceding chapters.  The idea of registers
 goes back to the earliest digital computer designs, although they might have been called
 _accumulators_, basically storage for intermediate results of mathematical operations.
 As previously mentioned, registers act like memory in that values can be stored
@@ -26,7 +26,7 @@ discuss the other types of registers in future episodes.
 
 The general purpose registers are unusual in this architecture, because they have both __W__
 versions and __X__ versions.  The __W__ version is the lower 32 bits of __X__ register, but it's important to know that the __W__ registers _act like_ 32-bit registers, not just like
-the lower-order bits of __X__ register.  For example, consider this short program:
+the lower-order bits of the __X__ register.  For example, consider this short program:
 
 ```
 ; wregs.s
@@ -44,7 +44,7 @@ _start:
     BRK #2
 ```
 
-This multiplies the number 134775813 times 111, which gives 14960115243 (the reason
+This multiplies the number 134775813 (hex 0x08088405) times 111, which gives 14960115243 (the reason
 for using these apparently weird numbers will eventually become clear).  The two
 operands are put in the W0 and W3 registers and the result ends up in register W4.
 
@@ -56,9 +56,9 @@ $ as -o wregs.o wregs.s
 $ ld -o wregs wregs.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -e _start -arch arm64
 $ lldb ./wregs
 (lldb) target create "./wregs"
-Current executable set to '/Users/mikemull/Documents/Dev/hdmcw/wregs' (arm64).
+Current executable set to '/Documents/Dev/hdmcw/wregs' (arm64).
 (lldb) run
-Process 40327 launched: '/Users/mikemull/Documents/Dev/hdmcw/wregs' (arm64)
+Process 40327 launched: '/Documents/Dev/hdmcw/wregs' (arm64)
 Process 40327 stopped
 * thread #1, queue = 'com.apple.main-thread', stop reason = EXC_BREAKPOINT (code=1, subcode=0x100003fb0)
     frame #0: 0x0000000100003fb0 wregs`start + 16
@@ -96,10 +96,12 @@ zeros in the left part, which means that when we do the addition in the into W4 
 not just puttin the leftmost two bits into the upper part of the register 
 
 There's one oddity here that I have to clear up.  You'll notice that that __W0__
-register is loaded with two instructions (MOVZ and MOVK) in order to get one
+register is loaded with two instructions (MOVZ and MOVK, which you can think of
+as "move and zero" and "move and keep") in order to get one
 number into the register (0x08088405).  The first instruction loads the lower two 
 bytes and zeros out the rest of the register.  The second instruction loads the leftmost
-two bytes by _left-shifting_ the value (0x0808).  This is because a "logical immediate",
+two bytes by _left-shifting_ the value (0x0808), but keeps the other bits alone.
+This is because a "logical immediate",
 a literal number used in the instruction, can only be so many bits long.  Why?
 
 To answer, let's first disassemble our program in lldb:

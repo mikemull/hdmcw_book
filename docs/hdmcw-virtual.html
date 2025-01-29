@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Episode 4: Virtual Memory – How Does My 🤬 Computer Work</title>
+<title>Episode 6: Virtual Memory – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -81,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-virtual.html">Episode 4: Virtual Memory</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-virtual.html">Episode 6: Virtual Memory</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -127,67 +147,67 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Etude: Assembling</span></a>
+ <span class="menu-text">Episode 2: Assembling</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 2: Memory</span></a>
+ <span class="menu-text">Episode 3: Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Etude: Registers</span></a>
+ <span class="menu-text">Episode 4: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-programs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 3: Programs</span></a>
+ <span class="menu-text">Episode 5: Programs</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-virtual.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Episode 4: Virtual Memory</span></a>
+ <span class="menu-text">Episode 6: Virtual Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-processes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 5: Processes</span></a>
+ <span class="menu-text">Episode 7: Processes</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 6: Cores</span></a>
+ <span class="menu-text">Episode 8: Cores</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-threads.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 7: Threads</span></a>
+ <span class="menu-text">Episode 9: Threads</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-scheduler.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 8: Schedulers</span></a>
+ <span class="menu-text">Episode 10: Schedulers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
+ <span class="menu-text">Episode 11: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 10: Files (WIP)</span></a>
+ <span class="menu-text">Episode 12: Files (WIP)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -210,7 +230,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Episode 4: Virtual Memory</h1>
+<h1 class="title">Episode 6: Virtual Memory</h1>
 </div>
 
 
@@ -310,10 +330,15 @@ Writable regions: Total=529.4M written=288K(0%) resident=416K(0%) swapped_out=0K
 <p>There’s a ton more to virtual memory, but i think we’ve got enough to go on. We haven’t really discussed the mechanics of how this virtually memory map gets built, but this gives us an idea of how code and data gets into memory so that the program can start execution. In the <a href="hdmcw-processes.html">next episode</a> we’ll go deeper into the idea of <em>processes</em>.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-juliaevansvmm" class="csl-entry" role="listitem">
+<span>“How Do You Read the Memory Maps of a Mac Process.”</span> 2018. 2018. <a href="https://jvns.ca/blog/2018/01/26/mac-memory-maps/">https://jvns.ca/blog/2018/01/26/mac-memory-maps/</a>.
+</div>
+</div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>I discovered this through <a href="https://jvns.ca/blog/2018/01/26/mac-memory-maps/">Julia Evans’s blog</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I discovered this through Julia Evans’s blog <span class="citation" data-cites="juliaevansvmm">(<a href="references.html#ref-juliaevansvmm" role="doc-biblioref"><span>“How Do You Read the Memory Maps of a Mac Process”</span> 2018</a>)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -740,13 +765,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Episode 3: Programs">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 3: Programs</span>
+      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Episode 5: Programs">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 5: Programs</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-processes.html" class="pagination-link" aria-label="Episode 5: Processes">
-        <span class="nav-page-text">Episode 5: Processes</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-processes.html" class="pagination-link" aria-label="Episode 7: Processes">
+        <span class="nav-page-text">Episode 7: Processes</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

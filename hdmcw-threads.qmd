@@ -1,5 +1,5 @@
 
-# Episode 7: Threads {.unnumbered}
+# Episode 9: Threads {.unnumbered}
 
 Not gonna lie, threads are tricky.  It's partially because there's an interplay between hardware, the operating system, and programming language constructs.
 Partially it's because _time_ comes on the scene and you have to worry about the order in which things happen.  
