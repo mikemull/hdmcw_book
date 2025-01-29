@@ -1,4 +1,4 @@
-# Episode 10: Files (WIP) {.unnumbered}
+# Episode 12: Files (WIP) {.unnumbered}
 
 Files have been the key metaphor for computer data since, like, the 1950s.  Conceptually they seem
 simple: a collection of bits stored on some semi-permanent device with some associated metadata that identifies

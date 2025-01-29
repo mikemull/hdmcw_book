@@ -1,5 +1,5 @@
 
-# Episode 8: Schedulers {.unnumbered}
+# Episode 10: Schedulers {.unnumbered}
 
 When i stop every program that i started, including the things run at startup, Activity Monitor says that i still
 have over 500 processes and around 2000 threads. Almost 500 of those threads are part of the __kernel_task__ process.

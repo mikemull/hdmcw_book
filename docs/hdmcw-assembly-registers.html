@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Etude: Registers – How Does My 🤬 Computer Work</title>
+<title>Episode 4: Registers – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -135,7 +135,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-assembly-registers.html">Etude: Registers</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-assembly-registers.html">Episode 4: Registers</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -181,67 +181,67 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Etude: Assembling</span></a>
+ <span class="menu-text">Episode 2: Assembling</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-memory.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 2: Memory</span></a>
+ <span class="menu-text">Episode 3: Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-assembly-registers.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Etude: Registers</span></a>
+ <span class="menu-text">Episode 4: Registers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-programs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 3: Programs</span></a>
+ <span class="menu-text">Episode 5: Programs</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-virtual.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 4: Virtual Memory</span></a>
+ <span class="menu-text">Episode 6: Virtual Memory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-processes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 5: Processes</span></a>
+ <span class="menu-text">Episode 7: Processes</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-cores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 6: Cores</span></a>
+ <span class="menu-text">Episode 8: Cores</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-threads.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 7: Threads</span></a>
+ <span class="menu-text">Episode 9: Threads</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-scheduler.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 8: Schedulers</span></a>
+ <span class="menu-text">Episode 10: Schedulers</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-io.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 9: Input/Output (I/O)</span></a>
+ <span class="menu-text">Episode 11: Input/Output (I/O)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Episode 10: Files (WIP)</span></a>
+ <span class="menu-text">Episode 12: Files (WIP)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -264,7 +264,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Etude: Registers</h1>
+<h1 class="title">Episode 4: Registers</h1>
 </div>
 
 
@@ -281,7 +281,7 @@ div.csl-indent {
 </header>
 
 
-<p>I’ve talked about registers in the preceding chapters. The idea of registers goes back to the earliest digital computer designs, although they might have been called <em>accumulators</em>, basically storage for intermediate results of mathematical operations. As previously mentioned, registers act like memory in that values can be stored into them and retrieved from them, but this happens very fast in modern computers since the registers are part of the CPU. Registers are essential to undertanding how CPUs work and they are a key part of assembly language programming, but they’re almost entirely hidden from programmers using higher-level languages.</p>
+<p>I talked about registers in the preceding chapters. The idea of registers goes back to the earliest digital computer designs, although they might have been called <em>accumulators</em>, basically storage for intermediate results of mathematical operations. As previously mentioned, registers act like memory in that values can be stored into them and retrieved from them, but this happens very fast in modern computers since the registers are part of the CPU. Registers are essential to undertanding how CPUs work and they are a key part of assembly language programming, but they’re almost entirely hidden from programmers using higher-level languages.</p>
 <p>The ARM-based M2 chip in my Mac has about 41 registers in what’s called the <em>AArch64 state</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <blockquote class="blockquote">
 <p>In AArch64 state, the following registers are available:</p>
@@ -294,7 +294,7 @@ div.csl-indent {
 </ul>
 </blockquote>
 <p>The general purpose registers are what we’ve seen the most of so far. The program counter appears in every program, even if you don’t realize it. This register points at the current instruction in memory, so it gets automatically changed on jumps/branching. I’ll discuss the other types of registers in future episodes.</p>
-<p>The general purpose registers are unusual in this architecture, because they have both <strong>W</strong> versions and <strong>X</strong> versions. The <strong>W</strong> version is the lower 32 bits of <strong>X</strong> register, but it’s important to know that the <strong>W</strong> registers <em>act like</em> 32-bit registers, not just like the lower-order bits of <strong>X</strong> register. For example, consider this short program:</p>
+<p>The general purpose registers are unusual in this architecture, because they have both <strong>W</strong> versions and <strong>X</strong> versions. The <strong>W</strong> version is the lower 32 bits of <strong>X</strong> register, but it’s important to know that the <strong>W</strong> registers <em>act like</em> 32-bit registers, not just like the lower-order bits of the <strong>X</strong> register. For example, consider this short program:</p>
 <pre><code>; wregs.s
 
 .global _start
@@ -308,16 +308,16 @@ _start:
     MUL W4, W3, W0
 
     BRK #2</code></pre>
-<p>This multiplies the number 134775813 times 111, which gives 14960115243 (the reason for using these apparently weird numbers will eventually become clear). The two operands are put in the W0 and W3 registers and the result ends up in register W4.</p>
+<p>This multiplies the number 134775813 (hex 0x08088405) times 111, which gives 14960115243 (the reason for using these apparently weird numbers will eventually become clear). The two operands are put in the W0 and W3 registers and the result ends up in register W4.</p>
 <p>So let’s assemble and run this program.</p>
 <pre class="console"><code>
 $ as -o wregs.o wregs.s
 $ ld -o wregs wregs.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -e _start -arch arm64
 $ lldb ./wregs
 (lldb) target create "./wregs"
-Current executable set to '/Users/mikemull/Documents/Dev/hdmcw/wregs' (arm64).
+Current executable set to '/Documents/Dev/hdmcw/wregs' (arm64).
 (lldb) run
-Process 40327 launched: '/Users/mikemull/Documents/Dev/hdmcw/wregs' (arm64)
+Process 40327 launched: '/Documents/Dev/hdmcw/wregs' (arm64)
 Process 40327 stopped
 * thread #1, queue = 'com.apple.main-thread', stop reason = EXC_BREAKPOINT (code=1, subcode=0x100003fb0)
     frame #0: 0x0000000100003fb0 wregs`start + 16
@@ -337,7 +337,7 @@ Target 0: (wregs) stopped.
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="bn">0x08088405</span> <span class="op">*</span> <span class="dv">111</span>) <span class="op">%</span> <span class="dv">2</span><span class="op">**</span><span class="dv">32</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Do you see why? This is important. It will be on the test.</p>
 <p>Also notice that the value of <strong>X</strong> form register is the same, just with 4 bytes of zeros in the left part, which means that when we do the addition in the into W4 it’s not just puttin the leftmost two bits into the upper part of the register</p>
-<p>There’s one oddity here that I have to clear up. You’ll notice that that <strong>W0</strong> register is loaded with two instructions (MOVZ and MOVK) in order to get one number into the register (0x08088405). The first instruction loads the lower two bytes and zeros out the rest of the register. The second instruction loads the leftmost two bytes by <em>left-shifting</em> the value (0x0808). This is because a “logical immediate”, a literal number used in the instruction, can only be so many bits long. Why?</p>
+<p>There’s one oddity here that I have to clear up. You’ll notice that that <strong>W0</strong> register is loaded with two instructions (MOVZ and MOVK, which you can think of as “move and zero” and “move and keep”) in order to get one number into the register (0x08088405). The first instruction loads the lower two bytes and zeros out the rest of the register. The second instruction loads the leftmost two bytes by <em>left-shifting</em> the value (0x0808), but keeps the other bits alone. This is because a “logical immediate”, a literal number used in the instruction, can only be so many bits long. Why?</p>
 <p>To answer, let’s first disassemble our program in lldb:</p>
 <pre><code>(lldb) di -b
 wregs`start:
@@ -789,13 +789,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-memory.html" class="pagination-link" aria-label="Episode 2: Memory">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 2: Memory</span>
+      <a href="./hdmcw-memory.html" class="pagination-link" aria-label="Episode 3: Memory">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Episode 3: Memory</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Episode 3: Programs">
-        <span class="nav-page-text">Episode 3: Programs</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Episode 5: Programs">
+        <span class="nav-page-text">Episode 5: Programs</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

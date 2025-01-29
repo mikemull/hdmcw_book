@@ -1,5 +1,5 @@
 
-# Episode 4: Virtual Memory  {.unnumbered}
+# Episode 6: Virtual Memory  {.unnumbered}
 
 A program uses memory in a few different ways.  As we've seen in our simple programs, the machine code and data
 we define in the program occupy memory.  In more sophisticated programs, you might define variables on the fly or call subroutines
@@ -141,4 +141,4 @@ this virtually memory map gets built, but this gives us an idea of how code and 
 can start execution.  In the [next episode](hdmcw-processes.html) we'll go deeper into the idea of _processes_.
 
 
-[^1]: I discovered this through [Julia Evans's blog](https://jvns.ca/blog/2018/01/26/mac-memory-maps/)
+[^1]: I discovered this through Julia Evans's blog [@juliaevansvmm]
