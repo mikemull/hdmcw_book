@@ -24,7 +24,7 @@
     "href": "hdmcw-prank.html#footnotes",
     "title": "1  Prank",
     "section": "",
-    "text": "Except for Radio Shack, where you could by the TRS-80 and a bag of resistors.↩︎\nSorry, i don’t have a more recent cultural reference. Is there a Gen Z version of Beavis and Butthead?↩︎",
+    "text": "Except for Radio Shack, where you could by the TRS-80 and a bag of resistors.↩︎\nSorry, i don’t have a more recent cultural reference. Is there a Gen Z version of Beavis and Butthead?↩︎\nThat is, standard output. The terminal if you run this program from a command line.↩︎",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Prank</span>"
     ]
@@ -44,7 +44,7 @@
     "href": "hdmcw-memory.html#footnotes",
     "title": "3  Memory",
     "section": "",
-    "text": "This is called the Von Neumann bottleneck, so taking credit for stuff is not all upside.↩︎\nAnother difference between the ARM and the Intel chips are that the former is a reduced instruction set computer (RISC) while the latter is a complex instruction set computer. This pertains to memory in that computers of the latter type can execute multiple low-level operations with one instruction (like load data, do something to it, then store it).↩︎",
+    "text": "This is called the Von Neumann bottleneck, so taking credit for stuff is not all upside.↩︎\nAnother difference between the ARM and the Intel chips are that the former is a reduced instruction set computer (RISC) while the latter is a complex instruction set computer. This pertains to memory in that computers of the latter type can execute multiple low-level operations with one instruction (like load data, do something to it, then store it).↩︎\nhttps://developer.arm.com/documentation/101811/0104/The-Memory-Management-Unit–MMU-↩︎",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Memory</span>"
     ]
@@ -154,7 +154,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "“ARM Developer.” 2025. 2025. https://developer.arm.com/.\n\n\nBelow, Alexander von. 2022. “HelloSilicon.” 2022. https://github.com/below/HelloSilicon.\n\n\nComer, Douglas. 2017. Essentials of Computer Architecture.\nChapman; Hall/CRC.\n\n\n“How Do You Read the Memory Maps of a Mac Process.” 2018.\n2018. https://jvns.ca/blog/2018/01/26/mac-memory-maps/.\n\n\nMattick, Lexi. 2023. “Putting the \"You\" in CPU.” 2023. https://cpu.land/.\n\n\nNeumann, John von. 1993. “First Draft of a Report on the\nEDVAC.” IEEE Ann. Hist. Comput. 15 (4): 27–75. https://doi.org/10.1109/85.238389.\n\n\nPetzold, Charles. 2000. Code: The Hidden Language of Computer\nHardware and Software. Microsoft Press.\n\n\nValsamaras, Dimitrios. 2022. “ARM 64 Assembly Series— Basic\nDefinitions and Registers.” 2022. https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40.",
+    "text": "“ARM Developer.” 2025. 2025. https://developer.arm.com/.\n\n\nBelow, Alexander von. 2022. “HelloSilicon.” 2022. https://github.com/below/HelloSilicon.\n\n\nComer, Douglas. 2017. Essentials of Computer Architecture.\nChapman; Hall/CRC.\n\n\nHaigh, Thomas, Mark Priestley, and Crispin Rope. 2016. ENIAC in\nAction: Making and Remaking the Modern Computer. The MIT Press.\n\n\n“How Do You Read the Memory Maps of a Mac Process.” 2018.\n2018. https://jvns.ca/blog/2018/01/26/mac-memory-maps/.\n\n\nMattick, Lexi. 2023. “Putting the \"You\" in CPU.” 2023. https://cpu.land/.\n\n\nNeumann, John von. 1993. “First Draft of a Report on the\nEDVAC.” IEEE Ann. Hist. Comput. 15 (4): 27–75. https://doi.org/10.1109/85.238389.\n\n\nPetzold, Charles. 2000. Code: The Hidden Language of Computer\nHardware and Software. Microsoft Press.\n\n\nValsamaras, Dimitrios. 2022. “ARM 64 Assembly Series— Basic\nDefinitions and Registers.” 2022. https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40.",
     "crumbs": [
       "References"
     ]

@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Programs
+# Programs {#sec-programs}
 
 Before getting into the technical details of how the computer loads and executes program, I want to talk about programs more
 generally.  It's surprisingly hard to define what a computer _program_ really is.  Usually you'll see something

@@ -23,6 +23,11 @@ book:
     - hdmcw-scheduler.qmd
     - hdmcw-io.qmd
     - hdmcw-files.qmd
+    - hdmcw-math-int.qmd
+    - hdmcw-math-float.qmd
+    - hdmcw-subs.qmd
+    - hdmcw-network.qmd
+    - hdmcw-gpu.qmd
     - references.qmd
     - --
 

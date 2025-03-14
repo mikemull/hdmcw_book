@@ -9,8 +9,7 @@ format:
 Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf)[@10.1109/85.238389],
 which described a design for a new type of electronic computer.
 People debate to what extent these were his ideas alone versus what was borrowed from existing designs, but he didn't give credit
-to other people and he was pretty famous so we now call what he described the _von Neumann architecture_.  Many
-real systems would be built from the design in the document, and even today most computers have this architecture.  One of the key
+to other people and he was pretty famous so we now call what he described the _von Neumann architecture_[@10.5555/2898944].  Many real systems would be built from the design in the document, and even today most computers have this architecture.  One of the key
 ideas was that programs would be stored in memory along with data, and the processors of the computer would fetch the instructions from memory.  Seems
 pretty obvious now, but it was a big step forward from, say, plugging wires into boards or flipping switches.
 
@@ -55,6 +54,9 @@ to the physical address of a memory location.  This is part of the hardware beca
 very fast.
 ![image](cachelevels.png)
 
+That _Address Translation_ box is essentially what's called the memory management unit, MMU[^3]. It's purpose
+is literally to take a number that addresses a virtual memory location and translate it into a number
+that addresses somewhere in physical memory (which might be in somewhere in a cache)
 The reason for using virtual addresses will become clearer in future chapters, but suffice it to say
 for now that it lets each program treat memory as its own personal workspace without worrying about
 the constraints of availably physical memory or the location of other programs in physical memory.
@@ -147,12 +149,21 @@ in the disassembly
 0x220040B9 -> 0x100003f70: 01 00 00 b0 21 00 00 91 __22 00 40 b9__ 03 00 00 b0 <br>
 
 
-Notice at the bottom there we also see our input and out data (__0x100004000: 11 00 00 00 19 00 00 00 2a 00 00 00 00 00 00 00__)
+Notice at the bottom there we also see our input and out data: <br>
+
+0x100004000: __11__ 00 00 00 __19__ 00 00 00 __2a__ 00 00 00 00 00 00 00__ <br>
+
 where 0x11 = 17, 0x19 = 25 and 0x2a = 42.
 
+One thing to note here about the data in memory when we look at these memory dumps: they might at first
+glance look sorta backwards.  For example the value 0x11 or 17 is actually held in 32 bits representing
+an integer (ie 11 00 00 00).  Note though that the as we go from left to right, the address of the bytes
+is _increasing_, so the byte holding the bits for 0x11 is at the _lowest_ address.  This ordering
+of bytes has the somewhat peculiar name _little-endian_.  Some microprocessors do use the opposite
+convention, which is called... did you guess it?  Yes, _big-endian_.
+
 So, that's our program (and data) "in memory".  The CPU fetches the instructions from memory and when instructed data values are transferred
-from memory into registers.  However, where the data actually comes from is harder to say than it seems.  First, as we'll see in the next
-episode the addresses we see in the debugger are not literal hardware addresses.  Second, when the processor fetches the
+from memory into registers.  However, where the data actually comes from is harder to say than it seems.  First, remember these are virtual addresses.  Second, when the processor fetches the
 instruction from 0x100003f70 it simultaneously tries both the cache and regular memory.  If it's a cache hit, then the memory fetch is
 cancelled.  This seems complicated, but it eliminates checking the cache before starting a memory fetch.
 
@@ -164,10 +175,12 @@ people sometimes say the ARM chips have a Harvard or modified Harvard architectu
 
 There are still many questions about memory and programs, one of which is "how does the program get into memory?".  Another thing that
 I've glossed over so far is the role of the operating system in all of this, which is what I'll start to
-cover that in [Episode 6](hdmcw-programs.html)
+cover in [Episode @sec-programs]
 
 
 [^1]: This is called the _Von Neumann bottleneck_, so taking credit for stuff is not all upside.
 [^2]: Another difference between the ARM and the Intel chips are that the former is a _reduced instruction set computer_ (RISC)
 while the latter is a _complex instruction set computer_.  This pertains to memory in that computers of the latter type can execute
 multiple low-level operations with one instruction (like load data, do something to it, then store it).
+[^3]: https://developer.arm.com/documentation/101811/0104/The-Memory-Management-Unit--MMU-
+

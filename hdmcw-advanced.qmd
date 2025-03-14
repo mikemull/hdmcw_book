@@ -1,0 +1,11 @@
+---
+format: 
+  html:
+    css: styles.css
+---
+
+# Advanced Instrutions [TBD]
+
+- SIMD
+- Pipelining
+- SVE/SME

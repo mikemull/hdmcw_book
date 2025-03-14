@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Assembling – How Does My 🤬 Computer Work</title>
+<title>14&nbsp; Math (Integers)[TBD] – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-memory.html" rel="next">
-<link href="./hdmcw-prank.html" rel="prev">
+<link href="./hdmcw-math-float.html" rel="next">
+<link href="./hdmcw-files.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-setup.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Assembling</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-math-int.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)[TBD]</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -127,7 +127,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link active">
+  <a href="./hdmcw-setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Assembling</span></span></a>
   </div>
 </li>
@@ -199,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-math-int.html" class="sidebar-item-text sidebar-link">
+  <a href="./hdmcw-math-int.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)[TBD]</span></span></a>
   </div>
 </li>
@@ -247,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Assembling</span></h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)[TBD]</span></h1>
 </div>
 
 
@@ -264,73 +264,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In the first episode I showed a program listing in ARM assembly language, but I didn’t describe how to turn this into a runnable program. Unfortunately, there’s no equivalent to <strong>debug.com</strong>, so you have to type the program into a text file and then run a program called an <em>assembler</em>. According to computer lore, the term assembler was coined in the 1950s but it meant something slightly different but then people and time intervened and now an assembler is a thing that assembles assembly language into machine instructions.</p>
-<p>To run the assembler on Mac OS you’ll probably need to install the XCode command line tools, part of Apple’s development platform (or you can install the who shebang from the App Store). You only need the assembler (called <strong>as</strong>) and other compiler tools for now. You can probably get what you need with the command:</p>
-<pre class="console"><code>xcode-select --install</code></pre>
-<p>If this works, you should have the neccessary programs on your computer, though you might have to set the PATH variable:</p>
-<pre><code>$ export PATH=/Library/Developer/CommandLineTools/usr/bin:$PATH
-$ which as
-/Library/Developer/CommandLineTools/usr/bin/as</code></pre>
-<p>Now you should be able to run the following commands to make an executable program (assuming the source file is called beep.s):</p>
-<pre class="console"><code>as -o beep.o beep.s
-ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` \ 
--e _start -arch arm64</code></pre>
-<p>The first command runs the <strong>as</strong> command to product an <em>object</em> file. We’ll talk more about that soon. The <strong>as</strong> program on MacOS is really just a shell script that runs the <strong>clang</strong> compiler, part of the LLVM toolset</p>
-<p>The second command, <strong>ld</strong>, creates the runnable programm called <strong>beep</strong>. The <strong>ld</strong> program is called the <em>linker</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. We’ll talk more about this in the next episode, but the basic idea is that to make an executable program we need to link our program’s code to system libraries (and sometimes other 3rd-party libraries). Let’s look at the arguments to this command:</p>
-<pre><code>-o beep</code></pre>
-<p>This specifies the executable program name.</p>
-<pre><code>-lSystem </code></pre>
-<p>This says to use the <em>System</em> directory to search for libraries to link.</p>
-<pre><code>-syslibroot `xcrun -sdk macosx --show-sdk-path`</code></pre>
-<p>Self-evident, so i’ll skip this one. Kidding! The <strong>-syslibroot</strong> option name is the root directory of the system library directories. The next part is trickier though. First you have to notice the backticks (<strong>`</strong>) around the <strong>xcrun</strong> command, which means “run this and then substitute the string you get back”. If we run the command by itself, it does something like this:</p>
-<pre class="console"><code>$ xcrun -sdk macosx --show-sdk-path
-/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk</code></pre>
-<p>We could for instance list the contents of the directory with the command:</p>
-<pre class="console"><code>$ ls `xcrun -sdk macosx --show-sdk-path`
-Entitlements.plist  SDKSettings.plist   usr
-SDKSettings.json    System</code></pre>
-<p>Back to the linker options:</p>
-<pre><code>-e _start</code></pre>
-<p>This tells the linker that the entry point is where the _start symbol is in our program. Remember the bit at the top of our first program that looked like this:</p>
-<pre><code>.global _start             // Provide program starting address to linker
-.align 4
-
-_start: </code></pre>
-<pre><code>-arch arm64</code></pre>
-<p>Finally, this tells the linker to produce a binary in the ARM 64 architecture format. This is the default.</p>
-<p>Note: quite often you <em>can</em> get away with a much simpler version of the link command, for example the following works for me for this program:</p>
-<pre class="console"><code>ld -o beep beep.o -e _start</code></pre>
-<p>If the above commands work, you should now have a file called <strong>beep</strong> that you can run (on MacOS, for me anyway, the file already has the execute permission set). Note though that if you do run this the only way to terminate the program is with ^C.</p>
-<p>As an alternative to running the program directly from the command line, you can also run it with the <strong>lldb</strong> debugger, which is part of the Xcode command line tools if you didn’t already have it. This way you can stop the program before it goes into the infinite loop:</p>
-<pre class="console"><code>$ lldb ./beep
-(lldb) target create "./beep"
-Current executable set to '/Dev/hdmcw/beep_4vr/beep' (arm64).
-(lldb) b beep4eva
-Breakpoint 1: where = beep`beep4eva, address = 0x0000000100003f9c
-(lldb) run
-Process 10410 launched: '//Dev/hdmcw/beep_4vr/beep' (arm64)
-Process 10410 stopped
-* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
-    frame #0: 0x0000000100003f9c beep`beep4eva
-beep`beep4eva:
--&gt;  0x100003f9c &lt;+0&gt;:  mov    x0, #0x1 ; =1 
-    0x100003fa0 &lt;+4&gt;:  adr    x1, 0x100003fb4 ; bel
-    0x100003fa4 &lt;+8&gt;:  mov    x2, #0x1 ; =1 
-    0x100003fa8 &lt;+12&gt;: mov    x16, #0x4 ; =4 
-Target 0: (beep) stopped.
-(lldb) 
-</code></pre>
-<p>One last detail. You’ll notice that the first part of most of the assembly language listings here will have this directive:</p>
-<pre><code>.align 4</code></pre>
-<p>This tells the loader to align the instructions on a 4-byte boundary. The <em>reason</em> for doing this will be more apparent after we cover the topic of memory, but for now know that you’ll probably need this directive to avoid errors when the program runs (you’ll probably get <em>Bus Error 100</em>, which has nothing to do with public transportation). This can be used in both the code and data sections of our programs, but we’ll go into that in more detail in later chapters.</p>
 
 
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>I assume it’s not called <strong>ln</strong> because that was already taken. It’s kind of like that <a href="https://www.youtube.com/watch?v=NA6CaeSY8fs">Demetri Martin joke about oranges and carrots</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -755,13 +690,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-prank.html" class="pagination-link" aria-label="Prank">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Prank</span></span>
+      <a href="./hdmcw-files.html" class="pagination-link" aria-label="Files (WIP)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-memory.html" class="pagination-link" aria-label="Memory">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Memory</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-math-float.html" class="pagination-link" aria-label="Math (Floats)[TBD]">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)[TBD]</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
