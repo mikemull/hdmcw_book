@@ -14,6 +14,7 @@ book:
     - hdmcw-setup.qmd
     - hdmcw-memory.qmd
     - hdmcw-assembly-registers.qmd
+    - hdmcw-instructions.qmd
     - hdmcw-programs.qmd
     - hdmcw-virtual.qmd
     - hdmcw-processes.qmd

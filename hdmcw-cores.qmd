@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 8: Cores {.unnumbered}
+# Cores
 
 This episode and the next two will cover topics so interrelated i'm not sure which order to put them in.  We've already touched on the idea that
 my computer, like most modern computers, runs multiple programs at the same time.  In fact, if you're not an old like me then pointing out this

@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 6: Virtual Memory  {.unnumbered}
+# Virtual Memory
 
 A program uses memory in a few different ways.  As we've seen in our simple programs, the machine code and data
 we define in the program occupy memory.  In more sophisticated programs, you might define variables on the fly or call subroutines

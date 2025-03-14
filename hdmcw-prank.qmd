@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 1: Prank {.unnumbered}
+# Prank
 
 When I was 20 years old my roommate Gary and I would go to computer stores to check out the latest wares.  These were not like Apple Stores.  Back then retail computer stores were serious places, intended for business people looking for systems to run spreadsheets and word processors (also, exclusively IBM PCs and clones)[^1] . Gary and I wore shorts and Ocean Pacific t-shirts.  We had mullets.  Picture Beavis and Butthead walking into a bank.[^2]
 

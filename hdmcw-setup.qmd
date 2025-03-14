@@ -1,4 +1,10 @@
-# Episode 2: Assembling {.unnumbered}
+---
+format: 
+  html:
+    css: styles.css
+---
+
+# Assembling
 
 In the first episode I showed a program listing in ARM assembly language, but I didn't
 describe how to turn this into a runnable program.  Unfortunately, there's no equivalent

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Programs – How Does My 🤬 Computer Work</title>
+<title>5&nbsp; Instructions – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-virtual.html" rel="next">
-<link href="./hdmcw-instructions.html" rel="prev">
+<link href="./hdmcw-programs.html" rel="next">
+<link href="./hdmcw-assembly-registers.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-programs.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Programs</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-instructions.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -145,13 +145,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-instructions.html" class="sidebar-item-text sidebar-link">
+  <a href="./hdmcw-instructions.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-programs.html" class="sidebar-item-text sidebar-link active">
+  <a href="./hdmcw-programs.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Programs</span></span></a>
   </div>
 </li>
@@ -217,7 +217,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Programs</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></h1>
 </div>
 
 
@@ -234,121 +234,303 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Before getting into the technical details of how the computer loads and executes program, I want to talk about programs more generally. It’s surprisingly hard to define what a computer <em>program</em> really is. Usually you’ll see something about “a set of instructions performed by a computer to perform a task”, but that leaves a lot of room for interpretation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. If you try to get more precise, you’ll end up talking about Turing machines or (God forbid) lambda calculus. The only constraint I’m going to put on programs for now is that i’ll usually be talking about programs where the source code is translated directly into machine instructions that the CPU can execute. This is in contrast to programming languages that use another program to interpret instructions at runtime or that use a <em>virtual machine</em> to translate a machine-agnostic code into machine-specific instructions. That’s not because one type of program is necessarily better than another, but my focus is on what the computer is doing.</p>
-<p>There’s sort of a meta-question here though: is the <em>program</em> the stuff that we write into a file, or is it the stuff that the computer executes? I’m going to meta-answer with the meta-response “Yes”. For now, i’m going to focus more on how we make the thing that the computer executes, and save the part about how the computer executes the thing for later.</p>
-<p>It’s probably also worth noting that any program we write for a computer like my computer is not running in isolation. There’s an extensive environment of other software running related to the MacOS operating system and services related to networking and other devices. The picture below shows the general software architecture of MacOS:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/2/26/The_XNU_Kernel_Graphic.svg" class="img-fluid figure-img"></p>
-<figcaption>MacOS architecture</figcaption>
-</figure>
-</div>
-<p>The programs we write, even these low-level assembly language programs, will be in what’s called <em>user space</em> in the diagram. Every program that you run directly is in user space, which has lower privilege than the stuff running in <em>kernel space</em>, so that they can’t tinker with kernel memory or assume greater priority. We’ll talk about this stuff in more detail later, but for now just keep in mind that there are a lot of supporting players in this drama.</p>
-<p>In the first two episodes we wrote two assembly language programs. As we saw in the last episode, each line of assembly maps to a 32-bit numbers that instructs the CPU what to do. We’ve also seen that process of going from the assembly language to the machine instructions is the function of the <em>assembler</em>. In the memory episode we wrote a program that takes two numbers from memory and adds them. Let’s imagine that the program is written in a file called <strong>adder.s</strong> (I don’t have to imagine it because it is). As we’ve seen, I can assemble the source program with the command:</p>
-<pre><code>as -o adder.o adder.s</code></pre>
-<p>This produces the file <strong>adder.o</strong> , which is called an <em>object file</em>, and on the Mac it’s in a format called Mach-O, which i <em>think</em> is pronounced “mock oh” and not “macho”. The equivalent on Unix systems is <em>Executable and Linkable Format</em> (ELF). Let’s look at the contents of this file. We’ll use <strong>xxd</strong> since it’s a binary file.</p>
-<pre class="console"><code>foo@bar:~$ file adder.o
-adder.o: Mach-O 64-bit object arm64</code></pre>
-<pre class="console"><code>foo@bar:~$ xxd adder.o
-
-00000000: cffa edfe 0c00 0001 0000 0000 0100 0000  ................
-00000010: 0400 0000 6801 0000 0000 0000 0000 0000  ....h...........
-00000020: 1900 0000 e800 0000 0000 0000 0000 0000  ................
-00000030: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000040: 3800 0000 0000 0000 8801 0000 0000 0000  8...............
-00000050: 3800 0000 0000 0000 0700 0000 0700 0000  8...............
-00000060: 0200 0000 0000 0000 5f5f 7465 7874 0000  ........__text..
-00000070: 0000 0000 0000 0000 5f5f 5445 5854 0000  ........__TEXT..
-00000080: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000090: 2c00 0000 0000 0000 8801 0000 0400 0000  ,...............
-000000a0: c001 0000 0600 0000 0004 0080 0000 0000  ................
-000000b0: 0000 0000 0000 0000 5f5f 6461 7461 0000  ........__data..
-000000c0: 0000 0000 0000 0000 5f5f 4441 5441 0000  ........__DATA..
-000000d0: 0000 0000 0000 0000 2c00 0000 0000 0000  ........,.......
-000000e0: 0c00 0000 0000 0000 b401 0000 0000 0000  ................
-000000f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000100: 0000 0000 0000 0000 3200 0000 1800 0000  ........2.......
-00000110: 0100 0000 0000 0e00 0000 0000 0000 0000  ................
-00000120: 0200 0000 1800 0000 f001 0000 0600 0000  ................
-00000130: 5002 0000 2800 0000 0b00 0000 5000 0000  P...(.......P...
-00000140: 0000 0000 0500 0000 0500 0000 0100 0000  ................
-00000150: 0600 0000 0000 0000 0000 0000 0000 0000  ................
-00000160: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000170: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-00000180: 0000 0000 0000 0000 0100 0090 2100 0091  ............!...
-00000190: 2200 40b9 0300 0090 6300 0091 6400 40b9  ".@.....c...d.@.
-000001a0: 8200 028b 0500 0090 a500 0091 a200 00f9  ................
-000001b0: 4000 20d4 1100 0000 1900 0000 0000 0000  @. .............
-000001c0: 2000 0000 0300 004c 1c00 0000 0300 003d   ......L.......=
-000001d0: 1000 0000 0200 004c 0c00 0000 0200 003d  .......L.......=
-000001e0: 0400 0000 0100 004c 0000 0000 0100 003d  .......L.......=
-000001f0: 1d00 0000 0e01 0000 0000 0000 0000 0000  ................
-00000200: 1800 0000 0e02 0000 2c00 0000 0000 0000  ........,.......
-00000210: 0800 0000 0e02 0000 3000 0000 0000 0000  ........0.......
-00000220: 0d00 0000 0e02 0000 3400 0000 0000 0000  ........4.......
-00000230: 1200 0000 0e02 0000 2c00 0000 0000 0000  ........,.......
-00000240: 0100 0000 0f01 0000 0000 0000 0000 0000  ................
-00000250: 005f 7374 6172 7400 6d79 6132 006d 7973  ._start.mya2.mys
-00000260: 3100 6c74 6d70 3100 6d79 6131 006c 746d  1.ltmp1.mya1.ltm
-00000270: 7030 0000 0000 0000                      p0......</code></pre>
-<p>Alrighty then. So if you squint you will see in there the hex values for our opcodes and data, plus some extra goodies like <strong>__text</strong> and <strong>__data</strong>, and also some text that matches our variable names (and, importantly, our <strong>_start</strong> label). For the most part this doesn’t tell us much, except that our assembler has produced a binary file that represents the code we wrote.</p>
-<p>Fortunately, there’s a utility on OSX that lets you examine Mach-O files in various ways. For one, we can disassemble it:</p>
-<pre class="console"><code>foo@bar:~$ objdump -d adder.o
-
-adder.o:    file format mach-o arm64
-
-Disassembly of section __TEXT,__text:
-
-0000000000000000 &lt;ltmp0&gt;:
-       0: 90000001      adrp    x1, 0x0 &lt;ltmp0&gt;
-       4: 91000021      add x1, x1, #0
-       8: b9400022      ldr w2, [x1]
-       c: 90000003      adrp    x3, 0x0 &lt;ltmp0+0xc&gt;
-      10: 91000063      add x3, x3, #0
-      14: b9400064      ldr w4, [x3]
-      18: 8b020082      add x2, x4, x2
-      1c: 90000005      adrp    x5, 0x0 &lt;ltmp0+0x1c&gt;
-      20: 910000a5      add x5, x5, #0
-      24: f90000a2      str x2, [x5]
-      28: d4200040      brk #0x2
-</code></pre>
-<p>Nice. That’s our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the “text section”) So, were done, right! We can just run this and… wait no, sorry, this is not an <em>executable</em> file. To make an actual runnable program we have to use the linker, <strong>ld</strong>. The command for the linker is also fairly short in this case:</p>
-<pre class="console"><code>foo@bar:~$ ld -o adder adder.o -e _start -arch arm64 </code></pre>
-<p>First, it’s using <strong>-o adder</strong> to say that we want the executable program to be called <strong>adder</strong>. Then it takes the name of our object file as input. The option <strong>-e _start</strong> tells the linker where the executable starts, and here we need to go back to the source code. Recall that in both of our programs so far we’ve had this bit at the beginning:</p>
-<pre><code>.global _start             // Provide program starting address to linker
-.align 4
-
-_start: 
-</code></pre>
-<p>Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
-<pre class="console"><code>foo@bar:~$ objdump --syms adder
-
-adder:  file format mach-o arm64
-
-SYMBOL TABLE:
-0000000100004000 l     O __DATA,__data mya1
-0000000100004004 l     O __DATA,__data mya2
-0000000100004008 l     O __DATA,__data mys1
-0000000100000000 g     F __TEXT,__text __mh_execute_header
-0000000100003f70 g     F __TEXT,__text _start
-</code></pre>
-<p>Right there is the “_start” symbol, and hey, it has the address that we saw in the last episode corresponding to the first instruction. That’s an amazing coincidence.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Why does the linker need to know where the start of our program is? Doesn’t it just start at, like, 0? The linker’s job is to combine various files into an executable program. In this case, we’ve only got one object file, so the other files that are getting linked are system-level libraries. However, in most complex programs there will be many object files and so the linker needs to know the entry point for the combined files. That’s why the “_start” symbol is a <em>global</em> symbol. If you were writing, say, C code the global start symbol would be in the runtime library.</p>
-<p>If we look at the final runnable program (<strong>adder</strong>), we’ll see that it’s way larger than the object file (<strong>adder.o</strong>) even though the latter holds all of the code we wrote.</p>
-<pre class="console"><code>foo@bar:~$ ls -l
-total 96
--rw-r--r--  1 mikemull  staff    184 Jul 19 16:05 Makefile
--rwxr-xr-x  1 mikemull  staff  33432 Aug  5 10:30 adder
--rw-r--r--  1 mikemull  staff    632 Aug  5 10:30 adder.o
--rw-r--r--  1 mikemull  staff    553 Aug  5 10:30 adder.s</code></pre>
-<p>Most of that is because the linker adds more of what are called “load commands” to the resulting binary, which are essentially instructions that tell the operating system how to load the program.</p>
-<p>So, we’ve more or less covered the “How does assembly get turned into numbers” part, skipping over (for now) details about how the actual files are created and read/written. Next we need to start thinking about how the stuff in that file gets executed by the computer. This is where the operating system gets really hard to separate from the hardware. The OS has the responsibility for loading the numbers that comprise our program, but it’s not a simple matter of taking the bits from a disk or SSD and putting them into physical memory. Before we talk about how the instructions are executed, we’re going to have to return to our discussion of memory and finally talk about <em>virtual memory</em>. That will be the subject of the <a href="hdmcw-virtual.html">next episode</a>.</p>
+<p>When discussing registers, I mentioned that the actual machine instructions corresponding to each line of assembly language are all 32 bits long. This can be hard to grasp at first, because some lines just look way more complicated and it seems like they should take more space. But no, an instruction like</p>
+<pre><code>W0, #0x808, LSL #16</code></pre>
+<p>takes the same number of bits as</p>
+<pre><code>B loop</code></pre>
+<p>To manage this the ARM architecture defines a format (various formats) to fit everything necessary into 32 bits. This includes the operation itself (aka the <em>operation code</em> or <em>opcode</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>), and operands like memory addresses, literal values, and registers. Taken together all of the different variations of those 32 bits constitute the <em>instruction set</em>.</p>
+<p>Let’s take a look at some of the instructions from the programs we’ve already seen. In the registers episode we saw that the instruction for <strong>MOVZ W0, #0x8405</strong> is the number</p>
+<pre><code>01010010100100001000000010100000  (0x529080a0)</code></pre>
+<p>The 32 bits for the instruction in this case need to encode (1) the opcode, (2) a register, and (3) the “immediate” value <strong>0x8405</strong>.</p>
+<p>The basic format of a MOV instruction is like this:</p>
+<table style="border: 1px solid black;text-align: center;white-space: nowrap;font-family:Courier New, monospace">
+<thead style="font-weight: bold;padding: 1 5 1">
+<tr>
+<td>
+31
+</td>
+<td>
+30_29
+</td>
+<td>
+28________23
+</td>
+<td>
+22_21
+</td>
+<td>
+20_____________________________5
+</td>
+<td>
+4_______0
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+sf
+</td>
+<td>
+opc
+</td>
+<td>
+1 0 0 1 0 1
+</td>
+<td>
+hw
+</td>
+<td>
+imm16
+</td>
+<td>
+Rd
+</td>
+</tr>
+<tr>
+<td>
+0
+</td>
+<td>
+1 0
+</td>
+<td>
+1 0 0 1 0 1
+</td>
+<td>
+00
+</td>
+<td>
+1 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1
+</td>
+<td>
+0 0 0 0 0
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <em>sf</em> flag indicates either a 32- or 64-bit operation. Here it’s 0 because we’re using the 32-bit variant of the register, if we’d used the register <strong>X0</strong> it would be <em>1</em>. The next 8 bits are basically the opcode for this instruction (this will change slightly for different variants of MOV). The <em>hw</em> here stands for “halfword”. A halfword is 16 bits, or half of a 32-bit word, but the value of the bits in this instruction are not super-relevant since we’re moving an immediate value rather than a value at a memory location. The key parts here are the <strong>imm16</strong> bits, which are the value we’re putting into the register and the <strong>Rd</strong> bits, which indicate the register. The register value here is <em>00000</em> since we’re using the <strong>W0</strong> register. If it were <em>00001</em> it would indicate the <strong>W1</strong> register.</p>
+<p>Let’s look at another one. The multiply instruction in our register program (<strong>MUL W4, W3, W0</strong>) has the hex value <strong>0x1b007c64</strong>, or <strong>00011011000000000111110001100100</strong> as 32-bit binary. The <strong>MUL</strong> instruction is actually an alias for a version of the <strong>MADD</strong> instruction (multiply and add), which does “multiply the values in two registers then add the value of another register”. The bits for this instruction break down thusly:</p>
+<table style="border: 1px solid black;text-align: center;white-space: nowrap;; font-family: Courier New,monospace">
+<thead style="font-weight: bold;padding: 1 5 1">
+<tr>
+<td>
+31
+</td>
+<td>
+30-29
+</td>
+<td>
+28_______24
+</td>
+<td>
+23 21
+</td>
+<td>
+20_______16
+</td>
+<td>
+15
+</td>
+<td>
+14______10
+</td>
+<td>
+9______5
+</td>
+<td>
+4______0
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+sf
+</td>
+<td>
+op54
+</td>
+<td>
+1 1 0 1 1
+</td>
+<td>
+op31
+</td>
+<td>
+Rm
+</td>
+<td>
+o0
+</td>
+<td>
+Ra
+</td>
+<td>
+Rn
+</td>
+<td>
+Rd
+</td>
+</tr>
+<tr>
+<td>
+0
+</td>
+<td>
+0 0
+</td>
+<td>
+1 1 0 1 1
+</td>
+<td>
+0 0 0
+</td>
+<td>
+0 0 0 0 0
+</td>
+<td>
+0
+</td>
+<td>
+1 1 1 1 1
+</td>
+<td>
+0 0 0 1 1
+</td>
+<td>
+0 0 1 0 0
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that the two registers values we’re multiplying are in <strong>Rm</strong> (<strong>W0</strong>=<strong>00000</strong>) and <strong>Rn</strong> (<strong>W3</strong>=<strong>00011</strong>) and result goes into <strong>Rd</strong> (<strong>W4</strong>=<strong>00100</strong>). The added value would be in the <strong>Ra</strong> register, but here that is <strong>11111</strong>, which tells the processor to just do the multiply.</p>
+<p>OK, let’s look at some more instructions, this time things that deal with memory addresses. Way back in our first program we saw the instruction <strong>ADR X1, bel</strong>, which loads the address of the data item labeled <strong>bel</strong> into register <strong>X1</strong>. <strong>ADR</strong> is essentially a variation of an <strong>ADD</strong> or <strong>SUB</strong> instruction, where the things being added are the <strong>PC</strong> (program counter) register and a value that gives the desired memory address <em>relative</em> to the <strong>PC</strong>.</p>
+<p>The hex value of this instruction is <strong>0x100000a1</strong> or <strong>00010000000000000000000010100001</strong> in binary. The instruction format looks like:</p>
+<table style="border: 1px solid black;text-align: center;white-space: nowrap; font-family: Courier New,monospace">
+<thead style="font-weight: bold;padding: 1 5 1">
+<tr>
+<td>
+31
+</td>
+<td>
+30-29
+</td>
+<td>
+28______24
+</td>
+<td>
+23_________________________________5
+</td>
+<td>
+4______0
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+op
+</td>
+<td>
+immlo
+</td>
+<td>
+1 0 0 0 0
+</td>
+<td>
+immhi
+</td>
+<td>
+Rd
+</td>
+</tr>
+<tr>
+<td>
+0
+</td>
+<td>
+0 0
+</td>
+<td>
+1 0 0 0 0
+</td>
+<td>
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1
+</td>
+<td>
+0 0 0 0 1
+</td>
+</tr>
+</tbody>
+</table>
+<p>This one’s a little strange, but basically we tack the <strong>immlo</strong> bits on to the end of the <strong>immhi</strong> bits and we get <strong>10100</strong> or 20, which happens to be the number of bytes above the current program location where the <strong>bel</strong> memory address resides. So, 20 gets added to the current <strong>PC</strong> and the result is put in register <strong>Rd</strong> (00001).</p>
+<p>In the chapter on memory we saw a similar instruction: <strong>ADRP X1, mya1</strong>. The difference here is that the value being loaded into the register is not the the exact location of the data, but the <em>page</em> in memory where that item resides. Page? Like books? Well, kinda. I’ll defer a complete discussion for now, but recall that I already mentioned that the memory addresses are <em>virtual</em>. When the virtual memory system loads memory it does so in 4KB chunks called <em>pages</em>. As a result, a specific memory address can be referred to by a page number and an offset within that page.</p>
+<p>The <strong>ADRP</strong> instruction has the same basic format as the <strong>ADR</strong> instruction with two exceptions. First, the leftmost bit is 1, and second, the immediate value in bits 23 to 5 is the number of pages where the data item resides relative to the current <strong>PC</strong> value. Of course to get the actual byte address, you need the following instruction that adds the offset within the page. Since this is a small program and the data is actually close the data is in the same page as the location where <strong>PC</strong> points to, so the 22 bits that make up the relative page number are all 0.</p>
+<table style="border: 1px solid black;text-align: center;white-space: nowrap; font-family: Courier New,monospace">
+<thead style="font-weight: bold;padding: 1 5 1">
+<tr>
+<td>
+31
+</td>
+<td>
+30-29
+</td>
+<td>
+28______24
+</td>
+<td>
+23_________________________________5
+</td>
+<td>
+4______0
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+op
+</td>
+<td>
+immlo
+</td>
+<td>
+1 0 0 0 0
+</td>
+<td>
+immhi
+</td>
+<td>
+Rd
+</td>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+0 0
+</td>
+<td>
+1 0 0 0 0
+</td>
+<td>
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+</td>
+<td>
+0 0 0 0 1
+</td>
+</tr>
+</tbody>
+</table>
+<p>Anyway, you get the idea. Every instruction in the aarch64 instruction is packed into 32 bits, which includes the operation, immediate values, and registers. As we’ll see these instructions get much more complicated but they’re still 32 bits. Conceptually the processor loads these instructions into memory and then executes them in turn (accounting for branching), however as we’ll see in future episodes, modern processors have various ways to make the execution faster, including <em>pipelining</em>, operating on multiple data elements with a single instruction, and predictive branching.</p>
 
 
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Pun intended.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>No, it’s not.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Everyone says <em>opcode</em>. It just sounds cooler.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -775,13 +957,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-instructions.html" class="pagination-link" aria-label="Instructions">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></span>
+      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Registers">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Registers</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-virtual.html" class="pagination-link" aria-label="Virtual Memory">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Virtual Memory</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Programs">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Programs</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
