@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 5: Programs {.unnumbered}
+# Programs
 
 Before getting into the technical details of how the computer loads and executes program, I want to talk about programs more
 generally.  It's surprisingly hard to define what a computer _program_ really is.  Usually you'll see something
@@ -15,18 +20,21 @@ There's sort of a meta-question here though: is the _program_ the stuff that we 
 executes?  I'm going to meta-answer with the meta-response "Yes".  For now, i'm going to focus more on how we make the thing that
 the computer executes, and save the part about how the computer executes the thing for later.
 
-In the first two episodes we wrote two assembly language programs, and I skirted around a bunch of details
-including things like "what is assembly language"?  If your nerd energy is strong enough to have made it
-this far, you probably don't need an answer to that, but I'll just say that it's the lowest level at
-which you can program except for entering numbers directly into the computer's memory.  Each assembly language instruction maps to a machine-level _operation code_ or _opcode_[^2] and usually some operands that tell the _opcode_ what to operate on.  As we saw in the last episode, each line of assembly maps to numbers that instruct the CPU what to do.  Assembly language also has _labels_ that designate specific places in the
-program, and various other directives that we'll discuss in a while.
+It's probably also worth noting that any program we write for a computer like my computer is not running
+in isolation.  There's an extensive environment of other software running related to the MacOS operating
+system and services related to networking and other devices.  The picture below shows the general software architecture of MacOS:
 
+![MacOS architecture](https://upload.wikimedia.org/wikipedia/commons/2/26/The_XNU_Kernel_Graphic.svg)
 
-What I'll start to answer now is: How does the assembly language get turned into numbers like what we saw in the computer's memory in Episode 2?
-The simple answer is "the assembler".  An assembler is yet another program that takes the assembly
-language source code and turns it into machine code. Let's imagine that the program in the last episode
-is written in a file called __adder.s__ (I don't have to imagine it because it is).  The assembler program on
-my Mac is called __as__ [^3], so i can assemble the source program with the command:
+The programs we write, even these low-level assembly language programs, will be in what's called _user space_ in the diagram.  Every program that you run directly
+is in user space, which has lower privilege than the stuff running in _kernel space_, so that they can't
+tinker with kernel memory or assume greater priority.  We'll talk about this stuff in more detail later, but
+for now just keep in mind that there are a lot of supporting players in this drama.
+
+In the first two episodes we wrote two assembly language programs.  As we saw in the last episode, each line of assembly maps to a 32-bit numbers that instructs the CPU what to do.  We've also seen that process of going
+from the assembly language to the machine instructions is the function of the _assembler_.  In the memory
+episode we wrote a program that takes two numbers from memory and adds them.  Let's imagine that the program 
+is written in a file called __adder.s__ (I don't have to imagine it because it is).  As we've seen, I can assemble the source program with the command:
 
 ```
 as -o adder.o adder.s
@@ -117,16 +125,13 @@ Disassembly of section __TEXT,__text:
 ```
 
 Nice.  That's our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the "text section")  So, were done, right!  We can just run this and... wait no, sorry, this is not an _executable_ file.  To make an actual runnable program we have to
-use a second program, the _linker_, which naturally is called __ld__.  The command for the linker is also fairly short in this case:
+use the linker, __ld__.  The command for the linker is also fairly short in this case:
 
 ```console
 foo@bar:~$ ld -o adder adder.o -e _start -arch arm64 
 ```
 
-First, it's using __-o adder__ to say that we want the executable program to be called __adder__.  Then it takes the name of our object file as input.  Now, normally the __ld__  command sort of gets mental.
-It often takes numerous arguments for libraries, directories to look in, optimization levels, etc.
-
-The option __-e \_start__ tells the linker where the executable starts, and here we need to go back to the source code.  Recall that in both of our programs so far we've had this bit at the beginning:
+First, it's using __-o adder__ to say that we want the executable program to be called __adder__.  Then it takes the name of our object file as input.  The option __-e \_start__ tells the linker where the executable starts, and here we need to go back to the source code.  Recall that in both of our programs so far we've had this bit at the beginning:
 
 ```
 .global _start             // Provide program starting address to linker
@@ -152,7 +157,7 @@ SYMBOL TABLE:
 
 ```
 Right there is the "_start" symbol, and hey, it has the address that we saw in the last episode corresponding to the first instruction.
-That's an amazing coincidence.[^4].  Why does the linker need to know where the start of our program is?  Doesn't it just start at, like, 0?
+That's an amazing coincidence.[^2].  Why does the linker need to know where the start of our program is?  Doesn't it just start at, like, 0?
 The linker's job is to combine various files into an executable program.  In this case, we've only got one object file, so the other files that
 are getting linked are system-level libraries.  However, in most complex programs there will be many object files and so the linker
 needs to know the entry point for the combined files.  That's why the "_start" symbol is a _global_ symbol.  If you were writing, say, C code
@@ -180,6 +185,4 @@ That will be the subject of the [next episode](hdmcw-virtual.html).
 
 
 [^1]: Pun intended.
-[^2]: Everyone says _opcode_.  It just sounds cooler.
-[^3]: __as__ just calls __clang__, which is part of the [LLVM](https://llvm.org/) toolset (as is __objdump__).
-[^4]: No, it's not.
+[^2]: No, it's not.

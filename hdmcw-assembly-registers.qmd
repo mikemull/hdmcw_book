@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 4: Registers {.unnumbered}
+# Registers
 
 I talked about registers in the preceding chapters.  The idea of registers
 goes back to the earliest digital computer designs, although they might have been called
@@ -93,7 +98,7 @@ Do you see why?  This is important.  It will be on the test.
 
 Also notice that the value of __X__ form register is the same, just with 4 bytes of
 zeros in the left part, which means that when we do the addition in the into W4 it's
-not just puttin the leftmost two bits into the upper part of the register 
+not just putting the leftmost two bits into the upper part of the register. 
 
 There's one oddity here that I have to clear up.  You'll notice that that __W0__
 register is loaded with two instructions (MOVZ and MOVK, which you can think of
@@ -116,14 +121,14 @@ wregs`start:
 ->  0x100003fb0 <+16>: 0xd4200040   brk    #0x2
 ```
 The hex values to the left of the instruction are the actual machine language
-instructions.  You
+instructions[^2].  You
 can see that all of the op codes are 4 bytes (32 bits).  What this implies is that the literal
 data value has to fit in the opcode.  For example the binary values of the opcode
 and the literal 0x8405 are shown below, with the value aligned:
 
 ```
-1010010100100001000000010100000  (0x529080a0)
-          1000010000000101       (0x8405)
+01010010100100001000000010100000  (0x529080a0)
+           1000010000000101       (0x8405)
 ```
 
 So, the size of the literal has to be limited so that it can fit into the opcode.  The
@@ -140,3 +145,4 @@ calls to subroutines.
 
 
 [^1]: [Registers in AArch64 state](https://developer.arm.com/documentation/dui0801/l/Overview-of-AArch64-state/Registers-in-AArch64-state) [@armdeveloper]
+[^2]: Note that MOVZ is an alias for MOV so when _disassembling_, MOVZ might be shown as just MOV.

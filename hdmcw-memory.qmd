@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 3: Memory {.unnumbered}
+# Memory
 
 Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf)[@10.1109/85.238389],
 which described a design for a new type of electronic computer.
@@ -43,6 +48,18 @@ execute the instructions in the CPU and then return any result to memory. The fe
 (measure in nanoseconds), but still it would make the computer slower if you had to go back and forth from CPU to DRAM on every instruction[^1].
 So, most computers have an instruction cache in the CPU.  It's up to 192 KB in my Mac.  Actually, this is only one _level_ of cache (the so-called
 L1 cache).  The M2 also has a second level of cache (L2 naturally) that's up to 16 MB. [^2]
+
+The image below (taken from the ARM Architecture Reference Manual) shows both the cache levels and the
+_address translation_ that takes place to map virtual addresses (the addresses we use in our programs)
+to the physical address of a memory location.  This is part of the hardware because it needs to be
+very fast.
+![image](cachelevels.png)
+
+The reason for using virtual addresses will become clearer in future chapters, but suffice it to say
+for now that it lets each program treat memory as its own personal workspace without worrying about
+the constraints of availably physical memory or the location of other programs in physical memory.
+In the old days of my PC these were not major concerns because the operating systems only allowed
+one user program to run at a time. This meant that memory management was relatively simple, as there was no need to protect one program's memory from another. Modern operating systems, however, allow multiple programs to run simultaneously, which requires more sophisticated memory management techniques to ensure that each program has its own protected memory space.
 
 You might wonder "If cache memory is so much faster, why not make _all_ of the memory the same as the cache memory"?  Good question, you're very smart.
 The chief reason is that cache memory is typically _static RAM_ (SRAM) while regular memory is _dynamic_ RAM (DRAM).  The former is faster, but also takes
@@ -91,17 +108,19 @@ I stuck a breakpoint at the end of this program so that i can run it in the __ll
 and then disassemble it after it hits the breakpoint, i see this
 
 ```
-    0x100003f70 <+0>:  adrp   x1, 1
-    0x100003f74 <+4>:  add    x1, x1, #0x0              ; mya1
-    0x100003f78 <+8>:  ldr    w2, [x1]
-    0x100003f7c <+12>: adrp   x3, 1
-    0x100003f80 <+16>: add    x3, x3, #0x4              ; mya2
-    0x100003f84 <+20>: ldr    w4, [x3]
-    0x100003f88 <+24>: add    x2, x4, x2
-    0x100003f8c <+28>: adrp   x5, 1
-    0x100003f90 <+32>: add    x5, x5, #0x8              ; mys1
-    0x100003f94 <+36>: str    x2, [x5]
-->  0x100003f98 <+40>: brk    #0x2
+(lldb) di -b
+adder`start:
+    0x100003f70 <+0>:  0xb0000001   adrp   x1, 1
+    0x100003f74 <+4>:  0x91000021   add    x1, x1, #0x0 ; mya1
+    0x100003f78 <+8>:  0xb9400022   ldr    w2, [x1]
+    0x100003f7c <+12>: 0xb0000003   adrp   x3, 1
+    0x100003f80 <+16>: 0x91001063   add    x3, x3, #0x4 ; mya2
+    0x100003f84 <+20>: 0xb9400064   ldr    w4, [x3]
+    0x100003f88 <+24>: 0x8b020082   add    x2, x4, x2
+    0x100003f8c <+28>: 0xb0000005   adrp   x5, 1
+    0x100003f90 <+32>: 0x910020a5   add    x5, x5, #0x8 ; mys1
+    0x100003f94 <+36>: 0xf90000a2   str    x2, [x5]
+->  0x100003f98 <+40>: 0xd4200040   brk    #0x2
 ```
 So, same program, but on the left you can see the memory addresses of the specific instructions.  If I actually dump memory starting at 0x100003f70
 I get:
@@ -119,14 +138,14 @@ I get:
 0x100004000: 11 00 00 00 19 00 00 00 2a 00 00 00 00 00 00 00  ........*.......
 ```
 
-Obvi, no?  Fortunately,  I found [this tool](https://armconverter.com/), which tells me as we expect that the first few
-instructions map to:
+Obvi, no?  You can see though how the contents of memory correspond to the instructions
+in the disassembly
 
-```
-0x010000B0
-0x21000091
-0x220040B9
-```
+
+0x010000B0 -> 0x100003f70: __01 00 00 b0__ 21 00 00 91 22 00 40 b9 03 00 00 b0 <br>
+0x21000091 -> 0x100003f70: 01 00 00 b0 __21 00 00 91__ 22 00 40 b9 03 00 00 b0 <br>
+0x220040B9 -> 0x100003f70: 01 00 00 b0 21 00 00 91 __22 00 40 b9__ 03 00 00 b0 <br>
+
 
 Notice at the bottom there we also see our input and out data (__0x100004000: 11 00 00 00 19 00 00 00 2a 00 00 00 00 00 00 00__)
 where 0x11 = 17, 0x19 = 25 and 0x2a = 42.
@@ -145,7 +164,7 @@ people sometimes say the ARM chips have a Harvard or modified Harvard architectu
 
 There are still many questions about memory and programs, one of which is "how does the program get into memory?".  Another thing that
 I've glossed over so far is the role of the operating system in all of this, which is what I'll start to
-cover that in [Episode 3](hdmcw-programs.html)
+cover that in [Episode 6](hdmcw-programs.html)
 
 
 [^1]: This is called the _Von Neumann bottleneck_, so taking credit for stuff is not all upside.

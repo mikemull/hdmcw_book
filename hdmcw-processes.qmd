@@ -1,5 +1,10 @@
+---
+format: 
+  html:
+    css: styles.css
+---
 
-# Episode 7: Processes {.unnumbered}
+# Processes
 
 The operating system on my computer is the standard Mac OS (Sonoma, 14.5), which Apple now calls Darwin OS.  The kernel, called XNU for "X is Not Unix",
 apparently combines bits of FreeBSD and something called OSFMK, which in turn has remnants of Mach.  Or something like that.  It's roughly Unix.

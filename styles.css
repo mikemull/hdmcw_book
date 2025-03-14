@@ -1,0 +1,11 @@
+td {
+    border: 1px solid black
+}
+
+.chapter-number::before {
+    content: "Episode ";
+}
+
+.chapter-number::after {
+    content: ": ";
+}
