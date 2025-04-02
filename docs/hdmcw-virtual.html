@@ -259,8 +259,14 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-stack-and-heap" id="toc-the-stack-and-heap" class="nav-link active" data-scroll-target="#the-stack-and-heap"><span class="header-section-number">7.1</span> The Stack and Heap</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -284,12 +290,21 @@ div.csl-indent {
 </header>
 
 
-<p>A program uses memory in a few different ways. As we’ve seen in our simple programs, the machine code and data we define in the program occupy memory. In more sophisticated programs, you might define variables on the fly or call subroutines which causes memory to be allocated on the <em>stack</em>. In other cases you might explicitly create a chunk of memory to be used for a data structure, which is allocated on the <em>heap</em>.</p>
-<p>The stack and heap aren’t special types of memory– ultimately they are in the same physical memory– but they are structures tailored to the way they are being used. The stack, as the name implies, is conceptually a last-in first-out (LIFO) queue usually used for smaller chunks of memory that are transient. The heap by contrast is used for large chunks of memory, and it’s designed for that purpose. The important thing here though is that both of these sections of memory can grow (and shrink) as a program does its thing.</p>
-<p>If my computer only ran one program at a time we could just use all of the available memory and hope that we don’t run out. That was sort of how my old PC worked. However, since you’ve used a computer you probably know they run more than one thing at a time. You might be reading this on a browser, listening to JPEGMAFIA, while you ignore the document you’re supposed to be writing (i mean, i am). While you’re ignoring it, you probably don’t want the contents of that document, brilliant as they are, to take up memory. The same goes for the 40 browser tabs you have open (again, me).</p>
-<p>We’d like to accomplish two things: use the memory in the most efficient way that allows everything to work, and also make sure that the memory we’re allocating doesn’t interfere with the memory other programs are allocating. This is what the virtual memory system, which is part operating system kernel and part hardware, does for us.</p>
-<p>Virtual memory has two implications that we’ve already hinted at. One is that the memory addresses we see in <strong>lldb</strong> or <strong>objdump</strong> are <em>virtual</em>. This is a little hard to grok but for now let’s just say that every location in my computer has a physical address, and what we see ain’t it. The other is that sometimes the contents of memory are temporarily <em>swapped out</em> to a storage device, in my case the SSD.</p>
-<p>Before looking at more details, let’s go back to our silly beeping program, which i will call <strong>beep</strong> (i have a knack for naming). The <strong>beep</strong> code gets assembled and linked similarly to the <strong>adder</strong> program, but it has the added virtue (in this situation) that it does not stop running. If we start it up from a shell, it will have a <em>process id</em> that we can get with the <strong>ps</strong> command.</p>
+<p>If my computer only ran one program at a time we could just use all of the available memory and hope that we don’t run out. That was sort of how my old PC worked. However, since you’ve used a computer you probably know they run more than one thing at a time. You might be reading this on a browser, listening to death metal, while you ignore the document you’re supposed to be writing (i mean, i am). While you’re ignoring it, you probably don’t want the contents of that document, brilliant as they are, to take up memory. The same goes for the 40 browser tabs you have open (again, me).</p>
+<p>Conceptually what we want is a chunk of memory for every program that goes from 0 to some large number N (maybe 1Gb?, 4Gb?). But we don’t want to set aside that much memory for every program, because then you can’t run many programs and there’ll usually be a lot of wasted space. On the other hand, you could set aside a small chunk for each program and then when a program needs more space you could expand it and shuffle things around to make room. That’d be kind of a bummer too though, since you’d either end up doing a lot of shuffling or you’d have to set aside a big chunk of memory to reduce the shuffling, which soon becomes like the previous problem.</p>
+<p>We’d like to accomplish two things: use the memory in the most efficient way that allows everything to work, and also make sure that the memory we’re allocating doesn’t interfere with the memory other programs are allocating. So what if we just <em>pretend</em> that every program has a huge memory space available. The system wouldn’t actually set aside all the necessary physical memory, but all of the addresses in that space would be valid. This is what the virtual memory system, which is part operating system kernel and part hardware, does for us. It sounds a bit magical, and to be frank it kinda is.</p>
+<p>Let’s talk a bit about the hardware part first. Back in the episode about memory we showed a picture with the cache levels and we talked about the <em>Address Translation</em> box in that picture, which is essentially the memory management unit, or MMU. The hardware there takes a virtual address and does two things. First, it checks the address against something called Translation Lookaside Buffers (TLB) to see if that virtual address was recently translated. If it wasn’t then it uses the Table Walk Unit which goes through translation tables to map the virtual address to a physical address. This happens even when the memory location is cached, because the caches store data using a physical address.</p>
+<p>The translation process is fairly tricky. Obviously, you can’t just have a huge table with one physical address for every virtual address. Also, since each program is using a virtual memory space, they will use the same address values so the translation tables have to keep track of information related to each program’s virtual memory space. The virtual memory space is divided up into <em>pages</em> as we’ve mentioned already, so what happens is that some subset of bits in the virtual address is used to map to a table for that page. The lower order bits in the virtual address are the same in the virtual address and the physical address, and they correspond to the offset within that page.</p>
+<p>One possibility is that the translation process finds that the virtual address does not yet map to data in physical memory because it hasn’t been loaded yet. This causes a <em>translation fault</em> in the MMU and then it’s the turn of the operating system, so now we move to the software part of virtual memory.</p>
+<p>In the operating system kernel, the translation fault exception triggers a <em>page fault</em> handler, which is the bit that loads a page from a storage device into a <em>page frame</em> in physical memory. If there’s unused physical memory this is fairly simple, but remember that we might be running a bunch of programs, all of which think they have access to a memory space that’s larger the whole capacity of physical memory. It’s often the case that to get data or machine code into memory the virtual memory system of the operating system will either have to <em>compress</em> pages in memory to make room, <em>swap</em> the current contents of the physical memory out to a storage device to make room for another program, or for memory that’s <em>shared</em> the kernel points the running process to the shared memory. We’ll talk more about sharing memory below.</p>
+<p>Once the page is loaded the page fault handler updates the translation tables (which are also in memory) and returns control to the program that caused the translation fault exception and restarts the instruction.</p>
+<section id="the-stack-and-heap" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="the-stack-and-heap"><span class="header-section-number">7.1</span> The Stack and Heap</h2>
+<p>So far the simple programs we’ve looked at specify how much memory they use ahead of time. The machine code produced by the assembler and data we define in the program occupy a fixed amount of memory that’s known when the program is assembled. In more sophisticated programs, you might define data structures on the fly or call subroutines, both of which require memory that you didn’t set up in your program code. When a subroutine is called for example, the current state of the registers must be saved in a special part of memory called the <em>stack</em>. If a program wants to create an array to hold data that will usually be allocated on the <em>heap</em>.</p>
+<p>The stack and heap aren’t special types of memory– ultimately they are in the same virtual memory space and the same physical memory– but they are structures tailored to the way they are being used. The stack, as the name implies, is conceptually a last-in first-out (LIFO) queue usually used for smaller chunks of memory that are transient. Elements are added to the stack with the <strong>PUSH</strong> instruction and removed with the <strong>POP</strong> instruction. These are just special store and load instructions that use a special register called the <em>stack pointer</em> to know where the data lives in memory.</p>
+<p>The heap by contrast is used for large chunks of memory, and it’s designed for that purpose. The heap has some of the same issues as the virtual memory system itself, since dynamically allocated memory can grow and shrink. The important thing here though is that both of these sections of memory can grow (and shrink) as a program does its thing. I won’t talk about the stack or heap in detail yet, but the ideas will come up below as we look at virtual memory in more detail.</p>
+<p>Let’s recap the implications of virtual memory before proceeding: - The memory addresses we see in <strong>lldb</strong> or <strong>objdump</strong> are <em>virtual</em>. - Virtual addresses have to be mapped to physical addresses by the MMU - Sometimes the contents of memory are temporarily <em>swapped out</em> to a storage device, in my case the SSD.</p>
+<p>Now let’s go back to our silly beeping program, which i will call <strong>beep</strong> (i have a knack for naming). The <strong>beep</strong> code gets assembled and linked similarly to the <strong>adder</strong> program, but it has the added virtue (in this situation) that it does not stop running. If we start it up from a shell, it will have a <em>process id</em> that we can get with the <strong>ps</strong> command.</p>
 <pre class="console"><code>foo@bar:~$ ps ul
 USER       PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND            UID  PPID CPU PRI NI WCHAN
 mikemull 36135  99.2  0.0 410592880   1072 s005  R+    3:24PM   0:03.67 ./beep             501   904   0  31  0 -       
@@ -362,8 +377,50 @@ Writable regions: Total=529.4M written=288K(0%) resident=416K(0%) swapped_out=0K
 ...
 </code></pre>
 <p>The command <strong>vmmap</strong> is short for <em>virtual memory map</em>, which is what it prints out. There’s a bunch of info here, even in my extremely elided version. Let’s take a look at the highlights.</p>
-<p>Our ~15 line assembly language program has a “physical footprint” of nearly a megabyte, which is weird. The part that our code uses is covered by the first line of the non-writable regions (<strong>__TEXT 102810000-102814000</strong>) Most of the rest here is either dynamic libraries (the .dylib things) or things related to stack and heap memory (memory on the heap is usually allocated with the C library function <em>malloc()</em>, hence all the MALLOC_ stuff). Note also near the top it says <strong>VM page size: 16384 bytes</strong>. The idea of a <em>page</em> is essential to virtual memory. What this means is that the virtual memory space is divided up into 16 K chunks (the page size is always a power of 2). When our program attempts to access something at a particular virtual memory address two things happen. The virtual address is translated to a physical address, and then there’s a check to see if the <em>page</em> in which that instruction or data lives is already resident in physical memory. That happens in the hardware because it needs to be as fast as possible. However, if the page is not resident, the hardware just returns a <em>page fault</em> which indicates to the operating system that it needs to retrieve the data from the SSD.</p>
+<p>Our ~15 line assembly language program has a “physical footprint” of nearly a megabyte, which is weird since we know instructions are 4 bytes each and we only use one byte of data. The part that our code uses is covered by the first line of the non-writable regions (<strong>__TEXT 102810000-102814000</strong>) Most of the rest here is either dynamic libraries (the .dylib things) or things related to stack and heap memory (memory on the heap is usually allocated with the C library function <em>malloc()</em>, hence all the MALLOC_ sections). Note also near the top it says <strong>VM page size: 16384 bytes</strong>. As we saw when talking about the processor above, the idea of a <em>page</em> is essential to virtual memory. Our virtual memory space is divided up into 16 K chunks (the page size is always a power of 2). Each line corresponds to a <em>region</em> in the virtual memory space, all of which are some multiple of pages.<br>
+When our program attempts to access something at a particular virtual memory address the process described above kicks in to make sure the page is in physical memory.</p>
 <p>Another couple of things to notice here: in the “Writable” section there’s a big gap between the MALLOC_SMALL section and the Stack section (like, a billion). That’s because usually the virtual memory space is set up so that the stack grows downward and the heap grows upward, address-wise. Also notice there is the <strong>SHRMOD</strong> (share mode) column, and for many things especially the “dylib” entries, the share mode is “SM=COW”. No bovine connection, COW means “copy on write”. This is a common optimization that basically means you share the memory until a process wants to modify something then you make a copy of it specifically for that process. Since a process is unlikely to modify the code of a system library it’s fairly safe to assume these will remain COWs.</p>
+<p>In assembly language programs, there’s generally not any dynamic memory allocation and therefore the only heap usage is by the system libraries linked to make a running program. To show what happens when our own program allocates memory, I wrote a simple C program that does a bunch of <strong>malloc</strong> calls.</p>
+<pre><code>//  memhog
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(int argc, const char * argv[]) {
+    long total_alloc = 0;
+    long nalloc = 10;
+    char *parray[100];
+    
+    for (int i=0; i&lt;10; i++) {
+        for (int j=0; j&lt;10; j++) {
+            parray[i*10 + j] = malloc(nalloc);
+            total_alloc += nalloc;
+            printf("Malloc %d %ld\n", i*10 + j, nalloc);
+        }
+        nalloc *= 10;
+    }
+    printf("Malloc %ld\n", total_alloc);
+    sleep(30);
+    return 0;
+}</code></pre>
+<p>This allocates a lot of memory (over 100Gb, about 4 times the size of my physical memory), but doesn’t actually write anything to it. The virtual memory map looks fairly similar with a couple of exceptions. First, there are some extra regions before the Stack section:</p>
+<pre><code>MALLOC_LARGE (reserved)     100c38000-106b98000    [ 95.4M     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000
+MALLOC_LARGE (reserved)     107600000-1134c0000    [190.8M     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000                  
+MALLOC_LARGE (reserved)     117600000-1234c0000    [190.8M     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000                 
+MALLOC_TINY                 127600000-127700000    [ 1024K    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x100820000
+MALLOC_LARGE metadata       127700000-127704000    [   16K    16K    16K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x100820000
+MALLOC_SMALL                127800000-128000000    [ 8192K    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x100820000
+MALLOC_MEDIUM               128000000-130000000    [128.0M    32K    32K     0K] rw-/rwx SM=PRV          MallocHelperZone_0x100820000
+MALLOC_LARGE (reserved)     130000000-153c58000    [572.3M     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000
+Stack                       16ee04000-16f600000    [ 8176K    96K    96K     0K] rw-/rwx SM=PRV          thread 0</code></pre>
+<p>This happens because the virtual memory system uses different regions for different size allocations. Note that the share mode on these regions is <strong>NUL</strong> indicating that the regions are reserved by not yet occupied. At the end of the map is an even more remarkable section:</p>
+<pre><code>MALLOC_LARGE (reserved)     300000000-ea43e0000    [ 46.6G     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000
+MALLOC_LARGE (reserved)    7000000000-7df8480000   [ 55.9G     0K     0K     0K] rw-/rwx SM=NUL          MallocHelperZone_0x100820000
+MALLOC_NANO              600000000000-600020000000 [512.0M   160K   160K     0K] rw-/rwx SM=PRV          DefaultMallocZone_0x10085c000
+page table in kernel           kernel-kernel       [  225K   225K   225K     0K] rw-/rw- SM=PRV          charged to process physical footprint </code></pre>
+<p>Note a few things here. One is that we have another set of MALLOC_LARGE regions, two of which are very large. Another is that there are some larger address values, well above the highest possible physical address. In principle, the ARM MMU can use up to 18 exabytes of virtual memory space (I don’t know how big that is either, but it’s lots). Also, there’s a section shown now of kernel memory being “charged to process physical footprint”, which means that the translation tables have grown just to handle this program.</p>
+<p>Of course, if we actually tried to use this memory things could get pretty slow because the virtual memory system would need to swap data back and forth from physical memory to SSD storage.</p>
 <p>There’s a ton more to virtual memory, but i think we’ve got enough to go on. We haven’t really discussed the mechanics of how this virtually memory map gets built, but this gives us an idea of how code and data gets into memory so that the program can start execution. In the <a href="hdmcw-processes.html">next episode</a> we’ll go deeper into the idea of <em>processes</em>.</p>
 
 
@@ -372,6 +429,7 @@ Writable regions: Total=529.4M written=288K(0%) resident=416K(0%) swapped_out=0K
 <span>“How Do You Read the Memory Maps of a Mac Process.”</span> 2018. 2018. <a href="https://jvns.ca/blog/2018/01/26/mac-memory-maps/">https://jvns.ca/blog/2018/01/26/mac-memory-maps/</a>.
 </div>
 </div>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>

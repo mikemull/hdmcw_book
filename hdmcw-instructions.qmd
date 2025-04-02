@@ -158,6 +158,19 @@ executes them in turn (accounting for branching), however as we'll see in future
 processors have various ways to make the execution faster, including _pipelining_, operating on multiple
 data elements with a single instruction, and predictive branching.
 
+One last note on instructions that connects them to the previous memory episode. As mentioned above the processor goes through a process of fetching the instruction and then executing it, which is called the _fetch-execute_
+cycle.  You might wonder what drives the processor to proceed from one instruction to the next.  This
+is primarily the function of what's called the _clock_.  The clock isn't really a timekeeper, but rather
+a signal that oscillates between a logical 1 and logical 0 value.  The rate at which this happens
+is called the _clock speed_, and generally a higher clock speed means a faster processor.  My computer
+has a clock speed measured in GHz, while my original PC has a clock speed measured in MHz.
+
+Instructions take some number of clock cycles, however saying precisely _how_ many is complicated by CPU
+caching and some of the things mentioned above (eg, pipelining).  As we'll see later on, the clock speed
+on my computer is also variable to some degree, which is an energy-saving measure since faster clock speeds
+correlate to greater power.  Anyway, it's part of the lingo: instructions and clock cycles are inextricably
+linked, and you'll often hear talk of clock speeds and clock cycles when talking about low-level programming
+and CPU speed comparisons.
 
 
 [^1]: Everyone says _opcode_.  It just sounds cooler.
