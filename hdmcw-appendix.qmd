@@ -1,0 +1,9 @@
+Useful commands
+
+
+vmmap
+
+heap
+
+objdump
+
