@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Math (Integers)[TBD]
+# Math (Integers)[WIP]
 
 A fairly common thing that people want to do with computers is compute.  Most of the early computers were built for
 the specific purpose of doing numerical computations.  Mauchly and Eckert got funding for the ENIAC by claiming that
