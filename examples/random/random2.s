@@ -32,7 +32,6 @@ loop:
 sum:
     LDR W4, [X6], 4    ; Load the value from the array
     ADD X3, X3, W4, SXTW  ; Add it to the sum
-    //ADD X6, X6, #4
     SUBS W5, W5, #1
     B.NE sum
 
