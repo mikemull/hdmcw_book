@@ -6,9 +6,9 @@ format:
 
 # Math (Integers)[WIP]
 
-A fairly common thing that people want to do with computers is compute.  Most of the early computers were built for
+A common thing that people want to do with computers is compute.  Most of the early computers were built for
 the specific purpose of doing numerical computations.  Mauchly and Eckert got funding for the ENIAC by claiming that
-it could be used to more rapidly compute firing tables for the Ballistic Research Laboratory.  Its first computations
+it could be used to rapidly compute firing tables for the Ballistic Research Laboratory.  Its first computations
 turned out to be computations for the atom bomb.  Nobody was thinking word processors or cat pictures when they 
 built the early machines.  Even i bought my first computer to do computations since i was a chemistry student and thought
 i could do homework and build models of molecules.  The fact that i could also play Zork and prank computer stores was
@@ -61,7 +61,7 @@ randos:     .fill   1000, 4, 0
 ```
 
 This one is a bit more complicated but here's what's happening.  The bit at the top of the loop (the MUL and ADD)
-effectively implement a pseudo-random number generator (PRNG), though not a particularly good one.  We run
+effectively implement a pseudo-random number generator (PRNG), though not a particularly good one[^1].  We run
 through this loop 1000 times, storing the 4-byte value in register W3 into memory and successive 4 byte long memory
 locations.  So we end up with 1000 pseudo random numbers.  But what exactly do we mean by "numbers"?
 
@@ -138,8 +138,8 @@ Anyway, the punchline here is that ARM processors (most processors) use what's c
 negative decimal numbers.  This is a tricky notion with a not-great name.
 
 Imagine that you have 8 bits of data and you want to represent both positive and negative integers.  You'd
-pick up on the idea of using one bit to represent the sign, so that you've got 2^7 positive numbers and 2^7
-negative numbers (-128 to 128).  You could then of course use the same values for the other 7 bits and just
+pick up on the idea of using one bit to represent the sign, so that you've got 2^7 non-negative numbers (0 to 127) and 2^7
+negative numbers (-128 to -1).  You could then of course use the same values for the other 7 bits and just
 use the 8th bit for the sign, but this has the problem that the processor would need special circuitry to
 do basic arithmetic for signed numbers.  Ideally you want the normal adding circuitry of the processor to
 compute zero if you add 50 and -50.
@@ -147,10 +147,12 @@ compute zero if you add 50 and -50.
 One thing you might think of is simply to invert all of the bits.  So, 50 decimal would be 00110010 and
 -50 would be 11001101.  Let's add those and see what we get:
 
+```
   00110010
 + 11001101
   ________
   11111111
+```
 
 At first, that looks _super_ wrong, but remember that if we flip all the bits of 11111111 we get 00000000.  In this
 scheme, which is called _ones' complement_, the value with all 1 bits is called "negative zero".  Having two values
@@ -159,10 +161,12 @@ for zero is one of the reasons (but not the only) why this scheme isn't used oft
 So if this is ones' complement, what the heck is _two's complement'?  Last i checked there are no 2s in binary numbers.
 In the example above, the value for negative 50 is similar, except that you add 1 after inverting the bits.
 
+```
   00110010
 + 11001110
   ________
   00000000
+```
 
 The trick here is that we get 0 because the 1 we carried into the 9th bit position gets discarded.  So, the
 two's complement value for a given positive integer is the value that when added to it will result in 2^N,
@@ -198,7 +202,7 @@ _start:
     MOV W3, #111
     ; Calculate the next state
 
-    MOV W5, #10  ; Number of iterations
+    MOV W5, #1000  ; Number of iterations
 
     ADRP X6, randos@PAGE  ; Load the page address of randos into X6
     ADD X6, X6, randos@PAGEOFF
@@ -241,4 +245,12 @@ same sign bit.
 Success!  We did a math!  I'll leave verifying that the sum is correct as an exercise for the reader (I've always wanted
 to say that).
 
-You're probably thinking that integer math is boring.  
+You're probably thinking that integer math is boring.  It is generally used for basic things like counters, indexing,
+memory address calculation, etc.  There are some cases where integer arithemetic is used for more complex computations
+using what's called _fixed point_ arithmetic.  In the good ol' days this was common (because there wasn't an option),
+but now things like scientific computing, simulation, and data science use _floating point_ arithmetic, which is the
+topic of the next episode.
+
+
+[^1]: This is what's called a [Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator),
+a fairly common technique back in the early days but generally considered insufficiently random now.
