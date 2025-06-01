@@ -4,5 +4,253 @@ format:
     css: styles.css
 ---
 
-# Math (Integers)[TBD]
+# Math (Integers)[WIP]
 
+A common thing that people want to do with computers is compute.  Most of the early computers were built for
+the specific purpose of doing numerical computations.  Mauchly and Eckert got funding for the ENIAC by claiming that
+it could be used to rapidly compute firing tables for the Ballistic Research Laboratory.  Its first computations
+turned out to be computations for the atom bomb.  Nobody was thinking word processors or cat pictures when they 
+built the early machines.  Even i bought my first computer to do computations since i was a chemistry student and thought
+i could do homework and build models of molecules.  The fact that i could also play Zork and prank computer stores was
+purely coincidental.
+
+When we think about math and physics, we might also think calculus, differential equations, statistics-- things that
+need real numbers with stuff after the decimal point.  Computers weren't particularly good at that type of math though
+in the early days.  Although ENIAC used a decimal encoding, computers quickly converged on binary numbers.  Dealing
+with naturals numbers (integers >=0) is pretty simple, the only problem being that the numbers can only get so large
+within the boundaries of the computer's word size or register size.  Beyond the natual numbers though, things get
+sorta weird.
+
+Before getting into details let's look at a new assembly language program that builds on what we started way back
+in the Registers episode.
+
+```
+.global _start
+.align 4
+
+_start: 
+
+    MOVZ W0, #0x8405
+    MOVK W0, #0x0808, LSL 16
+    MOV W1, #1
+    MOV W3, #111  ; Arbitrary seed value
+    ; Calculate the next state
+
+    MOV W5, #1000  ; Number of iterations
+
+    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
+    ADD X6, X6, randos@PAGEOFF
+
+loop:
+    MUL W4, W3, W0  ; R4 = a * current_state
+    ADD W3, W4, W1  ; R4 = (a * current_state) + c
+
+    STR W3, [X6]    ; Store the new value in the array
+    ADD X6, X6, #4
+    SUBS W5, W5, #1
+    B.NE loop
+
+bail:
+    mov     X0, #0      // Use 0 return code
+    mov     X16, #1     // Service command code 1 terminates this program
+    svc     0           // Call MacOS to terminate the program
+
+.data
+randos:     .fill   1000, 4, 0
+
+```
+
+This one is a bit more complicated but here's what's happening.  The bit at the top of the loop (the MUL and ADD)
+effectively implement a pseudo-random number generator (PRNG), though not a particularly good one[^1].  We run
+through this loop 1000 times, storing the 4-byte value in register W3 into memory and successive 4 byte long memory
+locations.  So we end up with 1000 pseudo random numbers.  But what exactly do we mean by "numbers"?
+
+If we run the program in the debugger up to the _bail_ label, we can look at the data.
+
+```
+$ lldb ./random
+(lldb) target create "./random"
+Current executable set to '/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random' (arm64).
+(lldb) break set -n bail
+Breakpoint 1: where = random`bail, address = 0x0000000100003f94
+(lldb) run
+Process 19029 launched: '/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random' (arm64)
+Process 19029 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
+    frame #0: 0x0000000100003f94 random`bail
+random`bail:
+->  0x100003f94 <+0>: mov    x0, #0x0 ; =0 
+    0x100003f98 <+4>: mov    x16, #0x1 ; =1 
+    0x100003f9c <+8>: svc    #0
+    0x100003fa0:      udf    #0x1
+Target 0: (random) stopped.
+(lldb) x &randos
+0x100004000: 2c 3e b1 7b dd e6 e4 1f 52 76 6a c5 9b 97 a6 02  ,>.{....Rvj.....
+0x100004010: 08 e2 44 88 29 8a 24 7e ce d6 3b e7 07 6a 5d 85  ..D.).$~..;..j].
+```
+
+Ok, so those are numbers and they look pretty darned random alright.  Instead of hex bytes, let's look
+at them as decimal numbers:
+
+```
+(lldb) x -fd &randos
+0x100004000: 2075213356
+0x100004004: 535095005
+0x100004008: -982878638
+0x10000400c: 44472219
+0x100004010: -2008751608
+0x100004014: 2116323881
+0x100004018: -415508786
+0x10000401c: -2057475577
+(lldb)
+```
+
+Nice, those look much more number-y.  Um, but some of those are _negative_ numbers.  How do you put a minus sign in
+binary form?  Let's look at the binary version:
+
+```
+(lldb) x -fb &randos
+0x100004000: 0b01111011101100010011111000101100
+0x100004004: 0b00011111111001001110011011011101
+0x100004008: 0b11000101011010100111011001010010
+0x10000400c: 0b00000010101001101001011110011011
+0x100004010: 0b10001000010001001110001000001000
+0x100004014: 0b01111110001001001000101000101001
+0x100004018: 0b11100111001110111101011011001110
+0x10000401c: 0b10000101010111010110101000000111
+(lldb)
+```
+
+One thing you'll notice is that the negative numbers (the 3rd, 5th, 7th, and 8th) have 1 for the leftmost bit.
+That makes sense, clearly the computer is treating that bit as the sign, 1 means negative, 0 means positive.
+So then if we take the remaining bits for, say, the third number (-982878638), the other 31 bits must
+just work out to 982878638 in decimal, right?
+
+```
+$ uv run python
+Python 3.12.8
+>>> 0b1000101011010100111011001010010
+1164605010
+```
+Hmmm, that's not quite the same.
+
+Anyway, the punchline here is that ARM processors (most processors) use what's called _twos complement_ to represent
+negative decimal numbers.  This is a tricky notion with a not-great name.
+
+Imagine that you have 8 bits of data and you want to represent both positive and negative integers.  You'd
+pick up on the idea of using one bit to represent the sign, so that you've got 2^7 non-negative numbers (0 to 127) and 2^7
+negative numbers (-128 to -1).  You could then of course use the same values for the other 7 bits and just
+use the 8th bit for the sign, but this has the problem that the processor would need special circuitry to
+do basic arithmetic for signed numbers.  Ideally you want the normal adding circuitry of the processor to
+compute zero if you add 50 and -50.
+
+One thing you might think of is simply to invert all of the bits.  So, 50 decimal would be 00110010 and
+-50 would be 11001101.  Let's add those and see what we get:
+
+```
+  00110010
++ 11001101
+  ________
+  11111111
+```
+
+At first, that looks _super_ wrong, but remember that if we flip all the bits of 11111111 we get 00000000.  In this
+scheme, which is called _ones' complement_, the value with all 1 bits is called "negative zero".  Having two values
+for zero is one of the reasons (but not the only) why this scheme isn't used often.
+
+So if this is ones' complement, what the heck is _two's complement'?  Last i checked there are no 2s in binary numbers.
+In the example above, the value for negative 50 is similar, except that you add 1 after inverting the bits.
+
+```
+  00110010
++ 11001110
+  ________
+  00000000
+```
+
+The trick here is that we get 0 because the 1 we carried into the 9th bit position gets discarded.  So, the
+two's complement value for a given positive integer is the value that when added to it will result in 2^N,
+in this case 2^8, or 100000000.  Like I said, weird name.
+
+Note that how the bits get interpreted is sort of a matter of context.  For example, if you're a programmer
+you've probably used _unsigned_ integer values in which case all the numbers are assumed to be
+positive so we can use the high-order bit as part of the value.  In lldb, the unsigned numbers look like:
+
+```
+(lldb) x -fu &randos
+0x100004000: 2075213356
+0x100004004: 535095005
+0x100004008: 3312088658
+0x10000400c: 44472219
+0x100004010: 2286215688
+0x100004014: 2116323881
+0x100004018: 3879458510
+0x10000401c: 2237491719
+```
+
+Let's extend the program above so that after generating the numbers we also add them up.
+
+```
+.global _start
+.align 4
+
+_start: 
+
+    MOVZ W0, #0x8405
+    MOVK W0, #0x0808, LSL 16
+    MOV W1, #1
+    MOV W3, #111
+    ; Calculate the next state
+
+    MOV W5, #1000  ; Number of iterations
+
+    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
+    ADD X6, X6, randos@PAGEOFF
+
+loop:
+    MUL W4, W3, W0  ; R4 = a * current_state
+    ADD W3, W4, W1  ; R4 = (a * current_state) + c
+
+    STR W3, [X6]    ; Store the new value in the array
+    ADD X6, X6, #4
+    SUBS W5, W5, #1
+    B.NE loop
+
+    MOV W5, #10  ; Reset the counter for summation
+    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
+    ADD X6, X6, randos@PAGEOFF
+
+    MOV X3, #0      ; Initialize sum to 0
+sum:
+    LDR W4, [X6], 4    ; Load the value from the array
+    ADD X3, X3, W4, SXTW  ; Add it to the sum
+    SUBS W5, W5, #1
+    B.NE sum
+
+bail:
+    mov     X0, #0      // Use 0 return code
+    mov     X16, #1     // Service command code 1 terminates this program
+    svc     0           // Call MacOS to terminate the program
+
+.data
+randos:     .fill   10, 4, 0
+```
+
+For the most part, the __sum__ loop is simple.  It loops through the random values and adds them up in the __X3__ register.
+However, that __ADD__ instruction has a weird appendage, __SXTW__.  We want to keep the sum in the 64-bit register
+because it will possibly overflow a 32-bit register.  However, the high-order bit used for the sign in the 32-bit value
+wouldn't be the high-order bit in a 64-bit register, so we have to _extend_ the 32-bit value to a 64-bit value with the
+same sign bit.
+
+Success!  We did a math!  I'll leave verifying that the sum is correct as an exercise for the reader (I've always wanted
+to say that).
+
+You're probably thinking that integer math is boring.  It is generally used for basic things like counters, indexing,
+memory address calculation, etc.  There are some cases where integer arithemetic is used for more complex computations
+using what's called _fixed point_ arithmetic.  In the good ol' days this was common (because there wasn't an option),
+but now things like scientific computing, simulation, and data science use _floating point_ arithmetic, which is the
+topic of the next episode.
+
+
+[^1]: This is what's called a [Linear Congruential Generator](https://en.wikipedia.org/wiki/Linear_congruential_generator),
+a fairly common technique back in the early days but generally considered insufficiently random now.

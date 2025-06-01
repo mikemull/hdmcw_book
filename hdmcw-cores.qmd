@@ -44,7 +44,7 @@ that naming convention faded.  As of this writing Intel makes a chip with 288 co
 
 The M2 chip in my computer is what they called a _system on a chip_ (SoC) because almost all of the necessary circuitry is part
 of a single piece of silcon (except the DRAM).  The chip has 8 cores, but they're not all the same.  There are 4 high-performance cores and 4 energy efficient cores (so i guess it's 
-duo-quad core?).  Interesting, Apple apparently calls this _asynmmetric multiprocessing_ since even though it's using the same
+duo-quad core?).  Interesting, Apple apparently calls this _asymmetric multiprocessing_ since even though it's using the same
 memory the sysem will allocate threads to different cores depending on their performance needs.  We saw a first hint of the multiple cores in the last episode where __ps__ command showed two processes running at
 the same time.  In general, which cores things run on is transparent to both the user and the programmer, although there are
 ways to influence which type gets selected for a given process.  See the __taskpolicy__ command or the __setpriority()__ system call.   

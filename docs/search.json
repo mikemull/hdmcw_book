@@ -178,5 +178,15 @@
     "crumbs": [
       "References"
     ]
+  },
+  {
+    "objectID": "hdmcw-math-int.html#footnotes",
+    "href": "hdmcw-math-int.html#footnotes",
+    "title": "14  Math (Integers)[WIP]",
+    "section": "",
+    "text": "This is what’s called a Linear Congruential Generator, a fairly common technique back in the early days but generally considered insufficiently random now.↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Math (Integers)[WIP]</span>"
+    ]
   }
 ]
