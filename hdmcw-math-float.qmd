@@ -4,4 +4,53 @@ format:
     css: styles.css
 ---
 
-# Math (Floats)[TBD]
+# Math (Floats)(WIP)
+
+Although negative integers turned out to be a challenge it's still reasonably easy to understand how some number of bits
+can be mapped to an integer.  
+
+
+```
+// multiply.s - ARM64 macOS Assembly
+// To assemble: as -o multiply.o multiply.s
+// To link: ld -macosx_version_min 11.0.0 -o multiply multiply.o -lSystem
+
+.global _main             // Entry point for macOS
+.align 4
+
+_main:
+    // 1. Load the first constant into register d0
+    adrp    x0, const1@PAGE
+    ldr     d0, [x0, const1@PAGEOFF]
+
+    // 2. Load the second constant into register d1
+    adrp    x0, const2@PAGE
+    ldr     d1, [x0, const2@PAGEOFF]
+
+    // 3. Multiply: d2 = d0 * d1
+    fmul    d2, d0, d1
+
+    // 4. Convert result to integer for the exit code (optional, for demo)
+    // 12.5 * 4 = 50. This will return 50 to the terminal.
+    fcvtzs  w0, d2          
+
+    // 5. Exit the program
+    mov     x16, #1         // macOS syscall for exit
+    svc     #0x80           // Invoke supervisor call
+
+.section __DATA,__data
+.align 3
+const1: .double 12.5
+const2: .double 4.0
+
+```
+
+
+Registers: We use d0, d1, and d2. These are 64-bit "Double" precision registers. If you wanted single precision (floats), you would use s0, s1, and s2.
+
+Adrp/Ldr: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB "page" where your data lives, and the ldr offset grabs the specific value.
+
+fmul: This is the specific instruction for Floating-point Multiplication.
+
+fcvtzs: This converts a Floating-point value to a Signed Integer (with truncation toward zero), which allows us to pass the result into w0 (the return register).
+
