@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>15&nbsp; Math (Floats)[TBD] – How Does My 🤬 Computer Work</title>
+<title>15&nbsp; Math (Floats)(WIP) – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-math-float.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)[TBD]</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-math-float.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -200,13 +200,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-int.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)[TBD]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)[TBD]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)[TBD]</span></h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></h1>
 </div>
 
 
@@ -264,6 +264,43 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Although negative integers turned out to be a challenge it’s still reasonably easy to understand how some number of bits can be mapped to an integer.</p>
+<pre><code>// multiply.s - ARM64 macOS Assembly
+// To assemble: as -o multiply.o multiply.s
+// To link: ld -macosx_version_min 11.0.0 -o multiply multiply.o -lSystem
+
+.global _main             // Entry point for macOS
+.align 4
+
+_main:
+    // 1. Load the first constant into register d0
+    adrp    x0, const1@PAGE
+    ldr     d0, [x0, const1@PAGEOFF]
+
+    // 2. Load the second constant into register d1
+    adrp    x0, const2@PAGE
+    ldr     d1, [x0, const2@PAGEOFF]
+
+    // 3. Multiply: d2 = d0 * d1
+    fmul    d2, d0, d1
+
+    // 4. Convert result to integer for the exit code (optional, for demo)
+    // 12.5 * 4 = 50. This will return 50 to the terminal.
+    fcvtzs  w0, d2          
+
+    // 5. Exit the program
+    mov     x16, #1         // macOS syscall for exit
+    svc     #0x80           // Invoke supervisor call
+
+.section __DATA,__data
+.align 3
+const1: .double 12.5
+const2: .double 4.0
+</code></pre>
+<p>Registers: We use d0, d1, and d2. These are 64-bit “Double” precision registers. If you wanted single precision (floats), you would use s0, s1, and s2.</p>
+<p>Adrp/Ldr: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB “page” where your data lives, and the ldr offset grabs the specific value.</p>
+<p>fmul: This is the specific instruction for Floating-point Multiplication.</p>
+<p>fcvtzs: This converts a Floating-point value to a Signed Integer (with truncation toward zero), which allows us to pass the result into w0 (the return register).</p>
 
 
 
@@ -690,8 +727,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-math-int.html" class="pagination-link" aria-label="Math (Integers)[TBD]">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)[TBD]</span></span>
+      <a href="./hdmcw-math-int.html" class="pagination-link" aria-label="Math (Integers)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Math (Integers)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
