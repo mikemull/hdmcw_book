@@ -264,43 +264,77 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Although negative integers turned out to be a challenge it’s still reasonably easy to understand how some number of bits can be mapped to an integer.</p>
-<pre><code>// multiply.s - ARM64 macOS Assembly
-// To assemble: as -o multiply.o multiply.s
-// To link: ld -macosx_version_min 11.0.0 -o multiply multiply.o -lSystem
-
-.global _main             // Entry point for macOS
+<p>Although negative integers turned out to be a challenge it’s still reasonably easy to understand how some number of bits can be mapped to an integer. But what if you want to represent a rational number, something with a fractional part?<br>
+Again, the general idea is that the bits in a register have to somehow represent the number, but rational numbers have a vastly larger range of values. But before we get into the details, let’s dredge up uncomfortable memories of your high school science classes.</p>
+<p>You probably took a class at some point where instead of writing out numbers the normal way, like 0.0000001234, you would write them in scientific notation, like 1.234 x 10^-7. You might have also learned that the “parts” of the number in scientific notation have special names. The 1.234 is called the “mantissa” or “significand” and the -7 is called the “exponent”. This notation lets you represent both very large (both positive and negative) and very small numbers in a compact way, but also retain precision.</p>
+<p>You might know arbitrary rationals as “floating point” numbers, so called because the decimal point can “float” to different places to represent different precisions. Believe it or not back when I bought my first computer, it didn’t support that concept natively. There were two options then. The first was to use fixed point math, where you would decide that a certain number of bits would represent the fractional part. For example, you might decide that in a 16-bit number, the first 8 bits would represent the integer part, and the last 8 bits would represent the fractional part. So the number 00000001 10000000 would represent 1.5 (more on binary fractions below). The second option was to use software libraries that would implement rational number math in software. At some point after i bought my original computer, Intel introduced the 8087 math coprocessor which could be added to the system to handle floating point math. It was a separate chip that plugged into the motherboard and had its own instruction set.</p>
+<p>Now of course, essentially all computers support floating point and floating point math is part of the standard instruction set. In ARM64, there are a set of registers that are specifically designed for floating point math, and a set of instructions that operate on those registers. They use a representation for floating point numbers that like scientific notation, but in binary instead of decimal. So that this representation would be fairly consistent across different platforms, the IEEE 754 standard was developed. This standard defines the format for single precision (32-bit) and double precision (64-bit) floating point numbers. In single precision, there are 1 bit for the sign, 8 bits for the exponent, and 23 bits for the mantissa. In double precision, there are 1 bit for the sign, 11 bits for the exponent, and 52 bits for the mantissa. The exponent is stored in a “biased” form, which means that a certain value (called the bias) is added to the actual exponent to get the stored exponent. For single precision, the bias is 127, and for double precision, the bias is 1023. This allows for both positive and negative exponents. The value of a floating point number can be calculated using the following formula:</p>
+<p>(-1)^sign * (1 + mantissa) * 2^(exponent - bias)</p>
+<p>The 1 that’s added to the mantissa might be confusing. Basically since all IEEE 754 floating point numbers are represented as 1.xxxxx in binary, the 1 is implicit and doesn’t need to be stored. This allows for an extra bit of precision in the mantissa.</p>
+<p>Let’s look at some of these things in the wild. Below is an example program that just multiplies two floating point constants. Note that the ARM processor has special registers for floating point, denoted by s0, s1, etc for single precision and d0, d1, etc for double precision. The instructions that operate on these registers are also different from the integer instructions. For example, to multiply two floating point numbers, you would use the FMUL instruction instead of the MUL instruction, and FADD for addition, etc.</p>
+<pre><code>.global _main             // Entry point for macOS
 .align 4
 
 _main:
-    // 1. Load the first constant into register d0
+    // 1. Load the first constant into register s0
     adrp    x0, const1@PAGE
-    ldr     d0, [x0, const1@PAGEOFF]
+    ldr     s0, [x0, const1@PAGEOFF]
 
-    // 2. Load the second constant into register d1
+    // 2. Load the second constant into register s1
     adrp    x0, const2@PAGE
-    ldr     d1, [x0, const2@PAGEOFF]
+    ldr     s1, [x0, const2@PAGEOFF]
 
-    // 3. Multiply: d2 = d0 * d1
-    fmul    d2, d0, d1
-
-    // 4. Convert result to integer for the exit code (optional, for demo)
-    // 12.5 * 4 = 50. This will return 50 to the terminal.
-    fcvtzs  w0, d2          
-
-    // 5. Exit the program
+    // 3. Multiply: s2 = s0 * s1
+    fmul    s2, s0, s1
+bail:
     mov     x16, #1         // macOS syscall for exit
     svc     #0x80           // Invoke supervisor call
 
 .section __DATA,__data
 .align 3
-const1: .double 12.5
-const2: .double 4.0
+const1: .float 22.5
+const2: .float 4.0
 </code></pre>
-<p>Registers: We use d0, d1, and d2. These are 64-bit “Double” precision registers. If you wanted single precision (floats), you would use s0, s1, and s2.</p>
-<p>Adrp/Ldr: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB “page” where your data lives, and the ldr offset grabs the specific value.</p>
-<p>fmul: This is the specific instruction for Floating-point Multiplication.</p>
-<p>fcvtzs: This converts a Floating-point value to a Signed Integer (with truncation toward zero), which allows us to pass the result into w0 (the return register).</p>
+<p>Registers: We use s0, s1, and s2. These are 32-bit “Single” precision registers. If you wanted double precision, you would use d0, d1, and d2.</p>
+<p>ADRP/LDR: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB “page” where your data lives, and the ldr offset grabs the specific value.</p>
+<p>FMUL: This is the specific instruction for Floating-point Multiplication.</p>
+<p>Let’s build this and run it in the debugger.</p>
+<pre><code>$ lldb ./multiply
+(lldb) target create "./multiply"
+Current executable set to '/hdmcw_book/examples/multiply/multiply' (arm64).
+(lldb) break set -n bail
+Breakpoint 1: where = multiply`bail, address = 0x0000000100000384
+(lldb) r
+Process 78799 launched: '/hdmcw_book/examples/multiply/multiply' (arm64)
+Process 78799 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
+    frame #0: 0x0000000100000384 multiply`bail
+multiply`bail:
+-&gt;  0x100000384 &lt;+0&gt;: mov    x16, #0x1 ; =1 
+Target 0: (multiply) stopped.
+(lldb) re read -fb s0
+      s0 = 0b01000001101101000000000000000000
+(lldb) re read -fb s1
+      s1 = 0b01000000100000000000000000000000
+(lldb) re read -fb s2
+      s2 = 0b01000010101101000000000000000000</code></pre>
+<p>So the result is, uh, gimme a second, um, 90.0? Right? The values in our registers are:</p>
+<p>22.5 = 0 10000011 01101000000000000000000</p>
+<p>4.0 = 0 10000001 00000000000000000000000</p>
+<p>90.0 = 0 10000101 01101000000000000000000</p>
+<p>For 22.5, the integer part is 22, which we can easily turn into binary as 10110 = (16 + 4 + 2). The fractional part is maybe a littler trickier. In decimal 0.5 is 5/10, or 1/2. To get the same fraction in binary (ie, base2) we need to express the fraction 1/2 in base 2. This is one of the easy cases since 1/2 is 2^-1, so we can just write it as 0.1 in binary. So the full number is 10110.1 in binary, which we can also write as 1.01101 x 2^4. If you look at the binary representation above you’ll see that the leftmost bits in the mantissa part are 01101. The 1 to the left of the decimal point is implicit in the IEEE 754 representation, so we don’t need to store it.</p>
+<p>More complex fractions are harder to explain. Take the 0.234 part from the 1.234 above. Basically we need to approximate this fraction as a sum of negative powers of 2 (1/2, 1/4, 1/8, etc). Conceptually, you can think of comparing the fraction to 1/2, then 1/4, then 1/8, etc, and if the fraction is greater than or equal to that value, you would add a 1 to the mantissa and subtract that value from the fraction. If the fraction is less than that value, you would add a 0 to the mantissa and move on to the next value. This process continues until you have filled all the bits in the mantissa or until the fraction becomes zero.</p>
+<p>Since our number is 1.01101 x 2^4 in binary, the exponent part is 4, but as you can see the bits in the exponent part do not make 4. That’s because of the bias used by the IEEE 754 standard, which means that we need to add a bias value to the actual exponent to get the stored exponent. For single precision, the bias is 127, so we need to add 127 to our exponent of 4 to get the stored exponent of 131. In binary, 131 is 10000011.</p>
+<p>It’s not surprising probably that 4.0 only has bits in the exponent part since it’s just 2^2. But maybe it’s harder to understand why 90.0 has the same mantissa as 22.5. In decimal 90.0 has no fractional part, but of course we’re not looking at a decimal number. In binary, 90.0 is 1011010.0, which we can write as 1.01101 x 2^6. Note that this differs from 22.5 only in the exponent part. One of the tricks of multiplying by a power of 2 is that it just shifts the decimal point, so the mantissa stays the same.</p>
+<p>Floating point numbers are only approximations of real numbers, with some fun consequences. Suppose for example that we change the first constant in our program to 0.1. We’d expect a result of 0.4. Let’s see what the registers show us:</p>
+<pre><code>(lldb) re read s0
+      s0 = 0.100000001
+(lldb) re read s2
+      s2 = 0.400000006
+(lldb) re read -fb s0
+      s0 = 0b00111101110011001100110011001101</code></pre>
+<p>Our 0.1 has mysteriously turned into 0.100000001. This is because 0.1 cannot be represented exactly in binary, just like 1/3 cannot be represented exactly in decimal. The closest we can get to 0.1 in binary is 0.0001100110011001100110011001101, which is what we see in the mantissa part of the binary representation above. When we multiply this by 4, we get 0.400000006, which is the closest we can get to 0.4 in binary. Most of the time this is good enough since in a lot of computations we don’t report the results to the full precision, but it can lead to rounding errors if you’re doing a lot of computations.</p>
+<p>:::</p>
 
 
 
