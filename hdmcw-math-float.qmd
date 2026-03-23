@@ -121,5 +121,3 @@ expect a result of 0.4.  Let's see what the registers show us:
 ```
  Our 0.1 has mysteriously turned into 0.100000001.  This is because 0.1 cannot be represented exactly in binary, just like 1/3 cannot be represented exactly in decimal.  The closest we can get to 0.1 in binary is 0.0001100110011001100110011001101, which is what we see in the mantissa part of the binary representation above.  When we multiply this by 4, we get 0.400000006, which is the closest we can get to 0.4 in binary.  Most of the time this is good enough since in a lot of computations we don't report the results to the full precision, but it can
  lead to rounding errors if you're doing a lot of computations.
-
-:::
