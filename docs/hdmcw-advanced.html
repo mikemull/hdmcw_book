@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Instructions – How Does My 🤬 Computer Work</title>
+<title>17&nbsp; Advanced Processor Features [WIP] – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./hdmcw-programs.html" rel="next">
-<link href="./hdmcw-assembly-registers.html" rel="prev">
+<link href="./hdmcw-network.html" rel="next">
+<link href="./hdmcw-subs.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-instructions.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-advanced.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -145,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-instructions.html" class="sidebar-item-text sidebar-link active">
+  <a href="./hdmcw-instructions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></span></a>
   </div>
 </li>
@@ -217,7 +251,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
+  <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
   </div>
 </li>
@@ -245,15 +279,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#simd" id="toc-simd" class="nav-link active" data-scroll-target="#simd"><span class="header-section-number">17.1</span> SIMD</a></li>
+  <li><a href="#pipelining-and-out-of-order-execution" id="toc-pipelining-and-out-of-order-execution" class="nav-link" data-scroll-target="#pipelining-and-out-of-order-execution"><span class="header-section-number">17.2</span> Pipelining and Out-of-order execution</a></li>
+  <li><a href="#speculative-prefetching-and-execution" id="toc-speculative-prefetching-and-execution" class="nav-link" data-scroll-target="#speculative-prefetching-and-execution"><span class="header-section-number">17.3</span> Speculative prefetching and execution</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Instructions</span></h1>
+<h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></h1>
 </div>
 
 
@@ -270,306 +312,83 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>When discussing registers, I mentioned that the actual machine instructions corresponding to each line of assembly language are all 32 bits long. This can be hard to grasp at first, because some lines just look way more complicated and it seems like they should take more space. But no, an instruction like</p>
-<pre><code>W0, #0x808, LSL #16</code></pre>
-<p>takes the same number of bits as</p>
-<pre><code>B loop</code></pre>
-<p>To manage this the ARM architecture defines a format (various formats) to fit everything necessary into 32 bits. This includes the operation itself (aka the <em>operation code</em> or <em>opcode</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>), and operands like memory addresses, literal values, and registers. Taken together all of the different variations of those 32 bits constitute the <em>instruction set</em>.</p>
-<p>Let’s take a look at some of the instructions from the programs we’ve already seen. In the registers episode we saw that the instruction for <strong>MOVZ W0, #0x8405</strong> is the number</p>
-<pre><code>01010010100100001000000010100000  (0x529080a0)</code></pre>
-<p>The 32 bits for the instruction in this case need to encode (1) the opcode, (2) a register, and (3) the “immediate” value <strong>0x8405</strong>.</p>
-<p>The basic format of a MOV instruction is like this:</p>
-<table style="border: 1px solid black;text-align: center;white-space: nowrap;font-family:Courier New, monospace">
-<thead style="font-weight: bold;padding: 1 5 1">
-<tr>
-<td>
-31
-</td>
-<td>
-30_29
-</td>
-<td>
-28________23
-</td>
-<td>
-22_21
-</td>
-<td>
-20_____________________________5
-</td>
-<td>
-4_______0
-</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-sf
-</td>
-<td>
-opc
-</td>
-<td>
-1 0 0 1 0 1
-</td>
-<td>
-hw
-</td>
-<td>
-imm16
-</td>
-<td>
-Rd
-</td>
-</tr>
-<tr>
-<td>
-0
-</td>
-<td>
-1 0
-</td>
-<td>
-1 0 0 1 0 1
-</td>
-<td>
-00
-</td>
-<td>
-1 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1
-</td>
-<td>
-0 0 0 0 0
-</td>
-</tr>
-</tbody>
-</table>
-<p>The <em>sf</em> flag indicates either a 32- or 64-bit operation. Here it’s 0 because we’re using the 32-bit variant of the register, if we’d used the register <strong>X0</strong> it would be <em>1</em>. The next 8 bits are basically the opcode for this instruction (this will change slightly for different variants of MOV). The <em>hw</em> here stands for “halfword”. A halfword is 16 bits, or half of a 32-bit word, but the value of the bits in this instruction are not super-relevant since we’re moving an immediate value rather than a value at a memory location. The key parts here are the <strong>imm16</strong> bits, which are the value we’re putting into the register and the <strong>Rd</strong> bits, which indicate the register. The register value here is <em>00000</em> since we’re using the <strong>W0</strong> register. If it were <em>00001</em> it would indicate the <strong>W1</strong> register.</p>
-<p>Let’s look at another one. The multiply instruction in our register program (<strong>MUL W4, W3, W0</strong>) has the hex value <strong>0x1b007c64</strong>, or <strong>00011011000000000111110001100100</strong> as 32-bit binary. The <strong>MUL</strong> instruction is actually an alias for a version of the <strong>MADD</strong> instruction (multiply and add), which does “multiply the values in two registers then add the value of another register”. The bits for this instruction break down thusly:</p>
-<table style="border: 1px solid black;text-align: center;white-space: nowrap;; font-family: Courier New,monospace">
-<thead style="font-weight: bold;padding: 1 5 1">
-<tr>
-<td>
-31
-</td>
-<td>
-30-29
-</td>
-<td>
-28_______24
-</td>
-<td>
-23 21
-</td>
-<td>
-20_______16
-</td>
-<td>
-15
-</td>
-<td>
-14______10
-</td>
-<td>
-9______5
-</td>
-<td>
-4______0
-</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-sf
-</td>
-<td>
-op54
-</td>
-<td>
-1 1 0 1 1
-</td>
-<td>
-op31
-</td>
-<td>
-Rm
-</td>
-<td>
-o0
-</td>
-<td>
-Ra
-</td>
-<td>
-Rn
-</td>
-<td>
-Rd
-</td>
-</tr>
-<tr>
-<td>
-0
-</td>
-<td>
-0 0
-</td>
-<td>
-1 1 0 1 1
-</td>
-<td>
-0 0 0
-</td>
-<td>
-0 0 0 0 0
-</td>
-<td>
-0
-</td>
-<td>
-1 1 1 1 1
-</td>
-<td>
-0 0 0 1 1
-</td>
-<td>
-0 0 1 0 0
-</td>
-</tr>
-</tbody>
-</table>
-<p>You can see that the two registers values we’re multiplying are in <strong>Rm</strong> (<strong>W0</strong>=<strong>00000</strong>) and <strong>Rn</strong> (<strong>W3</strong>=<strong>00011</strong>) and result goes into <strong>Rd</strong> (<strong>W4</strong>=<strong>00100</strong>). The added value would be in the <strong>Ra</strong> register, but here that is <strong>11111</strong>, which tells the processor to just do the multiply.</p>
-<p>OK, let’s look at some more instructions, this time things that deal with memory addresses. Way back in our first program we saw the instruction <strong>ADR X1, bel</strong>, which loads the address of the data item labeled <strong>bel</strong> into register <strong>X1</strong>. <strong>ADR</strong> is essentially a variation of an <strong>ADD</strong> or <strong>SUB</strong> instruction, where the things being added are the <strong>PC</strong> (program counter) register and a value that gives the desired memory address <em>relative</em> to the <strong>PC</strong>.</p>
-<p>The hex value of this instruction is <strong>0x100000a1</strong> or <strong>00010000000000000000000010100001</strong> in binary. The instruction format looks like:</p>
-<table style="border: 1px solid black;text-align: center;white-space: nowrap; font-family: Courier New,monospace">
-<thead style="font-weight: bold;padding: 1 5 1">
-<tr>
-<td>
-31
-</td>
-<td>
-30-29
-</td>
-<td>
-28______24
-</td>
-<td>
-23_________________________________5
-</td>
-<td>
-4______0
-</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-op
-</td>
-<td>
-immlo
-</td>
-<td>
-1 0 0 0 0
-</td>
-<td>
-immhi
-</td>
-<td>
-Rd
-</td>
-</tr>
-<tr>
-<td>
-0
-</td>
-<td>
-0 0
-</td>
-<td>
-1 0 0 0 0
-</td>
-<td>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1
-</td>
-<td>
-0 0 0 0 1
-</td>
-</tr>
-</tbody>
-</table>
-<p>This one’s a little strange, but basically we tack the <strong>immlo</strong> bits on to the end of the <strong>immhi</strong> bits and we get <strong>10100</strong> or 20, which happens to be the number of bytes above the current program location where the <strong>bel</strong> memory address resides. So, 20 gets added to the current <strong>PC</strong> and the result is put in register <strong>Rd</strong> (00001).</p>
-<p>In the chapter on memory we saw a similar instruction: <strong>ADRP X1, mya1</strong>. The difference here is that the value being loaded into the register is not the the exact location of the data, but the <em>page</em> in memory where that item resides. Page? Like books? Well, kinda. I’ll defer a complete discussion for now, but recall that I already mentioned that the memory addresses are <em>virtual</em>. When the virtual memory system loads memory it does so in 4KB chunks called <em>pages</em>. As a result, a specific memory address can be referred to by a page number and an offset within that page.</p>
-<p>The <strong>ADRP</strong> instruction has the same basic format as the <strong>ADR</strong> instruction with two exceptions. First, the leftmost bit is 1, and second, the immediate value in bits 23 to 5 is the number of pages where the data item resides relative to the current <strong>PC</strong> value. Of course to get the actual byte address, you need the following instruction that adds the offset within the page. Since this is a small program and the data is actually close the data is in the same page as the location where <strong>PC</strong> points to, so the 22 bits that make up the relative page number are all 0.</p>
-<table style="border: 1px solid black;text-align: center;white-space: nowrap; font-family: Courier New,monospace">
-<thead style="font-weight: bold;padding: 1 5 1">
-<tr>
-<td>
-31
-</td>
-<td>
-30-29
-</td>
-<td>
-28______24
-</td>
-<td>
-23_________________________________5
-</td>
-<td>
-4______0
-</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-op
-</td>
-<td>
-immlo
-</td>
-<td>
-1 0 0 0 0
-</td>
-<td>
-immhi
-</td>
-<td>
-Rd
-</td>
-</tr>
-<tr>
-<td>
-1
-</td>
-<td>
-0 0
-</td>
-<td>
-1 0 0 0 0
-</td>
-<td>
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-</td>
-<td>
-0 0 0 0 1
-</td>
-</tr>
-</tbody>
-</table>
-<p>Anyway, you get the idea. Every instruction in the aarch64 instruction is packed into 32 bits, which includes the operation, immediate values, and registers. As we’ll see these instructions get much more complicated but they’re still 32 bits. Conceptually the processor loads these instructions into memory and then executes them in turn (accounting for branching), however as we’ll see in future episodes, modern processors have various ways to make the execution faster, including <em>pipelining</em>, operating on multiple data elements with a single instruction, and predictive branching.</p>
-<p>One last note on instructions that connects them to the previous memory episode. As mentioned above the processor goes through a process of fetching the instruction and then executing it, which is called the <em>fetch-execute</em> cycle. You might wonder what drives the processor to proceed from one instruction to the next. This is primarily the function of what’s called the <em>clock</em>. The clock isn’t really a timekeeper, but rather a signal that oscillates between a logical 1 and logical 0 value. The rate at which this happens is called the <em>clock speed</em>, and generally a higher clock speed means a faster processor. My computer has a clock speed measured in GHz, while my original PC has a clock speed measured in MHz.</p>
-<p>Instructions take some number of clock cycles, however saying precisely <em>how</em> many is complicated by CPU caching and some of the things mentioned above (eg, pipelining). As we’ll see later on, the clock speed on my computer is also variable to some degree, which is an energy-saving measure since faster clock speeds correlate to greater power. Anyway, it’s part of the lingo: instructions and clock cycles are inextricably linked, and you’ll often hear talk of clock speeds and clock cycles when talking about low-level programming and CPU speed comparisons.</p>
+<p>The first microprocessors I worked on, mostly the Intel 8086 and Z80s, were marvels of technology. I didn’t understand how they were made and I had pretty vague notions of the basic electronics (I bought a book in the early 80s by the legendary Steve Ciarcia called “Build Your Own Z80 Computer”, but I didn’t make it past the power supply chapter). On the other hand, they made sense at the level necessary to program them. Instructions were read from memory, which in turn read data from memory, put it in registers, and then did things with it. The instructions were executed in the order they were read from memory, and the results of one instruction were always available to the next instruction. It was fairly easy to see the relationship between the logic of your program and the instructions that were executed on the processor.</p>
+<p>Not anymore. We’ve talked about some of the complexities already, like the multiple levels of instruction and data caching. But almost all modern processors, including the M2 in my Mac, do some totally crazy stuff. I will discuss some of these features in increasing order of craziness. Only the first of these is something we can easily control in our programs.</p>
+<section id="simd" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="simd"><span class="header-section-number">17.1</span> SIMD</h2>
+<p>A common pattern in programming is to go through data sequentially and apply the same operations to each item. So, say, you have two arrays of numbers and you want to add the elements of one to the elements of the other. Pretty standard looping thing. At some point processor designers realized that they could move some of this right into the processor itself. This isn’t exactly a new idea, for example in my first job I got to work with Cray supercomputers, and one of the tricks they used to make them so fast was what they called “vectorization”, which you can think of as “unrolling” a loop so that one instruction operates on multiple data items. This is a form of what’s called <em>SIMD</em>, which stands for “single instruction, multiple data”.</p>
+<p>The M2 has a special unit called Neon that enables SIMD operations. The instructions look fairly similar, but there’s a special syntax for the registers that indicates that they are Neon registers, and the instructions themselves have a different format. For example, the instruction to add two vectors of 4 32-bit integers looks like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>// Simple Neon Addition for <span class="dv">4</span> single<span class="op">-</span>precision floats</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>.global _main</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">_main:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    // 1. <span class="bu">Load</span> data from memory into Neon registers</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    // adrp<span class="op">/</span>add gets the address of our data labels</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    adrp    x0<span class="op">,</span> vec_a<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">add</span>     x0<span class="op">,</span> x0<span class="op">,</span> vec_a<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    adrp    x1<span class="op">,</span> vec_b<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">add</span>     x1<span class="op">,</span> x1<span class="op">,</span> vec_b<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    // ld1 <span class="op">{</span>v0<span class="op">.</span><span class="dv">4</span><span class="er">s</span><span class="op">}</span> loads four <span class="st">'s'</span> <span class="op">(</span>single<span class="op">-</span>precision<span class="op">/</span><span class="dv">32</span><span class="op">-</span>bit<span class="op">)</span> floats into v0</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ld1     <span class="op">{</span>v0<span class="op">.</span><span class="dv">4</span><span class="er">s</span><span class="op">},</span> <span class="op">[</span>x0<span class="op">]</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    ld1     <span class="op">{</span>v1<span class="op">.</span><span class="dv">4</span><span class="er">s</span><span class="op">},</span> <span class="op">[</span>x1<span class="op">]</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    // 2. The SIMD Instruction</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    // <span class="bu">fadd</span> <span class="op">(</span>Floating<span class="op">-</span>point Add<span class="op">)</span> </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    // .4s tells the engine to treat the registers as <span class="dv">4</span> separate lanes</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">fadd</span>    v2<span class="op">.</span><span class="dv">4</span><span class="er">s</span><span class="op">,</span> v0<span class="op">.</span><span class="dv">4</span><span class="er">s</span><span class="op">,</span> v1<span class="op">.</span><span class="dv">4</span><span class="er">s</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>.<span class="bu">data</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_a:</span>  .float <span class="fl">10.0</span><span class="op">,</span> <span class="fl">20.0</span><span class="op">,</span> <span class="fl">30.0</span><span class="op">,</span> <span class="fl">40.0</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_b:</span>  .float  <span class="fl">1.0</span><span class="op">,</span>  <span class="fl">2.0</span><span class="op">,</span>  <span class="fl">3.0</span><span class="op">,</span>  <span class="fl">4.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Neon unit has 128-bit registers rather than the normal 64-bit registers. These registers are divided into “lanes” based on the suffix added to the register name. Here for example, the v0, v1, and v2 registers use the suffix .4s, which means that each register is treated as 4 separate lanes of 32 bits each. The fadd instruction then adds the corresponding lanes of v0 and v1 together and puts the result in the corresponding lanes of v2. So, in this case, the first lane of v2 will be 11.0 (10.0 + 1.0), the second lane will be 22.0 (20.0 + 2.0), and so on. The options for the lane suffixes include everything from 16 half-word data elements to 2 double-word values (probably double precision floats).</p>
+<p>As written here it looks the same instructions we’ve seen before but operation on different registers. But the instruction are really specific to the Neon unit. A disassembly of this code shows this:</p>
+<pre><code>    0x100000380 &lt;+16&gt;: ld1.4s { v0 }, [x0]
+    0x100000384 &lt;+20&gt;: ld1.4s { v1 }, [x1]
+    0x100000388 &lt;+24&gt;: fadd.4s v2, v0, v1</code></pre>
+<p>which makes it more clear that these are special instructions that operate on the Neon registers. The Neon unit has a whole set of instructions for doing various operations on vectors, including not just arithmetic but also things like comparisons and shuffling of data between lanes. On the other hand, the SIMD instructions still operation within the machinery of the standard processor, with access to the same memory and caches, etc.</p>
+<p>While you can write SIMD instructions like this, and ARM provides intrinsics for doing so in C, for the most part you’ll rely on compilers to do this optimization for you.</p>
+</section>
+<section id="pipelining-and-out-of-order-execution" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="pipelining-and-out-of-order-execution"><span class="header-section-number">17.2</span> Pipelining and Out-of-order execution</h2>
+<p>Pipelining is sort of orthogonal to SIMD. Instead of one instruction operating on a bunch of data, pipelining is the idea of having multiple instructions in different stages of execution at the same time. For example, while one instruction is being decoded, another instruction can be fetched from memory, and yet another instruction can be executed. If this hurts your brain, you are not alone. You can pretty easily imagine the complexity this adds, since one instruction might depend on the result of another. The processor might have to skip over an instruction that needs to wait for a result and execute a later instruction that doesn’t have to wait. This is called <em>out-of-order execution</em>, and it is a common feature of modern processors. The M2 has a 12-stage pipeline, which means that there can be up to 12 instructions in various stages of execution at the same time.</p>
+<p>There aren’t any special instructions for pipelining, it’s just a thing that the processor does. However, there are ways to write code that make it more friendly to pipelining. At the assembly language level, you can sometimes do tricks to align instructions using the .align directive, or you can use the <strong>nop</strong> instruction to insert “no operation” instructions that can help to fill in pipeline bubbles.</p>
+</section>
+<section id="speculative-prefetching-and-execution" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="speculative-prefetching-and-execution"><span class="header-section-number">17.3</span> Speculative prefetching and execution</h2>
+<p>There are two common things that defeat pipelining: cache misses and branching. If the processor has to go get data from memory, it defeats the purpose of the pipeline. With branching, pipelining is tricky because the processor doesn’t know which instructions to fetch until the condition is evaluated. Since pipelining is so important for performance, the M2 and most modern processors have a clever trick to handle these problems: they guess.</p>
+<p>Of course they don’t call it guessing. There are two ways that the processor <em>predicts</em> what might happen next. To reduce cache misses the processor can use <em>speculative prefetching</em>, which is the idea that the processor will try to predict which data will be needed next and fetch it into the cache before it’s actually requested by the program. To deal with branching the processor does <em>branch prediction</em> along with <em>speculative execution</em>, which is the idea that the processor will try to predict which way a branch will go and execute instructions along that path before it’s actually known whether that path will be taken or not. If the prediction is correct, then the results of those instructions can be used immediately, but if the prediction is wrong, then the results are discarded and the correct path is executed instead.</p>
+<p>Sometimes you can write code in certain ways to make it more friendly to speculative execution. For example, instead of writing:</p>
+<pre><code>#include &lt;stdint.h&gt;
+
+int32_t filter_sum_branchy(int32_t* data, int32_t length, int32_t threshold) {
+    int32_t sum = 0;
+    for (int i = 0; i &lt; length; i++) {
+        if (data[i] &gt; threshold) {
+            sum += data[i];
+        }
+    }
+    return sum;
+}</code></pre>
+<p>You could write:</p>
+<pre><code>#include &lt;stdint.h&gt;
+
+int32_t filter_sum_branchless(int32_t* data, int32_t length, int32_t threshold) {
+    int32_t sum = 0;
+    for (int i = 0; i &lt; length; i++) {
+        // (data[i] &gt; threshold) evaluates to 1 (true) or 0 (false)
+        // This is a "data dependency" instead of a "control dependency"
+        sum += data[i] * (data[i] &gt; threshold);
+    }
+    return sum;
+}</code></pre>
+<p>The first version <em>might</em> work OK if the data has a pattern that the branch predictor can learn, so that it usually predicts the right branch. But if the data is random, then the branch predictor will be wrong a lot and the performance will suffer. The second version doesn’t have any branches, so it will perform more consistently regardless of the data pattern. Of course, the second version might be less readable to some people, so it’s a trade-off between readability and performance.</p>
+<p>Note that there are some instructions that are specifically designed to be friendly to speculative execution. For example, the ARM architecture has a set of instructions called “conditional select” instructions, which allow you to select between two values based on a condition without using a branch. These instructions can be used to write code that is more friendly to speculative execution. That second version of the C function above would probably compile down to something that uses conditional select instructions.</p>
+<p>Also, note that there are compiler macros in some versions of C that allow you to give hints to the compiler about branch prediction. On a Mac with clang, you can use the <strong>builtin_expect()</strong> macro to indicate that a certain condition is likely to be true or false, which can help the compiler generate code that is more friendly to branch prediction. In practice this macro is often further macro-ized to something like <strong>likely()</strong> and <strong>unlikely()</strong> for readability. These macros aren’t used that frequently since in most cases the hardware and compiler are smarter than the programmer at predicting branches, but you’ll see them in some performance-critical code where one outcome is much more likely than the other.</p>
 
 
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Everyone says <em>opcode</em>. It just sounds cooler.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
 </main> <!-- /main -->
@@ -995,13 +814,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-assembly-registers.html" class="pagination-link" aria-label="Registers">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Registers</span></span>
+      <a href="./hdmcw-subs.html" class="pagination-link" aria-label="Subroutines [WIP]">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-programs.html" class="pagination-link" aria-label="Programs">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Programs</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-network.html" class="pagination-link" aria-label="Networks [TBD]">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Networks [TBD]</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
