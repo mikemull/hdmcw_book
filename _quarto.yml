@@ -26,6 +26,7 @@ book:
     - hdmcw-math-int.qmd
     - hdmcw-math-float.qmd
     - hdmcw-subs.qmd
+    - hdmcw-advanced.qmd
     - hdmcw-network.qmd
     - hdmcw-gpu.qmd
     - references.qmd
