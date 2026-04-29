@@ -4,5 +4,501 @@ format:
     css: styles.css
 ---
 
-# GPUs [TBD]
+# GPUs [WIP]
 
+GPUs are now so intimately connected to the world of AI that it's hard to remember that the "G" in GPU stands for "graphics".  It might be obvious how these
+two things are connected, but let me state it outright.  GPUs are really good at doing a bunch of things all at once.  So, if you're trying to render a 3D scene
+there's a bunch of calculation that needs to happen to figure out what color/shade each pixel should be.  When I first started tinkering with 3D graphics in the early
+90s a ray tracer would literally calculate every pixel one at a time.  Not long after than I saw a project at UNC Chapel Hill called "Pixel-Planes" that was custom
+hardware with a bunch of processors that could calculate many pixels at once.  This works great for ray tracing case because the problem is "embarrassingly parallel", meaning that the calculation for each pixel is independent of the others.
+
+The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems,
+like doing matrix multiplications.  The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.
+
+## Metal
+
+The main reason I bring this up is because the technology that Apple provides for programming the GPUs in my computer is called "Metal", and the description of this technology has a bit of a graphics flavor (Metal is kind of like NVidia's CUDA or Microsoft's D3D).  For example, the language used to write GPU code is called "Metal Shader Language" (MSL).  However, you can do general
+purpose computation.  FWIW, I think Metal is a cool name and I'd totally wear that t-shirt, but it's a little weird to switch to a different language to write
+code for the GPU. Also, note that while the GPUs are used for things like PyTorch, many programmers (most?) are using them to make video games faster.
+
+[Note: My example code will be using Metal 3.  Apple introduced Metal 4 in 2025, but most example code I see out in the
+world is still using 3.]
+
+Although it's still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel.  We saw a version of that in [Chapter on Advanced CPU Features] in the discussion of SIMD.  The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency.  The memory situation
+with respect to the GPU in my computer is different than typical GPU setups however.  In my M2 Mac, the GPU shares memory with the CPU, what Apple calls the _unified memory model_.  The more common arrangement for GPUs is that data has to be copied
+from the CPU memory to the GPU memory before computation and then copied back again after computation.  My computer gets to avoid the copying, but the GPU still has to pull data from a buffer in memory.  
+
+The GPU is usually a good choice if you have a 1, 2, or 3-dimensional grid where the computation on each element can be
+done independently.  As mentioned above that works well for graphics because you can treat every pixel separately, and
+it works well for matrix multiplication because even though each element depends on multiple elements from the input matrices, the computation for each element can still be done independently once the necessary input elements are available.
+Maybe less intuitively it can also be used to filter data.  
+
+Consider this C function:
+
+```C
+void threshold_cpu(const float* input, int* output, float threshold, int length) {
+    for (int i = 0; i < length; i++) {
+        output[i] = (input[i] > threshold) ? 1 : 0;
+    }
+}
+```
+This takes an array of floats and returns an array of ints, so it's 1 if the number is over the threshold value and 0 otherwise.  The MSL code to run the same thing on the GPU is:
+
+```C
+#include <metal_stdlib>
+using namespace metal;
+
+// Kernel function that applies threshold to an array of floats
+// Values above threshold become 1, values below become 0
+kernel void threshold_kernel(
+    device const float* input [[buffer(0)]],      // Input array
+    device int* output [[buffer(1)]],              // Output array (integer)
+    constant float& threshold [[buffer(2)]],       // Threshold value
+    uint index [[thread_position_in_grid]])        // Thread index
+{
+    output[index] = (input[index] > threshold) ? 1 : 0;
+}
+
+```
+
+In Metal this is called a kernel function or a _shader_.  Functionally they look pretty similar, but while the standard
+version is simple to invoke there's a bit of machinery involved in starting up the GPU version.  Actually, lots of machinery.  Heavy machinery.  You gotta:
+
+ - Create a device
+ - Create a command queue
+ - Load a Metal library
+ - Load the kernel function
+ - Create pipeline state
+ - Create memory buffers
+ - Create a command buffer
+ - Create a command encoder
+ - Calculate thread groups
+ - Commit the command
+
+There are two categories of things here.  The first is preparing our kernel to be used by metal and then adding it
+to the _pipeline state_.  This is a confusing term but the "pipeline" is the set of functions that are going to be applied
+to the data.  We only have one computation here so it's not a very full pipeline, but if there were several steps as would
+be common in graphics processing, each step would be a stage in the pipeline.
+
+To set up the pipeline we need this code:
+
+```
+MTL::Device* device = MTL::CreateSystemDefaultDevice();
+MTL::Library* library = device->newDefaultLibrary();
+NS::String* functionName = NS::String::string("threshold_kernel", NS::UTF8StringEncoding);
+MTL::Function* kernelFunction = library->newFunction(functionName);
+// Create compute pipeline state
+MTL::ComputePipelineState* pipelineState = device->newComputePipelineState(kernelFunction, &error);
+```
+
+Note that we haven't really used the GPU yet.  All of this code is running on the CPU.
+
+The other category of Metal commands are for setting up the the command queue and adding commands to the buffer.  Again
+all of this is run on the CPU.  The GPU is a separate processor.  It has it's own cores, within those cores it can also do SIMD like the regular CPU.
+Usually though, you don't want to completely hand over control to the GPU so it has to play nice with the CPU.  The
+coordination happens through a command queue.  The GPU looks in the command queue for work to do, but it's the CPUs job
+to add things to that queue.  Ideally, the GPU can be kept busy without requiring the CPU to be constantly feeding
+it new commands.
+
+The thing that you want to run and the data it requires is encoded into a command via
+a command encoder and added to the command buffer.  The buffer is then _commited_, which tells the GPU that there's
+something to run.  This all gets code like this, san error checks [^1]:
+
+```
+MTL::CommandQueue* commandQueue = device->newCommandQueue();
+
+MTL::CommandBuffer* commandBuffer = commandQueue->commandBuffer();
+        
+// Create a compute command encoder
+MTL::ComputeCommandEncoder* computeEncoder = commandBuffer->computeCommandEncoder();
+computeEncoder->setComputePipelineState(pipelineState);
+computeEncoder->setBuffer(inputBuffer, 0, 0);
+computeEncoder->setBuffer(outputBuffer, 0, 1);
+computeEncoder->setBuffer(thresholdBuffer, 0, 2);
+        
+// Dispatch threads
+computeEncoder->dispatchThreads(gridSize, threadgroupSize);
+computeEncoder->endEncoding();
+        
+commandBuffer->commit();
+```
+
+Some things to note here.  First, we're creating a _computeCommandEncoder_ because we're just doing compute.
+Second, the encoder connects the pipeline state (and so the kernel) and the data that it will operate on.  Third,
+note again that this is a very simple example.  More complex cases might have multiple command queues, multiple
+command buffers per queue, and multiple encoders per buffer.
+Finally, there's this command _dispatchThreads_.  Roughly, this determines how the work will get divided across
+threads, but to understand that we need to first discuss _threadgroups_.
+
+
+## Threadgroups
+
+Like the CPU, the GPU treats each thing that it needs to run as a _thread_.  In our example above, there will be one
+thread for every element in the array.  Since that array can be arbitrarily large though, in practice it will be divided
+up into _threadgroups_.  In our test program you'll see the lines:
+
+```C++
+    NS::UInteger threadGroupSize = pipelineState->maxTotalThreadsPerThreadgroup();
+    if (threadGroupSize > arrayLength) {
+        threadGroupSize = arrayLength;
+    }
+```
+
+So the threadgroup size will be _maxTotalThreadsPerThreadgroup()_ or the size of the array.  On my machine the max total threads is 1024, so in most cases it will create a threadgroup for 1024-element chunks of the array and schedule those on
+the GPU. The final chunk will likely be smaller than the max, but the Metal framework automatically adjusts it to the size
+of the remaining elements.  The GPU will run 1024 threads at a time, all of which are running the kernel function.
+
+The threads in the threadgroup can also share what's called _threadgroup memory_, which is sort of like the L1 cache in the CPU. This is useful primarily when the threads share the same memory, especially when performing reductions or other operations that require communication between threads. In our example this isn't really necessary because each thread only uses one location in the memory.
+
+
+## Comparing to the CPU
+
+The test program does the same operation both in the GPU and on the CPU.  You'd think the GPU would always kick the CPUs
+butt in this particular computation, but remember from the previous episode that the CPU also has tricks up its sleeve
+for doing this type of computation.  The optimized assembly for the key comparison part of the CPU function looks
+like this:
+
+```
+    0x100001eac <+4868>: fcmgt.4s v0, v0, v4
+    0x100001eb0 <+4872>: and.16b v0, v0, v5
+    0x100001eb4 <+4876>: fcmgt.4s v1, v1, v4
+    0x100001eb8 <+4880>: and.16b v1, v1, v5
+    0x100001ebc <+4884>: fcmgt.4s v2, v2, v4
+    0x100001ec0 <+4888>: and.16b v2, v2, v5
+    0x100001ec4 <+4892>: fcmgt.4s v3, v3, v4
+    0x100001ec8 <+4896>: and.16b v3, v3, v5
+```
+
+The FCMGT instruction here is a SIMD instruction for doing floating point comparisons (Floating Point Masked Greater Than).
+Remember that in the chapter on SIMD we mentioned the idea of _lanes_ in the register.  The FCMGT compares 4 floats at once to the value in last register (so, for the first case compares the values in V0 to the value in V4).  The result goes back into V0 as a _mask_.  So in the less than case all the bits in the lane will be set to 0 and in the greater than case all the bits get set to 1 (ie, 0xFFFFFFFF or 64 1 bits).  The subsequet AND.16B instruction uses these bits to determine if the
+value should be 1 or 0.  The compiler as pulled data into 4 vector registers (V0-V3) so effectively the code compares
+16 floats at once.
+
+This is fast enough that given the overhead of initiating the GPU computation, the CPU will usually win for smaller arrays.
+However, small is surprisingly large here.  You'd think that given the size of the CPUs L1 cache, the CPU version would slow
+down from pulling stuff from memory to registers or cache.  But because of the ability of the CPU to _prefetch_ data the CPU is always finding what it needs in the cache.  It's very hard to get good timing results to compare the CPU and GPU
+because of numerous factors, including how hot the CPU gets.  But on my computer, for this particular computation, the GPU doesn't beat
+both single-threaded and multi-threaded CPU code until the input array is somewhere between 10 million and 50 million elements.
+
+Below is the full listing of the test program I used for this example:
+
+```C++
+//
+//  main.cpp
+//  MacGPUTest
+//
+
+#define NS_PRIVATE_IMPLEMENTATION
+#define CA_PRIVATE_IMPLEMENTATION
+#define MTL_PRIVATE_IMPLEMENTATION
+#include <Metal/Metal.hpp>
+#include <Foundation/Foundation.hpp>
+#include <iostream>
+#include <random>
+#include <vector>
+#include <chrono>
+#include <thread>
+ 
+// CPU implementation of threshold operation (single-threaded)
+void threshold_cpu(const float* input, int* output, float threshold, int length) {
+    for (int i = 0; i < length; i++) {
+        output[i] = (input[i] > threshold) ? 1 : 0;
+    }
+}
+
+// Multithreaded CPU implementation
+void threshold_cpu_mt(const float* input, int* output, float threshold, int length) {
+    unsigned int numThreads = std::thread::hardware_concurrency();
+    if (numThreads == 0) numThreads = 8; // Default if detection fails
+    
+    std::vector<std::thread> threads;
+    int chunkSize = (length + numThreads - 1) / numThreads;
+    
+    auto worker = [&](int start, int end) {
+        for (int i = start; i < end && i < length; i++) {
+            output[i] = (input[i] > threshold) ? 1 : 0;
+        }
+    };
+    
+    for (unsigned int t = 0; t < numThreads; t++) {
+        int start = t * chunkSize;
+        int end = start + chunkSize;
+        threads.emplace_back(worker, start, end);
+    }
+    
+    for (auto& thread : threads) {
+        thread.join();
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    // Parse array size from command line argument (supports scientific notation)
+    int arrayLength = 1000000; // Default: 1 million
+    if (argc > 1) {
+        arrayLength = (int)std::stod(argv[1]);
+        if (arrayLength <= 0) {
+            std::cerr << "Error: Array size must be positive" << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+    
+    std::cout << "Array size: " << arrayLength << std::endl;
+    
+    // Get the default Metal device (GPU)
+    MTL::Device* device = MTL::CreateSystemDefaultDevice();
+    if (!device) {
+        std::cerr << "Metal is not supported on this device" << std::endl;
+        return EXIT_FAILURE;
+    }
+    
+    std::cout << "Metal device: " << device->name()->utf8String() << std::endl;
+    
+    // Check Metal 4 support
+    bool supportsMetal4 = device->supportsFamily(MTL::GPUFamilyMetal4);
+    std::cout << "Metal 4 supported: " << (supportsMetal4 ? "Yes" : "No") << std::endl;
+    
+    // Create a command queue for submitting work to the GPU
+    // Note: Using classic Metal API (not Metal 4 argument tables) for simplicity
+    // The classic API is fully supported and performant on Metal 4 hardware
+    MTL::CommandQueue* commandQueue = device->newCommandQueue();
+    if (!commandQueue) {
+        std::cerr << "Failed to create command queue" << std::endl;
+        device->release();
+        return EXIT_FAILURE;
+    }
+    
+    // Load the Metal library containing our shader
+    NS::Error* error = nullptr;
+    MTL::Library* library = device->newDefaultLibrary();
+    if (!library) {
+        std::cerr << "Failed to load Metal library" << std::endl;
+        commandQueue->release();
+        device->release();
+        return EXIT_FAILURE;
+    }
+    
+    // Load the threshold kernel function
+    NS::String* functionName = NS::String::string("threshold_kernel", NS::UTF8StringEncoding);
+    MTL::Function* kernelFunction = library->newFunction(functionName);
+    if (!kernelFunction) {
+        std::cerr << "Failed to load kernel function" << std::endl;
+        library->release();
+        commandQueue->release();
+        device->release();
+        return EXIT_FAILURE;
+    }
+    
+    // Create compute pipeline state
+    MTL::ComputePipelineState* pipelineState = device->newComputePipelineState(kernelFunction, &error);
+    if (!pipelineState) {
+        std::cerr << "Failed to create pipeline state" << std::endl;
+        kernelFunction->release();
+        library->release();
+        commandQueue->release();
+        device->release();
+        return EXIT_FAILURE;
+    }
+    
+    // Prepare test data: array of random floats
+    float threshold = 5.0f;
+    
+    // Create Metal buffers with unified memory (shared storage mode)
+    size_t inputBufferSize = arrayLength * sizeof(float);
+    size_t outputBufferSize = arrayLength * sizeof(int);
+    MTL::Buffer* inputBuffer = device->newBuffer(inputBufferSize, MTL::ResourceStorageModeShared);
+    MTL::Buffer* outputBuffer = device->newBuffer(outputBufferSize, MTL::ResourceStorageModeShared);
+    MTL::Buffer* thresholdBuffer = device->newBuffer(sizeof(float), MTL::ResourceStorageModeShared);
+    
+    // Get pointers to the buffer contents and write directly to them
+    float* inputData = (float*)inputBuffer->contents();
+    float* thresholdData = (float*)thresholdBuffer->contents();
+    *thresholdData = threshold;
+    
+    // Generate random numbers directly into the Metal buffer
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dis(0.0f, 10.0f);
+    
+    std::cout << "Generating " << arrayLength << " random numbers..." << std::endl;
+    for (int i = 0; i < arrayLength; i++) {
+        inputData[i] = dis(gen);
+    }
+    
+    std::cout << "First 10 values: ";
+    for (int i = 0; i < 10; i++) {
+        std::cout << inputData[i] << " ";
+    }
+    std::cout << "\nThreshold: " << threshold << std::endl;
+    
+    // Calculate thread groups (used for all GPU runs)
+    MTL::Size gridSize = MTL::Size(arrayLength, 1, 1);
+    NS::UInteger threadGroupSize = pipelineState->maxTotalThreadsPerThreadgroup();
+    if (threadGroupSize > arrayLength) {
+        threadGroupSize = arrayLength;
+    }
+    MTL::Size threadgroupSize = MTL::Size(threadGroupSize, 1, 1);
+    
+    // Run GPU kernel 5 times
+    const int numRuns = 5;
+    std::vector<double> gpuTimes;
+    
+    std::cout << "Executing GPU kernel " << numRuns << " times..." << std::endl;
+    
+    for (int run = 0; run < numRuns; run++) {
+        // Create a command buffer
+        MTL::CommandBuffer* commandBuffer = commandQueue->commandBuffer();
+        
+        // Create a compute command encoder
+        MTL::ComputeCommandEncoder* computeEncoder = commandBuffer->computeCommandEncoder();
+        computeEncoder->setComputePipelineState(pipelineState);
+        computeEncoder->setBuffer(inputBuffer, 0, 0);
+        computeEncoder->setBuffer(outputBuffer, 0, 1);
+        computeEncoder->setBuffer(thresholdBuffer, 0, 2);
+        
+        // Dispatch threads
+        computeEncoder->dispatchThreads(gridSize, threadgroupSize);
+        computeEncoder->endEncoding();
+        
+        // Time this run
+        auto startTime = std::chrono::high_resolution_clock::now();
+        commandBuffer->commit();
+        commandBuffer->waitUntilCompleted();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+        double timeMs = duration.count() / 1000.0;
+        gpuTimes.push_back(timeMs);
+        
+        std::cout << "  Run " << (run + 1) << ": " << timeMs << " ms" << std::endl;
+    }
+    
+    // Calculate average GPU time (excluding largest value)
+    double maxGpuTime = *std::max_element(gpuTimes.begin(), gpuTimes.end());
+    double sumGpuTime = 0.0;
+    for (double t : gpuTimes) {
+        sumGpuTime += t;
+    }
+    double avgGpuTime = (sumGpuTime - maxGpuTime) / (numRuns - 1);
+    
+    std::cout << "GPU average execution time (excluding max): " << avgGpuTime << " ms" << std::endl;
+    
+    // Read results and compute statistics
+    int* results = (int*)outputBuffer->contents();
+    
+    std::cout << "First 10 output values: ";
+    for (int i = 0; i < 10; i++) {
+        std::cout << results[i] << " ";
+    }
+    
+    // Count how many values are above threshold
+    int countAbove = 0;
+    for (int i = 0; i < arrayLength; i++) {
+        if (results[i] == 1) {
+            countAbove++;
+        }
+    }
+    
+    std::cout << "\n\nGPU Results:" << std::endl;
+    std::cout << "  Total values above threshold: " << countAbove 
+              << " (" << (100.0f * countAbove / arrayLength) << "%)" << std::endl;
+    
+    // Now perform the same computation on CPU for comparison
+    std::vector<int> cpuOutput(arrayLength);
+    std::vector<double> cpuTimes;
+    std::vector<double> cpuMtTimes;
+    
+    std::cout << "\nWaiting 30 seconds before starting CPU runs..." << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(30));
+    
+    std::cout << "\nExecuting CPU kernel (single-threaded) " << numRuns << " times..." << std::endl;
+    
+    for (int run = 0; run < numRuns; run++) {
+        auto cpuStartTime = std::chrono::high_resolution_clock::now();
+        threshold_cpu(inputData, cpuOutput.data(), threshold, arrayLength);
+        auto cpuEndTime = std::chrono::high_resolution_clock::now();
+        
+        auto cpuDuration = std::chrono::duration_cast<std::chrono::microseconds>(cpuEndTime - cpuStartTime);
+        double timeMs = cpuDuration.count() / 1000.0;
+        cpuTimes.push_back(timeMs);
+        
+        std::cout << "  Run " << (run + 1) << ": " << timeMs << " ms" << std::endl;
+    }
+    
+    // Calculate average CPU time (excluding largest value)
+    double maxCpuTime = *std::max_element(cpuTimes.begin(), cpuTimes.end());
+    double sumCpuTime = 0.0;
+    for (double t : cpuTimes) {
+        sumCpuTime += t;
+    }
+    double avgCpuTime = (sumCpuTime - maxCpuTime) / (numRuns - 1);
+    
+    std::cout << "CPU (single-threaded) average execution time (excluding max): " << avgCpuTime << " ms" << std::endl;
+    
+    // Now run multithreaded CPU version
+    std::cout << "\nExecuting CPU kernel (multithreaded) " << numRuns << " times..." << std::endl;
+    
+    for (int run = 0; run < numRuns; run++) {
+        auto cpuMtStartTime = std::chrono::high_resolution_clock::now();
+        threshold_cpu_mt(inputData, cpuOutput.data(), threshold, arrayLength);
+        auto cpuMtEndTime = std::chrono::high_resolution_clock::now();
+        
+        auto cpuMtDuration = std::chrono::duration_cast<std::chrono::microseconds>(cpuMtEndTime - cpuMtStartTime);
+        double timeMs = cpuMtDuration.count() / 1000.0;
+        cpuMtTimes.push_back(timeMs);
+        
+        std::cout << "  Run " << (run + 1) << ": " << timeMs << " ms" << std::endl;
+    }
+    
+    // Calculate average multithreaded CPU time (excluding largest value)
+    double maxCpuMtTime = *std::max_element(cpuMtTimes.begin(), cpuMtTimes.end());
+    double sumCpuMtTime = 0.0;
+    for (double t : cpuMtTimes) {
+        sumCpuMtTime += t;
+    }
+    double avgCpuMtTime = (sumCpuMtTime - maxCpuMtTime) / (numRuns - 1);
+    
+    std::cout << "CPU (multithreaded) average execution time (excluding max): " << avgCpuMtTime << " ms" << std::endl;
+    
+    // Verify CPU results match GPU results
+    int cpuCountAbove = 0;
+    bool resultsMatch = true;
+    for (int i = 0; i < arrayLength; i++) {
+        if (cpuOutput[i] == 1) {
+            cpuCountAbove++;
+        }
+        if (cpuOutput[i] != results[i]) {
+            resultsMatch = false;
+        }
+    }
+    
+    std::cout << "\nCPU Results:" << std::endl;
+    std::cout << "  Total values above threshold: " << cpuCountAbove 
+              << " (" << (100.0f * cpuCountAbove / arrayLength) << "%)" << std::endl;
+    std::cout << "  Results match GPU: " << (resultsMatch ? "Yes" : "No") << std::endl;
+    
+    // Calculate speedups based on averages
+    double speedupST = avgCpuTime / avgGpuTime;
+    double speedupMT = avgCpuMtTime / avgGpuTime;
+    std::cout << "\nGPU Speedup vs single-threaded CPU: " << speedupST << "x" << std::endl;
+    std::cout << "GPU Speedup vs multithreaded CPU: " << speedupMT << "x" << std::endl;
+    std::cout << "CPU multithreaded speedup vs single-threaded: " << (avgCpuTime / avgCpuMtTime) << "x" << std::endl;
+    
+    std::cout << "\nComputation completed successfully" << std::endl;
+    
+    // Cleanup
+    inputBuffer->release();
+    outputBuffer->release();
+    thresholdBuffer->release();
+    pipelineState->release();
+    kernelFunction->release();
+    library->release();
+    commandQueue->release();
+    device->release();
+    
+    return EXIT_SUCCESS;
+}
+
+```
+
+
+[^1]: Sadly, Apple does not provided developer documentation for the machine code of the GPU, so this is about as low-level as we'll get.
