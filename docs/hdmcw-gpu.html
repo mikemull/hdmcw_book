@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>19&nbsp; GPUs [TBD] – How Does My 🤬 Computer Work</title>
+<title>18&nbsp; GPUs [WIP] – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./references.html" rel="next">
-<link href="./hdmcw-network.html" rel="prev">
+<link href="./hdmcw-advanced.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-gpu.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GPUs [TBD]</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-gpu.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -223,14 +257,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hdmcw-network.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Networks [TBD]</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GPUs [TBD]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,15 +273,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#metal" id="toc-metal" class="nav-link active" data-scroll-target="#metal"><span class="header-section-number">18.1</span> Metal</a></li>
+  <li><a href="#threadgroups" id="toc-threadgroups" class="nav-link" data-scroll-target="#threadgroups"><span class="header-section-number">18.2</span> Threadgroups</a></li>
+  <li><a href="#comparing-to-the-cpu" id="toc-comparing-to-the-cpu" class="nav-link" data-scroll-target="#comparing-to-the-cpu"><span class="header-section-number">18.3</span> Comparing to the CPU</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GPUs [TBD]</span></h1>
+<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></h1>
 </div>
 
 
@@ -270,8 +306,423 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>GPUs are now so intimately connected to the world of AI that it’s hard to remember that the “G” in GPU stands for “graphics”. It might be obvious how these two things are connected, but let me state it outright. GPUs are really good at doing a bunch of things all at once. So, if you’re trying to render a 3D scene there’s a bunch of calculation that needs to happen to figure out what color/shade each pixel should be. When I first started tinkering with 3D graphics in the early 90s a ray tracer would literally calculate every pixel one at a time. Not long after than I saw a project at UNC Chapel Hill called “Pixel-Planes” that was custom hardware with a bunch of processors that could calculate many pixels at once. This works great for ray tracing case because the problem is “embarrassingly parallel”, meaning that the calculation for each pixel is independent of the others.</p>
+<p>The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems, like doing matrix multiplications. The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.</p>
+<section id="metal" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="metal"><span class="header-section-number">18.1</span> Metal</h2>
+<p>The main reason I bring this up is because the technology that Apple provides for programming the GPUs in my computer is called “Metal”, and the description of this technology has a bit of a graphics flavor (Metal is kind of like NVidia’s CUDA or Microsoft’s D3D). For example, the language used to write GPU code is called “Metal Shader Language” (MSL). However, you can do general purpose computation. FWIW, I think Metal is a cool name and I’d totally wear that t-shirt, but it’s a little weird to switch to a different language to write code for the GPU. Also, note that while the GPUs are used for things like PyTorch, many programmers (most?) are using them to make video games faster.</p>
+<p>[Note: My example code will be using Metal 3. Apple introduced Metal 4 in 2025, but most example code I see out in the world is still using 3.]</p>
+<p>Although it’s still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel. We saw a version of that in [Chapter on Advanced CPU Features] in the discussion of SIMD. The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency. The memory situation with respect to the GPU in my computer is different than typical GPU setups however. In my M2 Mac, the GPU shares memory with the CPU, what Apple calls the <em>unified memory model</em>. The more common arrangement for GPUs is that data has to be copied from the CPU memory to the GPU memory before computation and then copied back again after computation. My computer gets to avoid the copying, but the GPU still has to pull data from a buffer in memory.</p>
+<p>The GPU is usually a good choice if you have a 1, 2, or 3-dimensional grid where the computation on each element can be done independently. As mentioned above that works well for graphics because you can treat every pixel separately, and it works well for matrix multiplication because even though each element depends on multiple elements from the input matrices, the computation for each element can still be done independently once the necessary input elements are available. Maybe less intuitively it can also be used to filter data.</p>
+<p>Consider this C function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> threshold_cpu<span class="op">(</span><span class="dt">const</span> <span class="dt">float</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> output<span class="op">,</span> <span class="dt">float</span> threshold<span class="op">,</span> <span class="dt">int</span> length<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> length<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        output<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>input<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> threshold<span class="op">)</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This takes an array of floats and returns an array of ints, so it’s 1 if the number is over the threshold value and 0 otherwise. The MSL code to run the same thing on the GPU is:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;metal_stdlib&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>using namespace metal<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Kernel function that applies threshold to an array of floats</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Values above threshold become 1, values below become 0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>kernel <span class="dt">void</span> threshold_kernel<span class="op">(</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    device <span class="dt">const</span> <span class="dt">float</span><span class="op">*</span> input <span class="op">[[</span><span class="at">buffer</span><span class="op">(</span><span class="dv">0</span><span class="op">)]],</span>      <span class="co">// Input array</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    device <span class="dt">int</span><span class="op">*</span> output <span class="op">[[</span><span class="at">buffer</span><span class="op">(</span><span class="dv">1</span><span class="op">)]],</span>              <span class="co">// Output array (integer)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    constant <span class="dt">float</span><span class="op">&amp;</span> threshold <span class="op">[[</span><span class="at">buffer</span><span class="op">(</span><span class="dv">2</span><span class="op">)]],</span>       <span class="co">// Threshold value</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    uint index <span class="op">[[</span><span class="at">thread_position_in_grid</span><span class="op">]])</span>        <span class="co">// Thread index</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    output<span class="op">[</span>index<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>input<span class="op">[</span>index<span class="op">]</span> <span class="op">&gt;</span> threshold<span class="op">)</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In Metal this is called a kernel function or a <em>shader</em>. Functionally they look pretty similar, but while the standard version is simple to invoke there’s a bit of machinery involved in starting up the GPU version. Actually, lots of machinery. Heavy machinery. You gotta:</p>
+<ul>
+<li>Create a device</li>
+<li>Create a command queue</li>
+<li>Load a Metal library</li>
+<li>Load the kernel function</li>
+<li>Create pipeline state</li>
+<li>Create memory buffers</li>
+<li>Create a command buffer</li>
+<li>Create a command encoder</li>
+<li>Calculate thread groups</li>
+<li>Commit the command</li>
+</ul>
+<p>There are two categories of things here. The first is preparing our kernel to be used by metal and then adding it to the <em>pipeline state</em>. This is a confusing term but the “pipeline” is the set of functions that are going to be applied to the data. We only have one computation here so it’s not a very full pipeline, but if there were several steps as would be common in graphics processing, each step would be a stage in the pipeline.</p>
+<p>To set up the pipeline we need this code:</p>
+<pre><code>MTL::Device* device = MTL::CreateSystemDefaultDevice();
+MTL::Library* library = device-&gt;newDefaultLibrary();
+NS::String* functionName = NS::String::string("threshold_kernel", NS::UTF8StringEncoding);
+MTL::Function* kernelFunction = library-&gt;newFunction(functionName);
+// Create compute pipeline state
+MTL::ComputePipelineState* pipelineState = device-&gt;newComputePipelineState(kernelFunction, &amp;error);</code></pre>
+<p>Note that we haven’t really used the GPU yet. All of this code is running on the CPU.</p>
+<p>The other category of Metal commands are for setting up the the command queue and adding commands to the buffer. Again all of this is run on the CPU. The GPU is a separate processor. It has it’s own cores, within those cores it can also do SIMD like the regular CPU. Usually though, you don’t want to completely hand over control to the GPU so it has to play nice with the CPU. The coordination happens through a command queue. The GPU looks in the command queue for work to do, but it’s the CPUs job to add things to that queue. Ideally, the GPU can be kept busy without requiring the CPU to be constantly feeding it new commands.</p>
+<p>The thing that you want to run and the data it requires is encoded into a command via a command encoder and added to the command buffer. The buffer is then <em>commited</em>, which tells the GPU that there’s something to run. This all gets code like this, san error checks <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<pre><code>MTL::CommandQueue* commandQueue = device-&gt;newCommandQueue();
+
+MTL::CommandBuffer* commandBuffer = commandQueue-&gt;commandBuffer();
+        
+// Create a compute command encoder
+MTL::ComputeCommandEncoder* computeEncoder = commandBuffer-&gt;computeCommandEncoder();
+computeEncoder-&gt;setComputePipelineState(pipelineState);
+computeEncoder-&gt;setBuffer(inputBuffer, 0, 0);
+computeEncoder-&gt;setBuffer(outputBuffer, 0, 1);
+computeEncoder-&gt;setBuffer(thresholdBuffer, 0, 2);
+        
+// Dispatch threads
+computeEncoder-&gt;dispatchThreads(gridSize, threadgroupSize);
+computeEncoder-&gt;endEncoding();
+        
+commandBuffer-&gt;commit();</code></pre>
+<p>Some things to note here. First, we’re creating a <em>computeCommandEncoder</em> because we’re just doing compute. Second, the encoder connects the pipeline state (and so the kernel) and the data that it will operate on. Third, note again that this is a very simple example. More complex cases might have multiple command queues, multiple command buffers per queue, and multiple encoders per buffer. Finally, there’s this command <em>dispatchThreads</em>. Roughly, this determines how the work will get divided across threads, but to understand that we need to first discuss <em>threadgroups</em>.</p>
+</section>
+<section id="threadgroups" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="threadgroups"><span class="header-section-number">18.2</span> Threadgroups</h2>
+<p>Like the CPU, the GPU treats each thing that it needs to run as a <em>thread</em>. In our example above, there will be one thread for every element in the array. Since that array can be arbitrarily large though, in practice it will be divided up into <em>threadgroups</em>. In our test program you’ll see the lines:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c++ code-with-copy"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    NS<span class="op">::</span>UInteger threadGroupSize <span class="op">=</span> pipelineState<span class="op">-&gt;</span>maxTotalThreadsPerThreadgroup<span class="op">();</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>threadGroupSize <span class="op">&gt;</span> arrayLength<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        threadGroupSize <span class="op">=</span> arrayLength<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So the threadgroup size will be <em>maxTotalThreadsPerThreadgroup()</em> or the size of the array. On my machine the max total threads is 1024, so in most cases it will create a threadgroup for 1024-element chunks of the array and schedule those on the GPU. The final chunk will likely be smaller than the max, but the Metal framework automatically adjusts it to the size of the remaining elements. The GPU will run 1024 threads at a time, all of which are running the kernel function.</p>
+<p>The threads in the threadgroup can also share what’s called <em>threadgroup memory</em>, which is sort of like the L1 cache in the CPU. This is useful primarily when the threads share the same memory, especially when performing reductions or other operations that require communication between threads. In our example this isn’t really necessary because each thread only uses one location in the memory.</p>
+</section>
+<section id="comparing-to-the-cpu" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="comparing-to-the-cpu"><span class="header-section-number">18.3</span> Comparing to the CPU</h2>
+<p>The test program does the same operation both in the GPU and on the CPU. You’d think the GPU would always kick the CPUs butt in this particular computation, but remember from the previous episode that the CPU also has tricks up its sleeve for doing this type of computation. The optimized assembly for the key comparison part of the CPU function looks like this:</p>
+<pre><code>    0x100001eac &lt;+4868&gt;: fcmgt.4s v0, v0, v4
+    0x100001eb0 &lt;+4872&gt;: and.16b v0, v0, v5
+    0x100001eb4 &lt;+4876&gt;: fcmgt.4s v1, v1, v4
+    0x100001eb8 &lt;+4880&gt;: and.16b v1, v1, v5
+    0x100001ebc &lt;+4884&gt;: fcmgt.4s v2, v2, v4
+    0x100001ec0 &lt;+4888&gt;: and.16b v2, v2, v5
+    0x100001ec4 &lt;+4892&gt;: fcmgt.4s v3, v3, v4
+    0x100001ec8 &lt;+4896&gt;: and.16b v3, v3, v5</code></pre>
+<p>The FCMGT instruction here is a SIMD instruction for doing floating point comparisons (Floating Point Masked Greater Than). Remember that in the chapter on SIMD we mentioned the idea of <em>lanes</em> in the register. The FCMGT compares 4 floats at once to the value in last register (so, for the first case compares the values in V0 to the value in V4). The result goes back into V0 as a <em>mask</em>. So in the less than case all the bits in the lane will be set to 0 and in the greater than case all the bits get set to 1 (ie, 0xFFFFFFFF or 64 1 bits). The subsequet AND.16B instruction uses these bits to determine if the value should be 1 or 0. The compiler as pulled data into 4 vector registers (V0-V3) so effectively the code compares 16 floats at once.</p>
+<p>This is fast enough that given the overhead of initiating the GPU computation, the CPU will usually win for smaller arrays. However, small is surprisingly large here. You’d think that given the size of the CPUs L1 cache, the CPU version would slow down from pulling stuff from memory to registers or cache. But because of the ability of the CPU to <em>prefetch</em> data the CPU is always finding what it needs in the cache. It’s very hard to get good timing results to compare the CPU and GPU because of numerous factors, including how hot the CPU gets. But on my computer, for this particular computation, the GPU doesn’t beat both single-threaded and multi-threaded CPU code until the input array is somewhere between 10 million and 50 million elements.</p>
+<p>Below is the full listing of the test program I used for this example:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c++ code-with-copy"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">//  main.cpp</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">//  MacGPUTest</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NS_PRIVATE_IMPLEMENTATION</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define CA_PRIVATE_IMPLEMENTATION</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MTL_PRIVATE_IMPLEMENTATION</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Metal/Metal.hpp&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Foundation/Foundation.hpp&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;chrono&gt;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;thread&gt;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">// CPU implementation of threshold operation (single-threaded)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> threshold_cpu<span class="op">(</span><span class="at">const</span> <span class="dt">float</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> output<span class="op">,</span> <span class="dt">float</span> threshold<span class="op">,</span> <span class="dt">int</span> length<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> length<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        output<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>input<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> threshold<span class="op">)</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">// Multithreaded CPU implementation</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> threshold_cpu_mt<span class="op">(</span><span class="at">const</span> <span class="dt">float</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> output<span class="op">,</span> <span class="dt">float</span> threshold<span class="op">,</span> <span class="dt">int</span> length<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> numThreads <span class="op">=</span> <span class="bu">std::</span>thread::hardware_concurrency<span class="op">();</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>numThreads <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> numThreads <span class="op">=</span> <span class="dv">8</span><span class="op">;</span> <span class="co">// Default if detection fails</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>thread<span class="op">&gt;</span> threads<span class="op">;</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> chunkSize <span class="op">=</span> <span class="op">(</span>length <span class="op">+</span> numThreads <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="op">/</span> numThreads<span class="op">;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> worker <span class="op">=</span> <span class="op">[&amp;](</span><span class="dt">int</span> start<span class="op">,</span> <span class="dt">int</span> end<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> start<span class="op">;</span> i <span class="op">&lt;</span> end <span class="op">&amp;&amp;</span> i <span class="op">&lt;</span> length<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            output<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">(</span>input<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> threshold<span class="op">)</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">unsigned</span> <span class="dt">int</span> t <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> t <span class="op">&lt;</span> numThreads<span class="op">;</span> t<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> start <span class="op">=</span> t <span class="op">*</span> chunkSize<span class="op">;</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> end <span class="op">=</span> start <span class="op">+</span> chunkSize<span class="op">;</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        threads<span class="op">.</span>emplace_back<span class="op">(</span>worker<span class="op">,</span> start<span class="op">,</span> end<span class="op">);</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span><span class="op">&amp;</span> thread <span class="op">:</span> threads<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        thread<span class="op">.</span>join<span class="op">();</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="at">const</span> <span class="dt">char</span> <span class="op">*</span> argv<span class="op">[])</span> <span class="op">{</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Parse array size from command line argument (supports scientific notation)</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> arrayLength <span class="op">=</span> <span class="dv">1000000</span><span class="op">;</span> <span class="co">// Default: 1 million</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">&gt;</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        arrayLength <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span><span class="bu">std::</span>stod<span class="op">(</span>argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>arrayLength <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>            <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Error: Array size must be positive"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Array size: "</span> <span class="op">&lt;&lt;</span> arrayLength <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Get the default Metal device (GPU)</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Device<span class="op">*</span> device <span class="op">=</span> MTL<span class="op">::</span>CreateSystemDefaultDevice<span class="op">();</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>device<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Metal is not supported on this device"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Metal device: "</span> <span class="op">&lt;&lt;</span> device<span class="op">-&gt;</span>name<span class="op">()-&gt;</span>utf8String<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Check Metal 4 support</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> supportsMetal4 <span class="op">=</span> device<span class="op">-&gt;</span>supportsFamily<span class="op">(</span>MTL<span class="op">::</span>GPUFamilyMetal4<span class="op">);</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Metal 4 supported: "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>supportsMetal4 <span class="op">?</span> <span class="st">"Yes"</span> <span class="op">:</span> <span class="st">"No"</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Create a command queue for submitting work to the GPU</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Note: Using classic Metal API (not Metal 4 argument tables) for simplicity</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">// The classic API is fully supported and performant on Metal 4 hardware</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>CommandQueue<span class="op">*</span> commandQueue <span class="op">=</span> device<span class="op">-&gt;</span>newCommandQueue<span class="op">();</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>commandQueue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Failed to create command queue"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>        device<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Load the Metal library containing our shader</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    NS<span class="op">::</span>Error<span class="op">*</span> error <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Library<span class="op">*</span> library <span class="op">=</span> device<span class="op">-&gt;</span>newDefaultLibrary<span class="op">();</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>library<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Failed to load Metal library"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>        commandQueue<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>        device<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Load the threshold kernel function</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    NS<span class="op">::</span>String<span class="op">*</span> functionName <span class="op">=</span> NS<span class="op">::</span>String<span class="op">::</span>string<span class="op">(</span><span class="st">"threshold_kernel"</span><span class="op">,</span> NS<span class="op">::</span>UTF8StringEncoding<span class="op">);</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Function<span class="op">*</span> kernelFunction <span class="op">=</span> library<span class="op">-&gt;</span>newFunction<span class="op">(</span>functionName<span class="op">);</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>kernelFunction<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Failed to load kernel function"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>        library<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>        commandQueue<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>        device<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Create compute pipeline state</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>ComputePipelineState<span class="op">*</span> pipelineState <span class="op">=</span> device<span class="op">-&gt;</span>newComputePipelineState<span class="op">(</span>kernelFunction<span class="op">,</span> <span class="op">&amp;</span>error<span class="op">);</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>pipelineState<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cerr <span class="op">&lt;&lt;</span> <span class="st">"Failed to create pipeline state"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        kernelFunction<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        library<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>        commandQueue<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>        device<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Prepare test data: array of random floats</span></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> threshold <span class="op">=</span> <span class="fl">5.0</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Create Metal buffers with unified memory (shared storage mode)</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> inputBufferSize <span class="op">=</span> arrayLength <span class="op">*</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">float</span><span class="op">);</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>    <span class="dt">size_t</span> outputBufferSize <span class="op">=</span> arrayLength <span class="op">*</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">);</span></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Buffer<span class="op">*</span> inputBuffer <span class="op">=</span> device<span class="op">-&gt;</span>newBuffer<span class="op">(</span>inputBufferSize<span class="op">,</span> MTL<span class="op">::</span>ResourceStorageModeShared<span class="op">);</span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Buffer<span class="op">*</span> outputBuffer <span class="op">=</span> device<span class="op">-&gt;</span>newBuffer<span class="op">(</span>outputBufferSize<span class="op">,</span> MTL<span class="op">::</span>ResourceStorageModeShared<span class="op">);</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Buffer<span class="op">*</span> thresholdBuffer <span class="op">=</span> device<span class="op">-&gt;</span>newBuffer<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">float</span><span class="op">),</span> MTL<span class="op">::</span>ResourceStorageModeShared<span class="op">);</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Get pointers to the buffer contents and write directly to them</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span><span class="op">*</span> inputData <span class="op">=</span> <span class="op">(</span><span class="dt">float</span><span class="op">*)</span>inputBuffer<span class="op">-&gt;</span>contents<span class="op">();</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span><span class="op">*</span> thresholdData <span class="op">=</span> <span class="op">(</span><span class="dt">float</span><span class="op">*)</span>thresholdBuffer<span class="op">-&gt;</span>contents<span class="op">();</span></span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>thresholdData <span class="op">=</span> threshold<span class="op">;</span></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Generate random numbers directly into the Metal buffer</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>random_device rd<span class="op">;</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>mt19937 gen<span class="op">(</span>rd<span class="op">());</span></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>uniform_real_distribution<span class="op">&lt;</span><span class="dt">float</span><span class="op">&gt;</span> dis<span class="op">(</span><span class="fl">0.0</span><span class="bu">f</span><span class="op">,</span> <span class="fl">10.0</span><span class="bu">f</span><span class="op">);</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Generating "</span> <span class="op">&lt;&lt;</span> arrayLength <span class="op">&lt;&lt;</span> <span class="st">" random numbers..."</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> arrayLength<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>        inputData<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> dis<span class="op">(</span>gen<span class="op">);</span></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"First 10 values: "</span><span class="op">;</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> inputData<span class="op">[</span>i<span class="op">]</span> <span class="op">&lt;&lt;</span> <span class="st">" "</span><span class="op">;</span></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">Threshold: "</span> <span class="op">&lt;&lt;</span> threshold <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate thread groups (used for all GPU runs)</span></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Size gridSize <span class="op">=</span> MTL<span class="op">::</span>Size<span class="op">(</span>arrayLength<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    NS<span class="op">::</span>UInteger threadGroupSize <span class="op">=</span> pipelineState<span class="op">-&gt;</span>maxTotalThreadsPerThreadgroup<span class="op">();</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>threadGroupSize <span class="op">&gt;</span> arrayLength<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>        threadGroupSize <span class="op">=</span> arrayLength<span class="op">;</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>    MTL<span class="op">::</span>Size threadgroupSize <span class="op">=</span> MTL<span class="op">::</span>Size<span class="op">(</span>threadGroupSize<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Run GPU kernel 5 times</span></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="dt">int</span> numRuns <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> gpuTimes<span class="op">;</span></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Executing GPU kernel "</span> <span class="op">&lt;&lt;</span> numRuns <span class="op">&lt;&lt;</span> <span class="st">" times..."</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> run <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> run <span class="op">&lt;</span> numRuns<span class="op">;</span> run<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Create a command buffer</span></span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>        MTL<span class="op">::</span>CommandBuffer<span class="op">*</span> commandBuffer <span class="op">=</span> commandQueue<span class="op">-&gt;</span>commandBuffer<span class="op">();</span></span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Create a compute command encoder</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>        MTL<span class="op">::</span>ComputeCommandEncoder<span class="op">*</span> computeEncoder <span class="op">=</span> commandBuffer<span class="op">-&gt;</span>computeCommandEncoder<span class="op">();</span></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>setComputePipelineState<span class="op">(</span>pipelineState<span class="op">);</span></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>inputBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>outputBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>thresholdBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Dispatch threads</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>dispatchThreads<span class="op">(</span>gridSize<span class="op">,</span> threadgroupSize<span class="op">);</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>        computeEncoder<span class="op">-&gt;</span>endEncoding<span class="op">();</span></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Time this run</span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> startTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>        commandBuffer<span class="op">-&gt;</span>commit<span class="op">();</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>        commandBuffer<span class="op">-&gt;</span>waitUntilCompleted<span class="op">();</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> endTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> duration <span class="op">=</span> <span class="bu">std::</span>chrono::duration_cast<span class="op">&lt;</span><span class="bu">std::</span>chrono::microseconds<span class="op">&gt;(</span>endTime <span class="op">-</span> startTime<span class="op">);</span></span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> timeMs <span class="op">=</span> duration<span class="op">.</span>count<span class="op">()</span> <span class="op">/</span> <span class="fl">1000.0</span><span class="op">;</span></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>        gpuTimes<span class="op">.</span>push_back<span class="op">(</span>timeMs<span class="op">);</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Run "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>run <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">": "</span> <span class="op">&lt;&lt;</span> timeMs <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate average GPU time (excluding largest value)</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> maxGpuTime <span class="op">=</span> <span class="op">*</span><span class="bu">std::</span>max_element<span class="op">(</span>gpuTimes<span class="op">.</span>begin<span class="op">(),</span> gpuTimes<span class="op">.</span>end<span class="op">());</span></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> sumGpuTime <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">double</span> t <span class="op">:</span> gpuTimes<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>        sumGpuTime <span class="op">+=</span> t<span class="op">;</span></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> avgGpuTime <span class="op">=</span> <span class="op">(</span>sumGpuTime <span class="op">-</span> maxGpuTime<span class="op">)</span> <span class="op">/</span> <span class="op">(</span>numRuns <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"GPU average execution time (excluding max): "</span> <span class="op">&lt;&lt;</span> avgGpuTime <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Read results and compute statistics</span></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span><span class="op">*</span> results <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">*)</span>outputBuffer<span class="op">-&gt;</span>contents<span class="op">();</span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"First 10 output values: "</span><span class="op">;</span></span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> results<span class="op">[</span>i<span class="op">]</span> <span class="op">&lt;&lt;</span> <span class="st">" "</span><span class="op">;</span></span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Count how many values are above threshold</span></span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> countAbove <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> arrayLength<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>results<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>            countAbove<span class="op">++;</span></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">GPU Results:"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Total values above threshold: "</span> <span class="op">&lt;&lt;</span> countAbove </span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>              <span class="op">&lt;&lt;</span> <span class="st">" ("</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="fl">100.0</span><span class="bu">f</span> <span class="op">*</span> countAbove <span class="op">/</span> arrayLength<span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">"%)"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Now perform the same computation on CPU for comparison</span></span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> cpuOutput<span class="op">(</span>arrayLength<span class="op">);</span></span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> cpuTimes<span class="op">;</span></span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> cpuMtTimes<span class="op">;</span></span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">Waiting 30 seconds before starting CPU runs..."</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>this_thread::sleep_for<span class="op">(</span><span class="bu">std::</span>chrono::seconds<span class="op">(</span><span class="dv">30</span><span class="op">));</span></span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">Executing CPU kernel (single-threaded) "</span> <span class="op">&lt;&lt;</span> numRuns <span class="op">&lt;&lt;</span> <span class="st">" times..."</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> run <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> run <span class="op">&lt;</span> numRuns<span class="op">;</span> run<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuStartTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>        threshold_cpu<span class="op">(</span>inputData<span class="op">,</span> cpuOutput<span class="op">.</span>data<span class="op">(),</span> threshold<span class="op">,</span> arrayLength<span class="op">);</span></span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuEndTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuDuration <span class="op">=</span> <span class="bu">std::</span>chrono::duration_cast<span class="op">&lt;</span><span class="bu">std::</span>chrono::microseconds<span class="op">&gt;(</span>cpuEndTime <span class="op">-</span> cpuStartTime<span class="op">);</span></span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> timeMs <span class="op">=</span> cpuDuration<span class="op">.</span>count<span class="op">()</span> <span class="op">/</span> <span class="fl">1000.0</span><span class="op">;</span></span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>        cpuTimes<span class="op">.</span>push_back<span class="op">(</span>timeMs<span class="op">);</span></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Run "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>run <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">": "</span> <span class="op">&lt;&lt;</span> timeMs <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate average CPU time (excluding largest value)</span></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> maxCpuTime <span class="op">=</span> <span class="op">*</span><span class="bu">std::</span>max_element<span class="op">(</span>cpuTimes<span class="op">.</span>begin<span class="op">(),</span> cpuTimes<span class="op">.</span>end<span class="op">());</span></span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> sumCpuTime <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">double</span> t <span class="op">:</span> cpuTimes<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a>        sumCpuTime <span class="op">+=</span> t<span class="op">;</span></span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> avgCpuTime <span class="op">=</span> <span class="op">(</span>sumCpuTime <span class="op">-</span> maxCpuTime<span class="op">)</span> <span class="op">/</span> <span class="op">(</span>numRuns <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"CPU (single-threaded) average execution time (excluding max): "</span> <span class="op">&lt;&lt;</span> avgCpuTime <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Now run multithreaded CPU version</span></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">Executing CPU kernel (multithreaded) "</span> <span class="op">&lt;&lt;</span> numRuns <span class="op">&lt;&lt;</span> <span class="st">" times..."</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> run <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> run <span class="op">&lt;</span> numRuns<span class="op">;</span> run<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuMtStartTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>        threshold_cpu_mt<span class="op">(</span>inputData<span class="op">,</span> cpuOutput<span class="op">.</span>data<span class="op">(),</span> threshold<span class="op">,</span> arrayLength<span class="op">);</span></span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuMtEndTime <span class="op">=</span> <span class="bu">std::</span>chrono::high_resolution_clock::now<span class="op">();</span></span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> cpuMtDuration <span class="op">=</span> <span class="bu">std::</span>chrono::duration_cast<span class="op">&lt;</span><span class="bu">std::</span>chrono::microseconds<span class="op">&gt;(</span>cpuMtEndTime <span class="op">-</span> cpuMtStartTime<span class="op">);</span></span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> timeMs <span class="op">=</span> cpuMtDuration<span class="op">.</span>count<span class="op">()</span> <span class="op">/</span> <span class="fl">1000.0</span><span class="op">;</span></span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>        cpuMtTimes<span class="op">.</span>push_back<span class="op">(</span>timeMs<span class="op">);</span></span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Run "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>run <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">": "</span> <span class="op">&lt;&lt;</span> timeMs <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate average multithreaded CPU time (excluding largest value)</span></span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> maxCpuMtTime <span class="op">=</span> <span class="op">*</span><span class="bu">std::</span>max_element<span class="op">(</span>cpuMtTimes<span class="op">.</span>begin<span class="op">(),</span> cpuMtTimes<span class="op">.</span>end<span class="op">());</span></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> sumCpuMtTime <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">double</span> t <span class="op">:</span> cpuMtTimes<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>        sumCpuMtTime <span class="op">+=</span> t<span class="op">;</span></span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> avgCpuMtTime <span class="op">=</span> <span class="op">(</span>sumCpuMtTime <span class="op">-</span> maxCpuMtTime<span class="op">)</span> <span class="op">/</span> <span class="op">(</span>numRuns <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"CPU (multithreaded) average execution time (excluding max): "</span> <span class="op">&lt;&lt;</span> avgCpuMtTime <span class="op">&lt;&lt;</span> <span class="st">" ms"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Verify CPU results match GPU results</span></span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> cpuCountAbove <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> resultsMatch <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> arrayLength<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>cpuOutput<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>            cpuCountAbove<span class="op">++;</span></span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>cpuOutput<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> results<span class="op">[</span>i<span class="op">])</span> <span class="op">{</span></span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>            resultsMatch <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">CPU Results:"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Total values above threshold: "</span> <span class="op">&lt;&lt;</span> cpuCountAbove </span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>              <span class="op">&lt;&lt;</span> <span class="st">" ("</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="fl">100.0</span><span class="bu">f</span> <span class="op">*</span> cpuCountAbove <span class="op">/</span> arrayLength<span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">"%)"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"  Results match GPU: "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>resultsMatch <span class="op">?</span> <span class="st">"Yes"</span> <span class="op">:</span> <span class="st">"No"</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate speedups based on averages</span></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> speedupST <span class="op">=</span> avgCpuTime <span class="op">/</span> avgGpuTime<span class="op">;</span></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> speedupMT <span class="op">=</span> avgCpuMtTime <span class="op">/</span> avgGpuTime<span class="op">;</span></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">GPU Speedup vs single-threaded CPU: "</span> <span class="op">&lt;&lt;</span> speedupST <span class="op">&lt;&lt;</span> <span class="st">"x"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"GPU Speedup vs multithreaded CPU: "</span> <span class="op">&lt;&lt;</span> speedupMT <span class="op">&lt;&lt;</span> <span class="st">"x"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"CPU multithreaded speedup vs single-threaded: "</span> <span class="op">&lt;&lt;</span> <span class="op">(</span>avgCpuTime <span class="op">/</span> avgCpuMtTime<span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="st">"x"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"</span><span class="sc">\n</span><span class="st">Computation completed successfully"</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Cleanup</span></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>    inputBuffer<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>    outputBuffer<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>    thresholdBuffer<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>    pipelineState<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>    kernelFunction<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>    library<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>    commandQueue<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>    device<span class="op">-&gt;</span>release<span class="op">();</span></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> EXIT_SUCCESS<span class="op">;</span></span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Sadly, Apple does not provided developer documentation for the machine code of the GPU, so this is about as low-level as we’ll get.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -696,8 +1147,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-network.html" class="pagination-link" aria-label="Networks [TBD]">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Networks [TBD]</span></span>
+      <a href="./hdmcw-advanced.html" class="pagination-link" aria-label="Advanced Processor Features [WIP]">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
