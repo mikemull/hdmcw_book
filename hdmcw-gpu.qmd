@@ -7,7 +7,7 @@ format:
 # GPUs [WIP]
 
 GPUs are now so intimately connected to the world of AI that it's hard to remember that the "G" in GPU stands for "graphics".  It might be obvious how these
-two things are connected, but let me state it outright.  GPUs are really good at doing a bunch of things all at once.  So, if you're trying to render a 3D scene
+two things are connected, but let me state it outright.  GPUs are really good at doing a bunch of the same computation all at once.  So, if you're trying to render a 3D scene
 there's a bunch of calculation that needs to happen to figure out what color/shade each pixel should be.  When I first started tinkering with 3D graphics in the early
 90s a ray tracer would literally calculate every pixel one at a time.  Not long after than I saw a project at UNC Chapel Hill called "Pixel-Planes" that was custom
 hardware with a bunch of processors that could calculate many pixels at once.  This works great for ray tracing case because the problem is "embarrassingly parallel", meaning that the calculation for each pixel is independent of the others.
