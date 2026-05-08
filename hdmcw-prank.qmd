@@ -21,7 +21,7 @@ Sure, it was kind of a dick move, but the point of this story is that I felt at 
 Let’s try to recreate that prank program I described above.  I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip.  The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: [https://github.com/below/HelloSilicon](https://github.com/below/HelloSilicon)[@hellosilicon]
 
 
-```
+```asm
 //
 //
 //  Send BEL to stdout ad infinitum or Ctrl-C
@@ -73,9 +73,10 @@ Riiiiiight.  Anyway, what happens here is that the processor goes into a special
 radically different than what happened on DOS 2.x except that there wasn't really a privileged mode.  Back then, you'd invoke an _interrupt_, which would start executing OS (or BIOS) code to do some system function, then return to where it was.  Current CPUs still have interrupts. They are a mechanism by which, as the name implies, important system functions can interrupt the execution of a program to perform some system task then return control to the program. I'll talk more about this later.
 
 That's about it.  Of course, on my M2 Mac this doesn't make the shrill beeping noise that old PCs did.  In fact it might not even make a sound depending on 
-your settings.  On my machine it currently makes a sort of pleasant metronome sound.
+your settings (you need to have the "Audible Bell" on for your terminal).  On my machine it currently makes a sort of pleasant metronome sound.
 
-This is a dumb program, and it's not the way anyone would accomplish this task now (as mentioned above there's a system call to "sleep" for a specified number of seconds, or nanoseconds).  But the way that my PC back in the 80s and my Macbook now would execute this program is similar.  Like most computers since the 1950s, they would hold this program in memory and then fetch the instructions, fetch data into registers, put arguments in registers, execute the instructions, call operating system services.  The details of this process will be discussed in much more detail in the coming chapters.
+This is a dumb program, and it's not the way anyone would accomplish this task now (as mentioned above there's a system call to "sleep" for a specified number of seconds, or nanoseconds).  But the way that my PC back in the 80s and my Macbook now would execute this program is in some ways surprisingly similar.  Like most computers since the 1950s, they would hold this program in memory and then fetch the instructions, fetch data into registers, put arguments in registers, execute the instructions, call operating system services.  On the other hand, the features added to make computers faster, smaller,
+and more secure in the last 40 years make comparing the two computers like comparing the Wright Flyer to an F-35.  I hope this books helps us understand both the similarities and the differences.
 
 
 [^1]: Except for Radio Shack, where you could by the TRS-80 and a bag of resistors.

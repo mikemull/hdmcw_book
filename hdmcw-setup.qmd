@@ -7,17 +7,17 @@ format:
 # Assembling
 
 In the first episode I showed a program listing in ARM assembly language, but I didn't
-describe how to turn this into a runnable program.  Unfortunately, there's no equivalent
+describe how to turn this into a runnable program.  There's no equivalent
 to __debug.com__, so you have to type the program into a text file and then run a program
-called an _assembler_.  According to computer lore, the term assembler was coined in the 1950s
-but it meant something slightly different but then people and time intervened and now an
-assembler is a thing that assembles assembly language into machine instructions.
+called an _assembler_.  According to computer lore, the term _assembler_ was coined in the 1950s
+in the book __The Preparation of Programs for an Electronic Digital Computer__ by Maurice Wilkes, David Wheeler, and Stanley Gill, but it meant something more like a program that combined parts
+of a program into one. Over time, the meaning evolved, and now an assembler is a tool that converts assembly language into machine instructions.
 
-To run the assembler on Mac OS you'll probably need to install the XCode command line tools, part of Apple's development platform (or you can install the who shebang from the App Store).  You only need the assembler (called __as__) and other compiler tools for now.  You can probably
+To run the assembler on Mac OS you'll need to install the XCode command line tools, part of Apple's development platform (or you can install the whole shebang from the App Store).  You only need the assembler (called __as__) and other compiler tools for now.  You can
 get what you need with the command: 
 
 ```console
-xcode-select --install
+$ xcode-select --install
 ```
 
 If this works, you should have the neccessary programs on your computer, though you might
@@ -33,16 +33,16 @@ Now you should be able to run the following commands to make an executable
 program (assuming the source file is called beep.s):
 
 ```console
-as -o beep.o beep.s
-ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` \ 
+$ as -o beep.o beep.s
+$ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` \ 
 -e _start -arch arm64
 ```
 
 The first command runs the __as__ command to product an _object_ file.  We'll talk more about
 that soon.  The __as__ program on MacOS is really just a shell script that runs the __clang__
-compiler, part of the LLVM toolset
+compiler, part of the LLVM toolset [@LLVM:CGO04].
 
-The second command, __ld__, creates the runnable programm called __beep__.  The __ld__
+The second command, __ld__, creates the runnable program called __beep__.  The __ld__
 program is called the _linker_[^1].  We'll talk more about this in the next episode, but the
 basic idea is that to make an executable program we need to link our program's code to system
 libraries (and sometimes other 3rd-party libraries).  Let's look at the arguments to this command:
@@ -86,19 +86,19 @@ Back to the linker options:
 This tells the linker that the entry point is where the _start symbol is in our program.  Remember the
 bit at the top of our first program that looked like this:
 
-```
+```asm
 .global _start             // Provide program starting address to linker
 .align 4
 
 _start: 
 ```
 
-
+Then the final option is:
 
 ```
 -arch arm64
 ```
-Finally, this tells the linker to produce a binary in the ARM 64 architecture format.  This is the default.
+This tells the linker to produce a binary in the ARM 64 architecture format.  This is the default.
 
 Note: quite often you _can_ get away with a much simpler version of the link command, for example
 the following works for me for this program:

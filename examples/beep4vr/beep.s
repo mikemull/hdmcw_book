@@ -21,10 +21,4 @@ beep4eva:
 
 	B beep4eva
 
-// Setup the parameters to exit the program
-// and then call the kernel to do it.
-//	MOV     W0, #0          // Use 0 return code
-//    MOV     X16, #1         // System call number 1 terminates this program
-//    SVC     #0x80           // Call kernel to terminate the program
-
 bel:      .byte  0x07

@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -259,8 +293,14 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#recreating-the-prank" id="toc-recreating-the-prank" class="nav-link active" data-scroll-target="#recreating-the-prank"><span class="header-section-number">1.1</span> Recreating the Prank</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -285,46 +325,47 @@ div.csl-indent {
 
 
 <p>When I was 20 years old my roommate Gary and I would go to computer stores to check out the latest wares. These were not like Apple Stores. Back then retail computer stores were serious places, intended for business people looking for systems to run spreadsheets and word processors (also, exclusively IBM PCs and clones)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> . Gary and I wore shorts and Ocean Pacific t-shirts. We had mullets. Picture Beavis and Butthead walking into a bank.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>The computers were usually powered on and we could type commands into them (this was before mice and windowing systems). The sales people would either ignore us, or watch us warily to make sure we weren’t there to steal floppy disks. Sometimes they’d engage us in conversation, but they didn’t want to be busy with us when somebody came in who might actually result in a commission. What they didn’t know is that we already owned one of these computers, and we knew our way around it fairly well. It’s hard to believe in modern times, but owning a personal computer then was a rarity, sort of like owning a short-wave radio or a Geiger counter.</p>
+<p>The computers were usually powered on and we could type commands into them (this was before mice and windowing systems). The sales people would either ignore us, or watch us warily to make sure we didn’t steal floppy disks. Sometimes they’d engage us in conversation, but they didn’t want to be busy with us when somebody came in who might actually result in a commission. What they didn’t know is that we already owned one of these computers, and we knew our way around it fairly well. It’s hard to believe in modern times, but owning a personal computer then was a rarity, sort of like owning a short-wave radio or a Geiger counter.</p>
 <p>The operating system of the time was MS-DOS 2.x. The computer might be running a spreadsheet program or the like, but we could exit and get to the C:&gt; prompt. DOS 2 shipped with a little-known program called debug.com. As the name implies, the program was intended for debugging. You could do things like disassemble parts of a running program, or do hex dumps. But also you could write new programs in the 8086 assembly language.</p>
 <p>It would be a couple of years still before we had access to cheap compilers, so I was fairly adept at assembly. I could type in simple programs and run them, certain they’d work, so we’d occasionally leave little Easter eggs for the store’s staff. These were all harmless, but at least once I wrote a short script that would wait for some period of time, then start sending the BEL character (ASCII 7, Ctrl-G) to the screen on an infinite loop, causing a constant stream of beeps. We’d start it, then exit the store knowing that a panicked sales person was going to be rebooting the machine soon.</p>
 <p>Sure, it was kind of a dick move, but the point of this story is that I felt at the time like I knew how computers worked. After 40 years as a professional software engineer, I’m not so sure anymore. I understand them well enough to have shipped working software, but developments in processor technology and operating systems have made the actual machine more and more of a black box. In addition, the style of engineering that is common now separates programmers from hardware (language runtimes in Docker containers running on virtual machines controlled by hypervisors in some unseen box in the cloud). This blog is my attempt to understand computers again.</p>
-<p>First, let’s try to recreate that prank program above. I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip. The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: <a href="https://github.com/below/HelloSilicon">https://github.com/below/HelloSilicon</a><span class="citation" data-cites="hellosilicon">(<a href="references.html#ref-hellosilicon" role="doc-biblioref">Below 2022</a>)</span></p>
-<pre><code>//
-//
-//  Send BEL to stdout ad infinitum or Ctrl-C
-//
-.global _start             // Provide program starting address to linker
-.align 4
-
-_start: 
-
-  MOV X4, #(20 * 4294967296)
-loop:
-  SUBS X4, X4, #1
-  B.NE loop
-
-beep4eva:
-  MOV X0, #1      // 1 = StdOut
-  ADR X1, bel     // string to print
-  MOV X2, #1      // length of our string
-  MOV X16, #4     // MacOS write system call
-  SVC 0
-
-  B beep4eva
-
-bel:      .byte  0x07
-</code></pre>
-<p>So let’s break this down a bit. First, i put a large number (20 * 4294967296) into register <em>X4</em>, which begs two questions: (1) why? and (2) what is a register? The answer to the first question is that i want the program to loop a large number of times to simulate waiting. Empirically, i found that 2^32 = 4294967296 iterations take about a second, so this number would take ~20 seconds (really, about 25 but who’s counting?). Chances are there’s some system service to delay or wait, but i’m trying to duplicate what we did back in the olden days.</p>
+<section id="recreating-the-prank" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="recreating-the-prank"><span class="header-section-number">1.1</span> Recreating the Prank</h2>
+<p>Let’s try to recreate that prank program I described above. I’m going to try this on my current personal machine, a Macbook Air with an Apple M2 chip. The assembly language for this chip is quite different than the 1980s x86 assembly, but I was able to cobble something together with the help of this excellent repo: <a href="https://github.com/below/HelloSilicon">https://github.com/below/HelloSilicon</a><span class="citation" data-cites="hellosilicon">(<a href="references.html#ref-hellosilicon" role="doc-biblioref">Below 2022</a>)</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>//</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>//</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>//  Send BEL to stdout ad infinitum <span class="op">or</span> Ctrl<span class="op">-</span>C</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>//</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>.global _start             <span class="op">//</span> Provide program starting address to linker</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">MOV</span> X4<span class="op">,</span> <span class="op">#(</span><span class="dv">20</span> <span class="op">*</span> <span class="dv">4294967296</span><span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">loop:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  SUBS X4<span class="op">,</span> X4<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  B<span class="op">.</span>NE loop</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">beep4eva:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="bu">MOV</span> X0<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>      <span class="op">//</span> <span class="dv">1</span> <span class="op">=</span> StdOut</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  ADR X1<span class="op">,</span> bel     <span class="op">//</span> string to print</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="bu">MOV</span> X2<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>      <span class="op">//</span> length of our string</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="bu">MOV</span> X16<span class="op">,</span> <span class="op">#</span><span class="dv">4</span>     <span class="op">//</span> MacOS write system call</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  SVC <span class="dv">0</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  B beep4eva</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">bel:</span>      .<span class="dt">byte</span>  <span class="bn">0x07</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So let’s break this down a bit. First, i put a large number (20 * 4294967296) into register <em>X4</em>, which begs two questions: (1) why? and (2) what is a register? The answer to the first question is that i want the program to loop a large number of times to simulate waiting. Empirically, i found that 2^32 = 4294967296 iterations take about a second, so this number would take ~20 seconds (really, about 25 but who’s counting?). There are now system services to delay or wait, but i’m trying to duplicate what we did back in the olden days.</p>
 <p>If you don’t know what a register is, think of it as a place in the CPU to temporarily store a small number of bits (64 here). I’ll go more into the ARM registers at a later point but for now see <span class="citation" data-cites="valsamaras2022">(<a href="references.html#ref-valsamaras2022" role="doc-biblioref">Valsamaras 2022</a>)</span></p>
 <p>So at this point we have a big number in the <em>X4</em> register. The next line in the program is not an instruction, but rather a <em>label</em>. This is a way to tell the assembler that we’re eventually going to want to jump back to the following instruction. That next instruction is <strong>SUBS</strong>. This instruction subtracts the last operand (1) from the second operand (<em>X4</em>) and puts the result in the first operand (also <em>X4</em>). Note that the basic subtract operation is <strong>SUB</strong> but the <em>S</em> suffix here indicates that “the condition flags are updated on the result of the operation”. That’s important here because the next instruction (<strong>B.NE</strong>) is going to use the condition flag to decide whether or not to branch to the <em>loop</em> label (ie, back to the <strong>SUBS</strong>). That is the whole delay loop.</p>
 <p>The next section (starting with the <em>beep4eva</em> label) is the fun part, an infinite loop that writes the BEL character to stdout<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> forever. This code is a tiny bit arcane however. Three of the instructions are just moving constant values into particular registers. These are essentially parameters for a call into the operating system services. The <strong>ADR</strong> instruction is effectively loading the memory address of our output data (the byte with the <em>bel</em> label at the bottom). The <strong>SVC</strong> instruction is a bit harder to explain. This stands for “supervisor call”. The ARM docs describe it this way</p>
 <blockquote class="blockquote">
 <p>The SVC instruction causes an exception. This means that the processor mode changes to Supervisor, the CPSR is saved to the Supervisor mode SPSR, and execution branches to the SVC vector.</p>
 </blockquote>
-<p>Riiiiiight. Anyway, what happens here is that the processor goes into a special privileged mode and branches to code in the operating system kernel. This is not radically different than what happened on DOS 2.x except that there wasn’t really a privileged mode. Back then, you’d invoke an “interrupt”, which would start executing some OS (or BIOS) code to do some system function, then return to where it was. Current CPUs still have interrupts. They are a mechanism by which, as the name implies, important system functions can interrupt the execution of a program to perform some system task then return control to the program. I’ll talk more about this later.</p>
-<p>That’s about it. Of course, on my M2 Mac this doesn’t make the shrill beeping noise that old PCs did. In fact it might not even make a sound depending on your settings. On my machine it currently makes a sort of pleasant metronome sound.</p>
-<p>My PC back in the 80s and my Macbook now, like most computers since the 1950s, would hold this program in memory and then fetch the instructions. The details of this process will be discussed in much more detail in the coming chapters.</p>
+<p>Riiiiiight. Anyway, what happens here is that the processor goes into a special privileged mode and branches to code in the operating system kernel. This is not radically different than what happened on DOS 2.x except that there wasn’t really a privileged mode. Back then, you’d invoke an <em>interrupt</em>, which would start executing OS (or BIOS) code to do some system function, then return to where it was. Current CPUs still have interrupts. They are a mechanism by which, as the name implies, important system functions can interrupt the execution of a program to perform some system task then return control to the program. I’ll talk more about this later.</p>
+<p>That’s about it. Of course, on my M2 Mac this doesn’t make the shrill beeping noise that old PCs did. In fact it might not even make a sound depending on your settings (you need to have the “Audible Bell” on for your terminal). On my machine it currently makes a sort of pleasant metronome sound.</p>
+<p>This is a dumb program, and it’s not the way anyone would accomplish this task now (as mentioned above there’s a system call to “sleep” for a specified number of seconds, or nanoseconds). But the way that my PC back in the 80s and my Macbook now would execute this program is in some ways surprisingly similar. Like most computers since the 1950s, they would hold this program in memory and then fetch the instructions, fetch data into registers, put arguments in registers, execute the instructions, call operating system services. On the other hand, the features added to make computers faster, smaller, and more secure in the last 40 years make comparing the two computers like comparing the Wright Flyer to an F-35. I hope this books helps us understand both the similarities and the differences.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -335,6 +376,7 @@ Below, Alexander von. 2022. <span>“HelloSilicon.”</span> 2022. <a href="http
 Valsamaras, Dimitrios. 2022. <span>“ARM 64 Assembly Series— Basic Definitions and Registers.”</span> 2022. <a href="https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40">https://valsamaras.medium.com/arm-64-assembly-series-basic-definitions-and-registers-ec8cc1334e40</a>.
 </div>
 </div>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>

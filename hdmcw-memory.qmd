@@ -6,10 +6,10 @@ format:
 
 # Memory
 
-Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf)[@10.1109/85.238389],
+Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf) [@10.1109/85.238389],
 which described a design for a new type of electronic computer.
 People debate to what extent these were his ideas alone versus what was borrowed from existing designs, but he didn't give credit
-to other people and he was pretty famous so we now call what he described the _von Neumann architecture_[@10.5555/2898944].  Many real systems would be built from the design in the document, and even today most computers have this architecture.  One of the key
+to other people and he was pretty famous so we now call what he described the _von Neumann architecture_ [@10.5555/2898944].  Many real systems would be built from the design in the document, and even today most computers have this architecture.  One of the key
 ideas was that programs would be stored in memory along with data, and the processors of the computer would fetch the instructions from memory.  Seems
 pretty obvious now, but it was a big step forward from, say, plugging wires into boards or flipping switches.
 
@@ -28,7 +28,7 @@ registers to address memory.  The mathematically astute will notice that this ad
 so it had an addressable space of 2^20, or 1 MB.  However, only 640 KB of this was available for programs because the rest was used as a video
 buffer (although if you didn't mind the screen being jacked up, you _could_ use the video buffer to store data).  Different times.
 
-I don't have a lot of information on the memory in my Mac.  I know that it uses something called Low Power Double Data Rate 5 (LPDDR5) SDRAM.
+I don't have a lot of information on the memory in my Mac.  I know that it uses something called Low Power Double Data Rate 5 (LPDDR5) SDRAM made by a company called Hynix.
 I know it's very fast, 100 GB/s bandwidth or something like that.  There's a 128-bit bus, so that the processor could grab a double precision float in one clock cycle.
 I know that it uses something called a _unified memory_ model, which means that the CPU and GPU use the same memory (Yes!  My computer
 has a GPU!  Some day i'll figure that out and write about it!).  I don't know why the Macbook Air tops out at 24 GB, other than that
@@ -71,7 +71,7 @@ i recommend the document [What Every Programmer Should Know About Memory](https:
 Let's make another silly program that adds two numbers (NOTE: sometimes in references on ARM64 assembly you'll see instructions like __LDR X1, =mya1__ 
 in place of the __ADRP X1, mya1@PAGE; ADD X1, X1, mya1@PAGEOFF__, but that doesn't work with the Mac OS assembler):
 
-```
+```asm
 //
 //  Add some things
 //

@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -296,38 +330,38 @@ div.csl-indent {
 <p>That <em>Address Translation</em> box is essentially what’s called the memory management unit, MMU<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. It’s purpose is literally to take a number that addresses a virtual memory location and translate it into a number that addresses somewhere in physical memory (which might be in somewhere in a cache) The reason for using virtual addresses will become clearer in future chapters, but suffice it to say for now that it lets each program treat memory as its own personal workspace without worrying about the constraints of availably physical memory or the location of other programs in physical memory. In the old days of my PC these were not major concerns because the operating systems only allowed one user program to run at a time. This meant that memory management was relatively simple, as there was no need to protect one program’s memory from another. Modern operating systems, however, allow multiple programs to run simultaneously, which requires more sophisticated memory management techniques to ensure that each program has its own protected memory space.</p>
 <p>You might wonder “If cache memory is so much faster, why not make <em>all</em> of the memory the same as the cache memory”? Good question, you’re very smart. The chief reason is that cache memory is typically <em>static RAM</em> (SRAM) while regular memory is <em>dynamic</em> RAM (DRAM). The former is faster, but also takes more space (more transistors) and more power and so generates more heat. If you <em>really</em> want to delve into the details of memory, i recommend the document <a href="https://www.akkadia.org/drepper/cpumemory.pdf">What Every Programmer Should Know About Memory</a></p>
 <p>Let’s make another silly program that adds two numbers (NOTE: sometimes in references on ARM64 assembly you’ll see instructions like <strong>LDR X1, =mya1</strong> in place of the <strong>ADRP X1, mya1@PAGE; ADD X1, X1, mya1@PAGEOFF</strong>, but that doesn’t work with the Mac OS assembler):</p>
-<pre><code>//
-//  Add some things
-//
-.global _start             // Provide program starting address to linker
-.align 4
-
-_start:
-    // Load mya1 into X2 register
-    ADRP X1, mya1@PAGE
-    ADD X1, X1, mya1@PAGEOFF
-    LDR W2, [X1]
-
-    // Load mya2 into X4 register
-    ADRP X3, mya2@PAGE
-    ADD X3, X3, mya2@PAGEOFF
-    LDR W4, [X3]
-
-    // Add 'em up
-    ADD X2, X4, X2
-
-    //  Shove it back into memory
-    ADRP X5, mys1@PAGE
-    ADD X5, X5, mys1@PAGEOFF
-    STR X2, [X5]
-
-    // Breakpoint
-    BRK #2
-
-.data
-mya1:  .word  17
-mya2:  .word  25
-mys1:  .word  0</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>//</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>//  <span class="bu">Add</span> some things</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>//</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>.global _start             <span class="op">//</span> Provide program starting address to linker</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    // <span class="bu">Load</span> mya1 into X2 register</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    ADRP X1<span class="op">,</span> mya1<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X1<span class="op">,</span> X1<span class="op">,</span> mya1<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    LDR W2<span class="op">,</span> <span class="op">[</span>X1<span class="op">]</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    // <span class="bu">Load</span> mya2 into X4 register</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ADRP X3<span class="op">,</span> mya2<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X3<span class="op">,</span> X3<span class="op">,</span> mya2<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    LDR W4<span class="op">,</span> <span class="op">[</span>X3<span class="op">]</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    // <span class="bu">Add</span> <span class="st">'em up</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X2<span class="op">,</span> X4<span class="op">,</span> X2</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    //  Shove it back into memory</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ADRP X5<span class="op">,</span> mys1<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X5<span class="op">,</span> X5<span class="op">,</span> mys1<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">STR</span> X2<span class="op">,</span> <span class="op">[</span>X5<span class="op">]</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    // Breakpoint</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    BRK <span class="op">#</span><span class="dv">2</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>.<span class="bu">data</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">mya1:</span>  .<span class="dt">word</span>  <span class="dv">17</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">mya2:</span>  .<span class="dt">word</span>  <span class="dv">25</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">mys1:</span>  .<span class="dt">word</span>  <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>I stuck a breakpoint at the end of this program so that i can run it in the <strong>lldb</strong> debugger. If I run the program and then disassemble it after it hits the breakpoint, i see this</p>
 <pre><code>(lldb) di -b
 adder`start:
