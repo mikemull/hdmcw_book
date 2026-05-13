@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -334,8 +354,14 @@ Target 0: (multiply) stopped.
 (lldb) re read -fb s0
       s0 = 0b00111101110011001100110011001101</code></pre>
 <p>Our 0.1 has mysteriously turned into 0.100000001. This is because 0.1 cannot be represented exactly in binary, just like 1/3 cannot be represented exactly in decimal. The closest we can get to 0.1 in binary is 0.0001100110011001100110011001101, which is what we see in the mantissa part of the binary representation above. When we multiply this by 4, we get 0.400000006, which is the closest we can get to 0.4 in binary. Most of the time this is good enough since in a lot of computations we don’t report the results to the full precision, but it can lead to rounding errors if you’re doing a lot of computations.</p>
+<p>If you want to learn more about floating point numbers, I recommend reaading <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> by David Goldberg <span class="citation" data-cites="goldberg1991floatingpoint">(<a href="references.html#ref-goldberg1991floatingpoint" role="doc-biblioref">Goldberg 1991</a>)</span>, which is a classic paper on the topic.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-goldberg1991floatingpoint" class="csl-entry" role="listitem">
+Goldberg, David. 1991. <span>“What Every Computer Scientist Should Know about Floating-Point Arithmetic.”</span> <em>ACM Computing Surveys</em> 23. <a href="https://doi.org/10.1145/103162.103163">https://doi.org/10.1145/103162.103163</a>.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

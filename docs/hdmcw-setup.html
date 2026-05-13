@@ -293,8 +293,16 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#xcode" id="toc-xcode" class="nav-link active" data-scroll-target="#xcode"><span class="header-section-number">2.1</span> XCode</a></li>
+  <li><a href="#running-the-assembler-and-linker" id="toc-running-the-assembler-and-linker" class="nav-link" data-scroll-target="#running-the-assembler-and-linker"><span class="header-section-number">2.2</span> Running the assembler and linker</a></li>
+  <li><a href="#running-the-program-in-a-debugger" id="toc-running-the-program-in-a-debugger" class="nav-link" data-scroll-target="#running-the-program-in-a-debugger"><span class="header-section-number">2.3</span> Running the program in a debugger</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -319,12 +327,17 @@ div.csl-indent {
 
 
 <p>In the first episode I showed a program listing in ARM assembly language, but I didn’t describe how to turn this into a runnable program. There’s no equivalent to <strong>debug.com</strong>, so you have to type the program into a text file and then run a program called an <em>assembler</em>. According to computer lore, the term <em>assembler</em> was coined in the 1950s in the book <strong>The Preparation of Programs for an Electronic Digital Computer</strong> by Maurice Wilkes, David Wheeler, and Stanley Gill, but it meant something more like a program that combined parts of a program into one. Over time, the meaning evolved, and now an assembler is a tool that converts assembly language into machine instructions.</p>
+<section id="xcode" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="xcode"><span class="header-section-number">2.1</span> XCode</h2>
 <p>To run the assembler on Mac OS you’ll need to install the XCode command line tools, part of Apple’s development platform (or you can install the whole shebang from the App Store). You only need the assembler (called <strong>as</strong>) and other compiler tools for now. You can get what you need with the command:</p>
 <pre class="console"><code>$ xcode-select --install</code></pre>
 <p>If this works, you should have the neccessary programs on your computer, though you might have to set the PATH variable:</p>
 <pre><code>$ export PATH=/Library/Developer/CommandLineTools/usr/bin:$PATH
 $ which as
 /Library/Developer/CommandLineTools/usr/bin/as</code></pre>
+</section>
+<section id="running-the-assembler-and-linker" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="running-the-assembler-and-linker"><span class="header-section-number">2.2</span> Running the assembler and linker</h2>
 <p>Now you should be able to run the following commands to make an executable program (assuming the source file is called beep.s):</p>
 <pre class="console"><code>$ as -o beep.o beep.s
 $ld -o beep beep.o -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` \ 
@@ -356,6 +369,9 @@ SDKSettings.json    System</code></pre>
 <p>Note: quite often you <em>can</em> get away with a much simpler version of the link command, for example the following works for me for this program:</p>
 <pre class="console"><code>ld -o beep beep.o -e _start</code></pre>
 <p>If the above commands work, you should now have a file called <strong>beep</strong> that you can run (on MacOS, for me anyway, the file already has the execute permission set). Note though that if you do run this the only way to terminate the program is with ^C.</p>
+</section>
+<section id="running-the-program-in-a-debugger" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="running-the-program-in-a-debugger"><span class="header-section-number">2.3</span> Running the program in a debugger</h2>
 <p>As an alternative to running the program directly from the command line, you can also run it with the <strong>lldb</strong> debugger, which is part of the Xcode command line tools if you didn’t already have it. This way you can stop the program before it goes into the infinite loop:</p>
 <pre class="console"><code>$ lldb ./beep
 (lldb) target create "./beep"
@@ -385,6 +401,7 @@ Target 0: (beep) stopped.
 Lattner, Chris, and Vikram Adve. 2004. <span>“<span>LLVM</span>: A Compilation Framework for Lifelong Program Analysis and Transformation.”</span> In <em>Proceedings of the 2004 International Symposium on Code Generation and Optimization (CGO’04)</em>, 75–88. Palo Alto, California, USA.
 </div>
 </div>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>

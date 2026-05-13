@@ -17,9 +17,8 @@ So in one way the programs i wrote back in the 80s on 8086/8088 processors were 
 M2 in my Mac.  The program from the last episode would be stored in memory and the CPU would fetch the instructions to execute.  However,
 in other ways this is one of the most significant differences between then and now.
 
-For one, there's a whole heck of a lot more of the stuff.  My original IBM PC had 64 KB of memory (yes, K, as in kilobyte).  My
-Mac has 24 GB, which i frequently exceed.  When i wanted to upgrade my PC to 128 KB, i went to some dingy electronics shop and bought 9 chips that i had 
-to shove into the motherboard.  Throughout the 90s and early 2000s it was common to buy memory memory modules to add to your computer.
+For one, there's a whole heck of a lot more of the stuff.  My original IBM PC had 64 KB of memory (yes, __K__, as in kilobyte).  My
+Mac has 24 GB, which i frequently exceed.  One time in college when i wanted to upgrade my PC to 128 KB, i went to some dingy electronics shop and bought 9 chips that were pressed into a chunk of foam (one chip for each bit, plus one for a parity bit). I had to remove the PC case and then shove those chips into sockets on the motherboard.  At some point in the 90s they started putting the individual chips called _inline modules_.  Throughout the 90s and early 2000s it was common to buy memory memory modules to add to your computer.
 I'm fairly sure that if i look sideways at the bottom panel of my Mac it voids my warranty.
 
 Part of the reason why there's so much more memory is due to advances in chip fabrication, but also there are  more bits available for
@@ -28,19 +27,21 @@ registers to address memory.  The mathematically astute will notice that this ad
 so it had an addressable space of 2^20, or 1 MB.  However, only 640 KB of this was available for programs because the rest was used as a video
 buffer (although if you didn't mind the screen being jacked up, you _could_ use the video buffer to store data).  Different times.
 
-I don't have a lot of information on the memory in my Mac.  I know that it uses something called Low Power Double Data Rate 5 (LPDDR5) SDRAM made by a company called Hynix.
+I don't have a lot of information on the memory in my Mac.  I know that it uses something called Low Power Double Data Rate 5 (LPDDR5) SDRAM made by a company called SK Hynix.
 I know it's very fast, 100 GB/s bandwidth or something like that.  There's a 128-bit bus, so that the processor could grab a double precision float in one clock cycle.
-I know that it uses something called a _unified memory_ model, which means that the CPU and GPU use the same memory (Yes!  My computer
-has a GPU!  Some day i'll figure that out and write about it!).  I don't know why the Macbook Air tops out at 24 GB, other than that
+  I don't know why the Macbook Air tops out at 24 GB, other than that
 it probably has something to do with space and heat.
 
-Second, my Mac has a sophisticated virtual memory system, which was not supported by either MS-DOS or the hardware i had.  Virtual memory
-uses disk storage to make the computer seem like it has more memory.  This is mostly transparent to users and programmers.  My 1980s
+## Virtual memory 
+
+Second, my Mac has a sophisticated virtual memory system, which was not supported by either MS-DOS or the hardware i had.  Virtual memory gives every program it's own private address space that has to be translated into physical memory addresses.
+Virtual memory also uses disk storage to make the computer seem like it has more memory.  This is mostly transparent to users and programmers.  My 1980s
 IBM PC only had 2 5.25 inch floppy drives, so if it had attempted virtual memory it woulda been hella noticeable.  More on that another day.
 
-Finally, the M2 in my Mac has _caches_.  This means that the instructions for a program are loaded into a memory in the CPU (a cache) so that
+## Caches and address translation
+Finally, the M2 in my Mac has _caches_.  This means that data and the instructions for a program are loaded into a memory in the CPU (a cache) so that
 fetching them doesn't take as long as a regular memory access.  The 8086/8088 didn't have a cache as such but it did have what it called a _prefetch
-queue_ or an instruction queue ([this article](https://www.righto.com/2024/03/8088-prefetch-circuitry.html) has some great details on the 8086 memory).
+queue_ or an instruction queue. [@shirriff2024prefetch] has some great details on the 8086 memory.
 
 So, the instructions are in the computer's memory.  Both the new M2 and the old 8088 would have to fetch the instructions from the memory.
 execute the instructions in the CPU and then return any result to memory. The fetchs and stores are _extremely_ fast in modern computers
@@ -54,7 +55,7 @@ to the physical address of a memory location.  This is part of the hardware beca
 very fast.
 ![image](cachelevels.png)
 
-That _Address Translation_ box is essentially what's called the memory management unit, MMU[^3]. It's purpose
+That _Address Translation_ box is essentially what's called the memory management unit, MMU [@arm_aarch64_mmu]. It's purpose
 is literally to take a number that addresses a virtual memory location and translate it into a number
 that addresses somewhere in physical memory (which might be in somewhere in a cache)
 The reason for using virtual addresses will become clearer in future chapters, but suffice it to say
@@ -66,7 +67,9 @@ one user program to run at a time. This meant that memory management was relativ
 You might wonder "If cache memory is so much faster, why not make _all_ of the memory the same as the cache memory"?  Good question, you're very smart.
 The chief reason is that cache memory is typically _static RAM_ (SRAM) while regular memory is _dynamic_ RAM (DRAM).  The former is faster, but also takes
 more space (more transistors) and more power and so generates more heat.  If you _really_ want to delve into the details of memory, 
-i recommend the document [What Every Programmer Should Know About Memory](https://www.akkadia.org/drepper/cpumemory.pdf)
+i recommend the document _What Every Programmer Should Know About Memory_ [@drepper2007memory]
+
+## Example of loading and storing data in memory
 
 Let's make another silly program that adds two numbers (NOTE: sometimes in references on ARM64 assembly you'll see instructions like __LDR X1, =mya1__ 
 in place of the __ADRP X1, mya1@PAGE; ADD X1, X1, mya1@PAGEOFF__, but that doesn't work with the Mac OS assembler):
@@ -182,5 +185,5 @@ cover in [Episode @sec-programs]
 [^2]: Another difference between the ARM and the Intel chips are that the former is a _reduced instruction set computer_ (RISC)
 while the latter is a _complex instruction set computer_.  This pertains to memory in that computers of the latter type can execute
 multiple low-level operations with one instruction (like load data, do something to it, then store it).
-[^3]: https://developer.arm.com/documentation/101811/0104/The-Memory-Management-Unit--MMU-
+
 

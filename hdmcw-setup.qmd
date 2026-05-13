@@ -13,6 +13,8 @@ called an _assembler_.  According to computer lore, the term _assembler_ was coi
 in the book __The Preparation of Programs for an Electronic Digital Computer__ by Maurice Wilkes, David Wheeler, and Stanley Gill, but it meant something more like a program that combined parts
 of a program into one. Over time, the meaning evolved, and now an assembler is a tool that converts assembly language into machine instructions.
 
+## XCode
+
 To run the assembler on Mac OS you'll need to install the XCode command line tools, part of Apple's development platform (or you can install the whole shebang from the App Store).  You only need the assembler (called __as__) and other compiler tools for now.  You can
 get what you need with the command: 
 
@@ -28,6 +30,8 @@ $ export PATH=/Library/Developer/CommandLineTools/usr/bin:$PATH
 $ which as
 /Library/Developer/CommandLineTools/usr/bin/as
 ```
+
+## Running the assembler and linker
 
 Now you should be able to run the following commands to make an executable
 program (assuming the source file is called beep.s):
@@ -110,6 +114,8 @@ ld -o beep beep.o -e _start
 If the above commands work, you should now have a file called __beep__ that you can run (on MacOS,
 for me anyway, the file already has the execute permission set).  Note though that if you do run
 this the only way to terminate the program is with ^C.
+
+## Running the program in a debugger
 
 As an alternative to running the program directly from the command line, you can also run it
 with the __lldb__ debugger, which is part of the Xcode command line tools if you didn't already
