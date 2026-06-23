@@ -33,7 +33,7 @@ The general purpose registers are unusual in this architecture, because they hav
 versions and __X__ versions.  The __W__ version is the lower 32 bits of __X__ register, but it's important to know that the __W__ registers _act like_ 32-bit registers, not just like
 the lower-order bits of the __X__ register.  For example, consider this short program:
 
-```
+```asm
 ; wregs.s
 
 .global _start
@@ -50,7 +50,7 @@ _start:
 ```
 
 This multiplies the number 134775813 (hex 0x08088405) times 111, which gives 14960115243 (the reason
-for using these apparently weird numbers will eventually become clear).  The two
+for using these apparently weird numbers will be explained later).  The two
 operands are put in the W0 and W3 registers and the result ends up in register W4.
 
 So let's assemble and run this program. 
@@ -85,8 +85,8 @@ Psych!  It's not even close to what we said it would be, which is just up above
 there (14960115243).
 
 Given the setup, you've probably already figured out the problem.  The binary rendering
-of 14960115243 is 1101111011101100010011111000101011, which you can see is
-34 bits (lol, i had to copy and paste it into __wc__).  If you lop off the top two bits
+of 14960115243 is 1101111011101100010011111000101011, which you can easily see is
+34 bits [^2].  If you lop off the top two bits
 you're left with 2075213355.  Interestingly, you'll get the same number if you do
 the following computation in Python:
 
@@ -100,6 +100,8 @@ Also notice that the value of __X__ form register is the same, just with 4 bytes
 zeros in the left part, which means that when we do the addition in the into W4 it's
 not just putting the leftmost two bits into the upper part of the register. 
 
+## Immediate Values and Register Encoding
+
 There's one oddity here that I have to clear up.  You'll notice that that __W0__
 register is loaded with two instructions (MOVZ and MOVK, which you can think of
 as "move and zero" and "move and keep") in order to get one
@@ -111,7 +113,7 @@ a literal number used in the instruction, can only be so many bits long.  Why?
 
 To answer, let's first disassemble our program in lldb:
 
-```
+```console
 (lldb) di -b
 wregs`start:
     0x100003fa0 <+0>:  0x529080a0   mov    w0, #0x8405 ; =33797 
@@ -121,7 +123,7 @@ wregs`start:
 ->  0x100003fb0 <+16>: 0xd4200040   brk    #0x2
 ```
 The hex values to the left of the instruction are the actual machine language
-instructions[^2].  You
+instructions[^3].  You
 can see that all of the op codes are 4 bytes (32 bits).  What this implies is that the literal
 data value has to fit in the opcode.  For example the binary values of the opcode
 and the literal 0x8405 are shown below, with the value aligned:
@@ -145,4 +147,5 @@ calls to subroutines.
 
 
 [^1]: [Registers in AArch64 state](https://developer.arm.com/documentation/dui0801/l/Overview-of-AArch64-state/Registers-in-AArch64-state) [@armdeveloper]
-[^2]: Note that MOVZ is an alias for MOV so when _disassembling_, MOVZ might be shown as just MOV.
+[^2]: LOL, i had to copy and paste it into __wc__
+[^3]: Note that MOVZ is an alias for MOV so when _disassembling_, MOVZ might be shown as just MOV.

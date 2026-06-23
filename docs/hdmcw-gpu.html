@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -307,7 +327,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>GPUs are now so intimately connected to the world of AI that it’s hard to remember that the “G” in GPU stands for “graphics”. It might be obvious how these two things are connected, but let me state it outright. GPUs are really good at doing a bunch of the same computation all at once. So, if you’re trying to render a 3D scene there’s a bunch of calculation that needs to happen to figure out what color/shade each pixel should be. When I first started tinkering with 3D graphics in the early 90s a ray tracer would literally calculate every pixel one at a time. Not long after than I saw a project at UNC Chapel Hill called “Pixel-Planes” that was custom hardware with a bunch of processors that could calculate many pixels at once. This works great for ray tracing case because the problem is “embarrassingly parallel”, meaning that the calculation for each pixel is independent of the others.</p>
-<p>The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems, like doing matrix multiplications. The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.</p>
+<p>The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems, like doing matrix multiplications. The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI. See <span class="citation" data-cites="horowitz2024origins">(<a href="references.html#ref-horowitz2024origins" role="doc-biblioref">Horowitz et al. 2024</a>)</span> for more history of GPUs.</p>
 <section id="metal" class="level2" data-number="18.1">
 <h2 data-number="18.1" class="anchored" data-anchor-id="metal"><span class="header-section-number">18.1</span> Metal</h2>
 <p>The main reason I bring this up is because the technology that Apple provides for programming the GPUs in my computer is called “Metal”, and the description of this technology has a bit of a graphics flavor (Metal is kind of like NVidia’s CUDA or Microsoft’s D3D). For example, the language used to write GPU code is called “Metal Shader Language” (MSL). However, you can do general purpose computation. FWIW, I think Metal is a cool name and I’d totally wear that t-shirt, but it’s a little weird to switch to a different language to write code for the GPU. Also, note that while the GPUs are used for things like PyTorch, many programmers (most?) are using them to make video games faster.</p>
@@ -716,6 +736,11 @@ commandBuffer-&gt;commit();</code></pre>
 <span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-horowitz2024origins" class="csl-entry" role="listitem">
+Horowitz, Mark A., William J. Dally, Stephen W. Keckler, and David B. Kirk. 2024. <span>“The Origins of GPU Computing.”</span> <em>Communications of the ACM</em> 67 (4): 32–35. <a href="https://doi.org/10.1145/3649133">https://doi.org/10.1145/3649133</a>.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>

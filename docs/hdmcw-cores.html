@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -267,13 +287,13 @@ ul.task-list li input[type="checkbox"] {
 <p>This episode and the next two will cover topics so interrelated i’m not sure which order to put them in. We’ve already touched on the idea that my computer, like most modern computers, runs multiple programs at the same time. In fact, if you’re not an old like me then pointing out this fact may not even make sense to you. It was even possible back in the days of my first PC (Unix was already over a decade old, even though Linux was still a ways off) but it wasn’t really a feature of the early personal computers <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>There are really (at least) two different things happening. The first is an idea variously called <em>multitasking</em>, <em>multiprogramming</em>, or <em>time-sharing</em>. Although these have slightly different flavors, they all refer to giving multiple programs slices of time on a single processor, a concept that goes back to at least the 1960s. So, basically, it’s a cool trick to make it <em>seem</em> like the computer is running multiple things. Sometimes the term <em>time-sharing</em> is meant only to imply that multiple users can use the same computer at the same time, but i’ll probably use it along with the other terms to mean a type of <em>concurrency</em>.</p>
 <p>Before discussing the second variation of “running multiple programs”, i need to introduce the concept of <em>threads</em>. As we saw in the last episode, the operating system treats running programs as <em>processes</em>, but the thing that executes on the processor is a thread. Every process has at least one thread, but as we’ll see a program often has numerous threads. Threads will be the topic of the next episode. The concurrency techniques introduced in the last paragraph depend on the ability to switch quickly from one thread to another, so fast that you don’t notice, an operating system function called <em>scheduling</em>, which will be the topic of the after-next episode. Note also that i’m talking specifically here about what are called <em>system threads</em> or <em>kernel threads</em>. There are implementations of <em>user space</em> threads, such as in the Python <strong>asyncio</strong> framework, but i don’t plan to talk about that (doesn’t mean i won’t). Also, sometimes the term <em>task</em> is used interchangeably with thread.</p>
-<p>The other type of thing that happens is when the computer literally runs multiple programs at the same time, using multiple processors. This is a type of <em>parallelism</em>. Computer architects figured out pretty early on that running multiple things would be helped by simply having more than one CPU<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> that could use the same memory. This idea in general is called <em>symmetric multiprocessing</em>, and again this idea goes back to the 1960s <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In the 1990s, by which time the idea of operating system threads was already common, two different ideas emerged about how to run multiple threads. A paper from 1997<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> says:</p>
+<p>The other type of thing that happens is when the computer literally runs multiple programs at the same time, using multiple processors. This is a type of <em>parallelism</em>. Computer architects figured out pretty early on that running multiple things would be helped by simply having more than one CPU<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> that could use the same memory. This idea in general is called <em>symmetric multiprocessing</em>, and again this idea goes back to the 1960s <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. In the 1990s, by which time the idea of operating system threads was already common, two different ideas emerged about how to run multiple threads. A paper from 1997 <span class="citation" data-cites="NayfehOlukotun1997">(<a href="references.html#ref-NayfehOlukotun1997" role="doc-biblioref">Nayfeh and Olukotun 1997</a>)</span> says:</p>
 <blockquote class="blockquote">
 <p>Researchers have proposed two alternative microarchitectures that exploit multiple threads of control: simultaneous multithreading (SMT) and chip multiprocessors (CMP).</p>
 </blockquote>
 <p>Both of these things are still around. SMT is the idea behind Intel’s <em>hyperthreading</em>, and the CMP concept is our topic here: <em>cores</em>. In fact, in some processors both are used at the same time, ie, multiple cores with SMT, although interestingly Apple’s ARM-based chips like my M2 do not (which might be good because it’s mind-bendingly complicated). Incidentally, one of the authors of the above paper is Kunle Olukotun, a Stanford professor who is sometimes called the “father of the multi-core processor”.</p>
-<p>Around 2000 or thereabouts, commercial chip manufacturers introduced chips that had multiple processing units on the same chunk of silicon as described in the paper. At first we had <em>dual core</em> systems and then <em>quad core</em>, but eventually that naming convention faded. As of this writing Intel makes a chip with 288 cores<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, though i don’t know if that’s the most.</p>
-<p>The M2 chip in my computer is what they called a <em>system on a chip</em> (SoC) because almost all of the necessary circuitry is part of a single piece of silcon (except the DRAM). The chip has 8 cores, but they’re not all the same. There are 4 high-performance cores and 4 energy efficient cores (so i guess it’s duo-quad core?). Interesting, Apple apparently calls this <em>asymmetric multiprocessing</em> since even though it’s using the same memory the sysem will allocate threads to different cores depending on their performance needs. We saw a first hint of the multiple cores in the last episode where <strong>ps</strong> command showed two processes running at the same time. In general, which cores things run on is transparent to both the user and the programmer, although there are ways to influence which type gets selected for a given process. See the <strong>taskpolicy</strong> command or the <strong>setpriority()</strong> system call.</p>
+<p>Around 2000 or thereabouts, commercial chip manufacturers introduced chips that had multiple processing units on the same chunk of silicon as described in the paper. At first we had <em>dual core</em> systems and then <em>quad core</em>, but eventually that naming convention faded. As of this writing Intel makes a chip with 288 cores<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, though i don’t know if that’s the most.</p>
+<p>The M2 chip in my computer is what they called a <em>system on a chip</em> (SoC) because almost all of the necessary circuitry is part of a single piece of silcon (except the DRAM). The chip has 8 cores, but they’re not all the same. There are 4 high-performance cores and 4 energy efficient cores (so i guess it’s duo-quad core?). Interesting, Apple apparently calls this <em>asymmetric multiprocessing</em> since even though it’s using the same memory the system will allocate threads to different cores depending on their performance needs. We saw a first hint of the multiple cores in the last episode where <strong>ps</strong> command showed two processes running at the same time. In general, which cores things run on is transparent to both the user and the programmer, although there are ways to influence which type gets selected for a given process. See the <strong>taskpolicy</strong> command or the <strong>setpriority()</strong> system call.</p>
 <p>The Activity Monitor app on the Mac has a nifty view that will show the CPU usage history per core. For example:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -294,17 +314,21 @@ ul.task-list li input[type="checkbox"] {
 <pre class="console"><code>sudo powermetrics -i 100 -o power.txt -n 10 -s cpu_power</code></pre>
 <p>I see in the output that the CPU 0 frequency (one of the efficiency cores) ranges from a low of 1053 MHz to a high of 1760 MHz. Apparently this is a way of conserving power, and hence battery life on laptops. Of course whatever’s running will go slower with a slower clock, but that probably doesn’t matter if a program is not CPU-bound. This apparently goes by the name <em>dynamic frequency scaling</em> or <em>CPU throttling</em>.</p>
 <p>The benefit of multiple cores is obviously that tasks don’t have to share the CPU so things speed up. This has the effect of making different programs more responsive (eg, you can update the formulas in your spreadsheet and still scroll Reddit). It also has the benefit that a single application can utilize multiple cores in parallel, for example pytorch uses multiple processes to get data to feed to the GPU. The penalty paid is complexity. The separate cores are using the same bus to fetch/store stuff, and the two types of cores share L2 cache, so there has to be some coordination between them.</p>
-<p>Most of that complexity is in the hardware so you rarely have to think about it. However, programs often <em>do</em> have to be aware of the existence of multiple cores. At the least the operating system must, so that it can schedule tasks efficiently but we’ll get into the details of that later. Quite often though, the programs that you’re running regularly (browsers, word processors) will also create multiple <em>threads</em> of execution to take advantage of the multiple cores. That adds another type of complexity because threads created within a process are using the same memory space. No big deal so long as you’re only <em>reading</em> memory, but once the threads start writing data to memory, programming gets hard. Like, really difficult sometimes. Like, i mean, should we even really do this? Maybe we can come to some conclusions in Episode 7.</p>
+<p>Most of that complexity is in the hardware so you rarely have to think about it. However, programs often <em>do</em> have to be aware of the existence of multiple cores. At the least the operating system must, so that it can schedule tasks efficiently but we’ll get into the details of that later. Quite often though, the programs that you’re running regularly (browsers, word processors) will also create multiple <em>threads</em> of execution to take advantage of the multiple cores. That adds another type of complexity because threads created within a process are using the same memory space. No big deal so long as you’re only <em>reading</em> memory, but once the threads start writing data to memory, programming gets hard. Like, really difficult sometimes. Like, i mean, should we even really do this? Maybe we can come to some conclusions in <a href="hdmcw-threads.html" class="quarto-xref">Episode&nbsp;<span>10</span></a>.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-NayfehOlukotun1997" class="csl-entry" role="listitem">
+Nayfeh, B. A., and K. Olukotun. 1997. <span>“A Single-Chip Multiprocessor.”</span> <em>Computer</em> 30 (9): 79–85. <a href="https://doi.org/10.1109/2.612253">https://doi.org/10.1109/2.612253</a>.
+</div>
+</div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p>DOS eventually allowed what were called <em>terminate-and-stay-resident</em> (TSR) programs, which would stay in memory after they were started but they still had to be manually switched to.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Which, i mean, is it really <em>central</em> at that point?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>As do i, to be fair.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p><a href="https://ieeexplore.ieee.org/abstract/document/612253">A single-chip multiprocessor</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p><a href="https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor">https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor">https://www.datacenterknowledge.com/servers/intel-announces-next-gen-288-core-xeon-server-processor</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

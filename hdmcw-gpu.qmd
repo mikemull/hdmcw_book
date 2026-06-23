@@ -13,7 +13,7 @@ there's a bunch of calculation that needs to happen to figure out what color/sha
 hardware with a bunch of processors that could calculate many pixels at once.  This works great for ray tracing case because the problem is "embarrassingly parallel", meaning that the calculation for each pixel is independent of the others.
 
 The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems,
-like doing matrix multiplications.  The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.
+like doing matrix multiplications.  The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.  See [@horowitz2024origins] for more history of GPUs.
 
 ## Metal
 

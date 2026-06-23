@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -345,11 +379,10 @@ Disassembly of section __TEXT,__text:
 <p>Nice. That’s our program, and it even has hex for the instructions! (Note: the part of the object file with the program code is referred to as the “text section”) So, were done, right! We can just run this and… wait no, sorry, this is not an <em>executable</em> file. To make an actual runnable program we have to use the linker, <strong>ld</strong>. The command for the linker is also fairly short in this case:</p>
 <pre class="console"><code>foo@bar:~$ ld -o adder adder.o -e _start -arch arm64 </code></pre>
 <p>First, it’s using <strong>-o adder</strong> to say that we want the executable program to be called <strong>adder</strong>. Then it takes the name of our object file as input. The option <strong>-e _start</strong> tells the linker where the executable starts, and here we need to go back to the source code. Recall that in both of our programs so far we’ve had this bit at the beginning:</p>
-<pre><code>.global _start             // Provide program starting address to linker
-.align 4
-
-_start: 
-</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>.global _start             <span class="op">//</span> Provide program starting address to linker</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Using <strong>objdump</strong> we can look at the <em>symbol table</em> in our binary program file, and we see:</p>
 <pre class="console"><code>foo@bar:~$ objdump --syms adder
 
