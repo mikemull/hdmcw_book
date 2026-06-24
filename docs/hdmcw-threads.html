@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -240,25 +240,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -273,8 +273,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#mutexes" id="toc-mutexes" class="nav-link active" data-scroll-target="#mutexes"><span class="header-section-number">10.1</span> Mutexes</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -460,6 +466,8 @@ Breakpoint 2: where = a.out`copy_ints + 20 at threads.c:35:14, address = 0x00000
     0x100003f18 &lt;+88&gt;:  add    w8, w8, w10
     0x100003f1c &lt;+92&gt;:  str    w8, [x9]</code></pre>
 <p>As things stand both threads can be executing this section of code. However, notice that the operations here are (1) grab a value from memory and put it into a register, compute the new value in a register with an <strong>add</strong>, then store the value from the register back to memory. It’s <em>possible</em> that thread 2 can grab the same value that thread 1 grabbed <em>before</em> thread 1 increments. Then thread 2 decrements that value and stores it after thread 1 stores its value. So, instead of an increment followed by a decrement, the increment is forgotten. This situation where the answer can depend on precise timing issues is called a <em>race condition</em>.</p>
+<section id="mutexes" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="mutexes"><span class="header-section-number">10.1</span> Mutexes</h2>
 <p>The fix for this is usually to put guardrails around the bit of code that causes the problem, almost always something that’s modifying shared memory. This code is called a <em>critical section</em>. My fix here is to use another part of the <strong>pthreads</strong> API, the <em>mutex</em> API. Here’s the modified code:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
@@ -524,9 +532,10 @@ Breakpoint 2: where = a.out`copy_ints + 20 at threads.c:35:14, address = 0x00000
 <span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The main difference is the calls to <em>pthread_mutex_lock()</em> and <em>pthread_mutex_unlock()</em> around the bit where we modify our shared array. The first thread to call <em>pthread_mutex_lock</em> will have exclusive access to that part of the code. If the second thread arrives at the lock call, it will wait until the first thread does it’s thing and calls <em>pthread_mutex_unlock</em>. This avoids that race condition at the expense of a slight delay.</p>
 <p>The term <em>mutex</em> is short for <em>mutual exclusion</em>, which makes sense. This idea goes back to the 1960 also, introduce first by computer scientist Edsger Dijkstra. The concept of using a mutex to insure that operations are done in the right order is called <em>thread synchronization</em>.</p>
-<p>As mentioned before, when the second thread calls <em>pthread_mutex_lock()</em>, it will see that the mutex is locked and will wait until it is unlocked. How does it know when to start running again? This, again, relies on the scheduler, the topic of Episode 8.</p>
+<p>As mentioned before, when the second thread calls <em>pthread_mutex_lock()</em>, it will see that the mutex is locked and will wait until it is unlocked. How does it know when to start running again? This, again, relies on the scheduler, the topic of <a href="hdmcw-scheduler.html" class="quarto-xref">Episode&nbsp;<span>11</span></a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

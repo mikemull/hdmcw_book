@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Subroutines [WIP]
+# Subroutines
 
 The word _subroutine_ is hard to explain because it implies the existence of a _routine_ of which it is a part or to which it is subordinate.  Better words might be _subprogram_ or _procedure_, and
 in some cases the word _function_ makes more sense.  But subroutine is what we have, and it's still being used by Data on Star Trek in the 24th century,
@@ -18,10 +18,10 @@ values in registers, including the program counter.  We know that we can branch 
 back to the place from which we branched to the subroutine.
 
 Suppose you want some code that multiplies two numbers and then adds a third.  You could repeat those instructions every time you needed them but that's _not how
-we professionals do it_(LOL, except when we do).  For now, just think of this fairly trivial process as a proxy for something way more complicated that would be
+we professionals do it (LOL, except when we do).  For now, just think of this fairly trivial process as a proxy for something way more complicated that would be
 a bummer to repeat over and over again.  You could probably do something like this:
 
-```
+```asm
 .global _main             // Entry point for macOS
 .align 4
 
@@ -51,7 +51,7 @@ This works, but it's ugly.  There are fancier ways to set up the return address 
 since this is a very common thing to do, there are already instructions in the ARM64 instruction set for it.  The
 proper way to write this code would be like this:
 
-```
+```asm
 .global _main             // Entry point for macOS
 .align 4
 
@@ -125,19 +125,19 @@ Obviously multiply_and_add is super basic, but a subroutine could be quite compl
 would call its own subroutines, and so forth.  A subroutine could even _call itself_ if structured properly (recursion: see recursion).  As we'll see, those types of subroutines require more machinery, but the basic idea is the same.
 
 As in bowling, with subroutines there are _rules_.  One is that you should only use certain registers for passing arguments and returning values, and you should save and restore any registers that you use in the subroutine.  The ARM64 calling convention specifies that X0-X7 are used for passing arguments and returning values, and that X19-X28 are callee-saved registers (meaning that if a subroutine uses them, it must save their original values and restore them before returning).  The link register (X30) is used for storing the return address.  One of the best bugs I ever had was caused by forgetting to restore a register in an assembly language
-subroutine that was called by a C function.  The result was that memory was afterward allocated in the video buffer.  Ah, the good ol'd days.
+subroutine that was called by a C function.  The result was that memory was afterward allocated in the video buffer.  Ah, the good ol' days.
 
 ## The Stack
 
 Since subroutine calls can be nested and recursive, sometimes relying on registers to hold state is not enough.  We need a place we can stash things that
-can grow abritrarily large.  Remember way back in the Chapter on Memory where we talked about the _stack_?  The stack sits at the top of the virtual memory
+can grow abritrarily large.  Remember way back in [Episode @sec-memory] where we talked about the _stack_?  The stack sits at the top of the virtual memory
 space and it grows downwards.  It's called "the stack" because it's like a stack of books: the last thing you put on top is the first thing you take off.  The
 operations of putting something on the stack and taking it off are called "pushing" and "popping".  On my first computer with 8086 assembly language there were
 literal PUSH and POP instructions, but ARM64 uses a different approach.  Also note that processor keeps track of the stack with a special register called the stack pointer (SP, which is X31).  The stack pointer points to the top of the stack, and it is automatically updated when we push or pop values.
 
 Using the stack, we could write our multiply_and_add subroutine like this:
 
-```
+```asm
 .global _main             // Entry point for macOS
 .align 4
 

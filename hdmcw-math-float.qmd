@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Math (Floats)(WIP)
+# Math (Floats)
 
 Although negative integers turned out to be a challenge it's still reasonably easy to understand how some number of bits
 can be mapped to an integer.  But what if you want to represent a rational number, something with a fractional part?  
@@ -21,7 +21,7 @@ The first was to use fixed point math, where you would decide that a certain num
 part.  For example, you might decide that in a 16-bit number, the first 8 bits would represent the integer part, and the last
 8 bits would represent the fractional part.  So the number 00000001 10000000 would represent 1.5 (more on binary fractions below).  The second option was to use software libraries that would implement rational number math in software.  At some point after i bought my original computer, Intel introduced the 8087 math coprocessor which could be added to the system to handle floating point math.  It was a separate chip that plugged into the motherboard and had its own instruction set.
 
-Now of course, essentially all computers support floating point and floating point math is part of the standard instruction set.  In ARM64, there are a set of registers that are specifically designed for floating point math, and a set of instructions that operate on those registers.  They use a representation for floating point numbers that like scientific notation, but in binary instead of decimal.  So that this representation would be fairly consistent across different platforms, the IEEE 754 standard was developed.  This standard defines the format for single precision (32-bit) and double precision (64-bit) floating point numbers.  In single precision, there are 1 bit for the sign, 8 bits for the exponent, and 23 bits for the mantissa.  In double precision, there are 1 bit for the sign, 11 bits for the exponent, and 52 bits for the mantissa.  The exponent is stored in a "biased" form, which means that a certain value (called the bias) is added to the actual exponent to get the stored exponent.  For single precision, the bias is 127, and for double precision, the bias is 1023.  This allows for both positive and negative exponents.  The value of a floating point number can be calculated using the following formula:
+Now of course, essentially all computers support floating point and floating point math is part of the standard instruction set.  In ARM64, there are a set of registers that are specifically designed for floating point math, and a set of instructions that operate on those registers.  They use a representation for floating point numbers that's like scientific notation, but in binary instead of decimal.  So that this representation would be fairly consistent across different platforms, the IEEE 754 standard was developed.  This standard defines the format for single precision (32-bit) and double precision (64-bit) floating point numbers.  In single precision, there are 1 bit for the sign, 8 bits for the exponent, and 23 bits for the mantissa.  In double precision, there are 1 bit for the sign, 11 bits for the exponent, and 52 bits for the mantissa.  The exponent is stored in a "biased" form, which means that a certain value (called the bias) is added to the actual exponent to get the stored exponent.  For single precision, the bias is 127, and for double precision, the bias is 1023.  This allows for both positive and negative exponents.  The value of a floating point number can be calculated using the following formula:
 
 (-1)^sign * (1 + mantissa) * 2^(exponent - bias)
 
@@ -30,7 +30,7 @@ The 1 that's added to the mantissa might be confusing.  Basically since all IEEE
 Let's look at some of these things in the wild.  Below is an example program that just multiplies two floating point constants.  Note that the ARM processor has special registers for
 floating point, denoted by s0, s1, etc for single precision and d0, d1, etc for double precision.  The instructions that operate on these registers are also different from the integer instructions.  For example, to multiply two floating point numbers, you would use the FMUL instruction instead of the MUL instruction, and FADD for addition, etc.
 
-```
+```asm
 .global _main             // Entry point for macOS
 .align 4
 
@@ -56,11 +56,7 @@ const2: .float 4.0
 
 ```
 
-Registers: We use s0, s1, and s2. These are 32-bit "Single" precision registers. If you wanted double precision, you would use d0, d1, and d2.
-
-ADRP/LDR: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB "page" where your data lives, and the ldr offset grabs the specific value.
-
-FMUL: This is the specific instruction for Floating-point Multiplication.
+We use the __s0__, __s1__, and __s2__ registers. These are 32-bit "Single" precision registers. If you wanted double precision, you would use __d0__, __d1__, and __d2__.  Note thatARM64 cannot load a 64-bit memory address in a single instruction. ADRP finds the 4KB "page" where your data lives, and the LDR offset grabs the specific value. FMUL is the specific instruction for Floating-point Multiplication.
 
 Let's build this and run it in the debugger.
 
@@ -95,7 +91,7 @@ So the result is, uh, gimme a second, um, 90.0?  Right?  The values in our regis
 90.0 = 0 10000101 01101000000000000000000
 
 For 22.5, the integer part is 22, which we can easily turn into binary as 10110 = (16 + 4 + 2).  The fractional part is maybe
-a littler trickier.  In decimal 0.5 is 5/10, or 1/2.  To get the same fraction in binary (ie, base2) we need to express the fraction 1/2 in base 2.  This is one of the easy cases since 1/2 is 2^-1, so we can just write it as 0.1 in binary.  So the full number is 10110.1 in binary, which we can also write as 1.01101 x 2^4.  If you look at the binary representation above you'll see that the leftmost bits in the mantissa part are 01101.  The 1 to the left of the decimal point is implicit in the IEEE 754 representation, so we don't need to store it.
+a littler trickier.  In decimal 0.5 is 5/10, or 1/2.  To get the same fraction in binary (ie, base 2) we need to express the fraction 1/2 in base 2.  This is one of the easy cases since 1/2 is 2^-1, so we can just write it as 0.1 in binary.  So the full number is 10110.1 in binary, which we can also write as 1.01101 x 2^4.  If you look at the binary representation above you'll see that the leftmost bits in the mantissa part are 01101.  Again, the 1 to the left of the decimal point is implicit in the IEEE 754 representation, so we don't need to store it.
 
 More complex fractions are harder to explain.  Take the 0.234 part from the 1.234 above. Basically we need to approximate this
 fraction as a sum of negative powers of 2 (1/2, 1/4, 1/8, etc).  Conceptually, you can think of comparing the fraction to 1/2, then 1/4, then 1/8, etc, and if the fraction is greater than or equal to that value, you would add a 1 to the mantissa and subtract that value from the fraction.  If the fraction is less than that value, you would add a 0 to the mantissa and move on to the next value.  This process continues until you have filled all the bits in the mantissa or until the fraction becomes zero.
@@ -107,6 +103,8 @@ It's not surprising probably that 4.0 only has bits in the exponent part since i
 understand why 90.0 has the same mantissa as 22.5.  In decimal 90.0 has no fractional part, but of course we're not looking
 at a decimal number.  In binary, 90.0 is 1011010.0, which we can write as 1.01101 x 2^6.  Note that this differs from 22.5
 only in the exponent part.  One of the tricks of multiplying by a power of 2 is that it just shifts the decimal point, so the mantissa stays the same.
+
+# Rounding Error
 
 Floating point numbers are only approximations of real numbers, with some fun consequences.  Suppose for example that we change the first constant in our program to 0.1.  We'd
 expect a result of 0.4.  Let's see what the registers show us:

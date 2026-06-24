@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Schedulers
+# Schedulers {#sec-schedulers}
 
 When i stop every program that i started, including the things run at startup, Activity Monitor says that i still
 have over 500 processes and around 2000 threads. Almost 500 of those threads are part of the __kernel_task__ process.
@@ -65,6 +65,8 @@ In this case it's servicing an interrupt, which as i mentioned some time ago is 
 to, say, update a timer or read something from a device. Finally, notice that the narrative says that our thread is running _at priority 31_.  This is a CPU priority
 value used by MacOS to determine how to prioritize our thread with respect to other threads.
 
+## Clutch Scheduler
+
 Scheduling in general is one of the most complicated parts of the operating system.  I've read through
 the Linux scheduler many times trying to get a feel for it, and there have been many articles written
 about how it works and its limitations.  Not so much with the Mac OS scheduler.  Fortunately, the XNU
@@ -84,7 +86,7 @@ Ultimately, the scheduler has to pick a thread to run on a CPU but the clutch sc
 priority.  There seems to be a separate _root bucket_ for each quality of service level (QoS).  The QoS is similar to
 the priority value i mentioned above, but has to do with the degree of interactivity.  For example, if you're running
 an interactive application, you want to make sure that once a thread becomes runnable it gets on the CPU quickly,
-but also it might not need to run for as long as, say, a background job.  The slice if time that a thread gets, what
+but also it might not need to run for as long as, say, a background job.  The slice of time that a thread gets, what
 Apple calls a _quantum_ is also dependent on the clutch/QoS.
 
 It looks like the scheduler starts with what's called a worst case execution latency (WCEL) for each root bucket,
@@ -103,6 +105,8 @@ of this scheduler that will again try to achieve low latency for interactive app
 
 When the scheduler has chosen a clutch root bucket and a thread group, then it chooses an actual thread based on
 the specific priority of that thread and how much CPU it has already used.
+
+## Edge Scheduler
 
 On top of all this is something called the _Edge Scheduler_.  The Clutch scheduler seems to be work per _cluster_, that is either focused on
 efficiency cores or performance cores.  Sometimes a thread will need to be moved from one cluster to another, which it seems is

@@ -210,6 +210,8 @@ _before_ thread 1 increments.  Then thread 2 decrements that value and stores it
 increment followed by a decrement, the increment is forgotten.  This situation where the answer can depend on precise
 timing issues is called a _race condition_.
 
+## Mutexes
+
 The fix for this is usually to put guardrails around the bit of code that causes the problem, almost always something that's modifying
 shared memory.  This code is called a _critical section_.  My fix here is to use another part of the __pthreads__ API, the _mutex_ API.
 Here's the modified code:
@@ -288,4 +290,4 @@ computer scientist Edsger Dijkstra.  The concept of using a mutex to insure that
 is called _thread synchronization_.
 
 As mentioned before, when the second thread calls _pthread_mutex_lock()_, it will see that the mutex is locked and will wait until
-it is unlocked.  How does it know when to start running again?  This, again, relies on the scheduler, the topic of Episode 8.
+it is unlocked.  How does it know when to start running again?  This, again, relies on the scheduler, the topic of [Episode @sec-schedulers].

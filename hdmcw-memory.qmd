@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Memory
+# Memory {#sec-memory}
 
 Back in 1945 John von Neumann wrote a document called [_First Draft of a Report on the EDVAC_](https://web.mit.edu/STS.035/www/PDFs/edvac.pdf) [@10.1109/85.238389],
 which described a design for a new type of electronic computer.

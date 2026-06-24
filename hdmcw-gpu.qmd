@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# GPUs [WIP]
+# GPUs
 
 GPUs are now so intimately connected to the world of AI that it's hard to remember that the "G" in GPU stands for "graphics".  It might be obvious how these
 two things are connected, but let me state it outright.  GPUs are really good at doing a bunch of the same computation all at once.  So, if you're trying to render a 3D scene
@@ -24,7 +24,7 @@ code for the GPU. Also, note that while the GPUs are used for things like PyTorc
 [Note: My example code will be using Metal 3.  Apple introduced Metal 4 in 2025, but most example code I see out in the
 world is still using 3.]
 
-Although it's still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel.  We saw a version of that in [Chapter on Advanced CPU Features] in the discussion of SIMD.  The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency.  The memory situation
+Although it's still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel.  We saw a version of that in the [Episode on @sec-advanced] in the discussion of SIMD.  The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency.  The memory situation
 with respect to the GPU in my computer is different than typical GPU setups however.  In my M2 Mac, the GPU shares memory with the CPU, what Apple calls the _unified memory model_.  The more common arrangement for GPUs is that data has to be copied
 from the CPU memory to the GPU memory before computation and then copied back again after computation.  My computer gets to avoid the copying, but the GPU still has to pull data from a buffer in memory.  
 
@@ -82,7 +82,7 @@ be common in graphics processing, each step would be a stage in the pipeline.
 
 To set up the pipeline we need this code:
 
-```
+```C++
 MTL::Device* device = MTL::CreateSystemDefaultDevice();
 MTL::Library* library = device->newDefaultLibrary();
 NS::String* functionName = NS::String::string("threshold_kernel", NS::UTF8StringEncoding);
@@ -104,7 +104,7 @@ The thing that you want to run and the data it requires is encoded into a comman
 a command encoder and added to the command buffer.  The buffer is then _commited_, which tells the GPU that there's
 something to run.  This all gets code like this, san error checks [^1]:
 
-```
+```C++
 MTL::CommandQueue* commandQueue = device->newCommandQueue();
 
 MTL::CommandBuffer* commandBuffer = commandQueue->commandBuffer();
@@ -501,4 +501,4 @@ int main(int argc, const char * argv[]) {
 ```
 
 
-[^1]: Sadly, Apple does not provided developer documentation for the machine code of the GPU, so this is about as low-level as we'll get.
+[^1]: Sadly, Apple does not provide developer documentation for the machine code of the GPU, so this is about as low-level as we'll get.

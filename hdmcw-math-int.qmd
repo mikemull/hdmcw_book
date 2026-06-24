@@ -24,7 +24,7 @@ sorta weird.
 Before getting into details let's look at a new assembly language program that builds on what we started way back
 in the Registers episode.
 
-```
+```asm
 .global _start
 .align 4
 
@@ -67,7 +67,7 @@ locations.  So we end up with 1000 pseudo random numbers.  But what exactly do w
 
 If we run the program in the debugger up to the _bail_ label, we can look at the data.
 
-```
+```asm
 $ lldb ./random
 (lldb) target create "./random"
 Current executable set to '/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random' (arm64).
@@ -137,6 +137,8 @@ Hmmm, that's not quite the same.
 Anyway, the punchline here is that ARM processors (most processors) use what's called _twos complement_ to represent
 negative decimal numbers.  This is a tricky notion with a not-great name.
 
+# Two's Complement
+
 Imagine that you have 8 bits of data and you want to represent both positive and negative integers.  You'd
 pick up on the idea of using one bit to represent the sign, so that you've got 2^7 non-negative numbers (0 to 127) and 2^7
 negative numbers (-128 to -1).  You could then of course use the same values for the other 7 bits and just
@@ -190,7 +192,7 @@ positive so we can use the high-order bit as part of the value.  In lldb, the un
 
 Let's extend the program above so that after generating the numbers we also add them up.
 
-```
+```asm
 .global _start
 .align 4
 

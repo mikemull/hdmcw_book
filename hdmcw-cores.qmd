@@ -38,6 +38,8 @@ mind-bendingly complicated).
 Incidentally, one of the authors of the above paper is Kunle Olukotun, a Stanford professor who is sometimes
 called the "father of the multi-core processor".
 
+## Apple Cores
+
 Around 2000 or thereabouts, commercial chip manufacturers
 introduced chips that had multiple processing units on the same chunk of silicon as described in the paper.   At first we had _dual core_ systems and then _quad core_, but eventually
 that naming convention faded.  As of this writing Intel makes a chip with 288 cores[^4], though i don't know if that's the most.
@@ -60,6 +62,8 @@ training run:
 
 Definitely lights up the performance cores, but also lights up _everything_.  The green parts in the chart are the fraction of core time devoted to the user program code, and the red parts are the fraction used
 by operating system functions.
+
+## Clocks 
 
 I havent' been able to find anything that says exactly how the efficiency and performance cores differ, but one major difference is that 
 that they have different clock speeds, 2.42 GHz and 3.49 GHz respectively.  I haven't really talked about clocks, and probably you already

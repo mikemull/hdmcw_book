@@ -194,7 +194,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -206,25 +206,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -239,15 +239,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#clutch-scheduler" id="toc-clutch-scheduler" class="nav-link active" data-scroll-target="#clutch-scheduler"><span class="header-section-number">11.1</span> Clutch Scheduler</a></li>
+  <li><a href="#edge-scheduler" id="toc-edge-scheduler" class="nav-link" data-scroll-target="#edge-scheduler"><span class="header-section-number">11.2</span> Edge Scheduler</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Schedulers</span></h1>
+<h1 class="title"><span id="sec-schedulers" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Schedulers</span></span></h1>
 </div>
 
 
@@ -289,6 +296,8 @@ ul.task-list li input[type="checkbox"] {
 00:08.723.149   Ran _pthread_start  0x9e0edb (a.out, pid: 10456) at priority 31 for 459.42 µs.  
 00:08.723.608   Servicing an interrupt handler, and preempting _pthread_start  0x9e0edb (a.out, pid: 10456) for 5.21 µs.    </code></pre>
 <p>This tells us a few things. One is that our thread seems to be getting slices of 1/2 to 1 ms of CPU time. Also, note that the the scheduler says it’s <em>preempting</em> our thread. You’ll maybe hear the term <em>preemptive scheduling</em>, which means that the scheduler is taking some action to stop the running thread and switch to running something else. In this case it’s servicing an interrupt, which as i mentioned some time ago is a bit of code that has to run to, say, update a timer or read something from a device. Finally, notice that the narrative says that our thread is running <em>at priority 31</em>. This is a CPU priority value used by MacOS to determine how to prioritize our thread with respect to other threads.</p>
+<section id="clutch-scheduler" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="clutch-scheduler"><span class="header-section-number">11.1</span> Clutch Scheduler</h2>
 <p>Scheduling in general is one of the most complicated parts of the operating system. I’ve read through the Linux scheduler many times trying to get a feel for it, and there have been many articles written about how it works and its limitations. Not so much with the Mac OS scheduler. Fortunately, the XNU source is available, but it’s hard to follow and what i can follow is complicated.</p>
 <p>It <em>looks</em> like in Mac OS (as opposed to, say, Ios) the key scheduler is something called the <em>clutch scheduler</em>. I <em>think</em> they’re using the word <em>clutch</em> in the sense of a clutch of eggs (“a group of eggs that is laid by a bird at one time”), but i confess that’s a guess. Here’s what they say about it in the XNU repo:</p>
 <blockquote class="blockquote">
@@ -299,7 +308,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Thread Level</li>
 </ul>
 </blockquote>
-<p>Ultimately, the scheduler has to pick a thread to run on a CPU but the clutch scheduler gives more control over priority. There seems to be a separate <em>root bucket</em> for each quality of service level (QoS). The QoS is similar to the priority value i mentioned above, but has to do with the degree of interactivity. For example, if you’re running an interactive application, you want to make sure that once a thread becomes runnable it gets on the CPU quickly, but also it might not need to run for as long as, say, a background job. The slice if time that a thread gets, what Apple calls a <em>quantum</em> is also dependent on the clutch/QoS.</p>
+<p>Ultimately, the scheduler has to pick a thread to run on a CPU but the clutch scheduler gives more control over priority. There seems to be a separate <em>root bucket</em> for each quality of service level (QoS). The QoS is similar to the priority value i mentioned above, but has to do with the degree of interactivity. For example, if you’re running an interactive application, you want to make sure that once a thread becomes runnable it gets on the CPU quickly, but also it might not need to run for as long as, say, a background job. The slice of time that a thread gets, what Apple calls a <em>quantum</em> is also dependent on the clutch/QoS.</p>
 <p>It looks like the scheduler starts with what’s called a worst case execution latency (WCEL) for each root bucket, which is based on the QoS type. For example, the interactive bucket has a worst-case latency of 37.5 ms while the background bucket has a worst-case of 200 ms. The bucket from which to get the next thread is determined by the “earliest deadline first”, so as the nanoseconds pass the interactive bucket will be near it’s deadline more often, but eventually the background bucket deadline will be earliest.</p>
 <p>The document linked above describes the thread group like this:</p>
 <blockquote class="blockquote">
@@ -307,10 +316,14 @@ ul.task-list li input[type="checkbox"] {
 </blockquote>
 <p>I think this means all of the threads launched from a particular process. This level is said to use a variant of the BSD ULE scheduler<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, though i don’t know why. There’s apparently an “interactivity score” that’s part of this scheduler that will again try to achieve low latency for interactive applications.</p>
 <p>When the scheduler has chosen a clutch root bucket and a thread group, then it chooses an actual thread based on the specific priority of that thread and how much CPU it has already used.</p>
+</section>
+<section id="edge-scheduler" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="edge-scheduler"><span class="header-section-number">11.2</span> Edge Scheduler</h2>
 <p>On top of all this is something called the <em>Edge Scheduler</em>. The Clutch scheduler seems to be work per <em>cluster</em>, that is either focused on efficiency cores or performance cores. Sometimes a thread will need to be moved from one cluster to another, which it seems is the job of the Edge scheduler. To make things even more complex, the Edge scheduler can apparently use information from what Apple calls the Closed Loop Performance Controller (CLPC) <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <p>One other unique aspect of the Apple world is a software library called <strong>libdispatch</strong> or, more fancily, “Grand Central Dispatch”. This is a piece of software that sort of bridges user-space programs and the XNU kernel, so that as a programmer you can get the benefits of a system with a bunch of cores (of different types) but you don’t have to manage threads directly.</p>
 
 
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>

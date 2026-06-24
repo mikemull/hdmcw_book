@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -194,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -206,25 +240,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -239,8 +273,14 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#twos-complement" id="toc-twos-complement" class="nav-link active" data-scroll-target="#twos-complement"><span class="header-section-number">15</span> Two’s Complement</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -267,60 +307,59 @@ ul.task-list li input[type="checkbox"] {
 <p>A common thing that people want to do with computers is compute. Most of the early computers were built for the specific purpose of doing numerical computations. Mauchly and Eckert got funding for the ENIAC by claiming that it could be used to rapidly compute firing tables for the Ballistic Research Laboratory. Its first computations turned out to be computations for the atom bomb. Nobody was thinking word processors or cat pictures when they built the early machines. Even i bought my first computer to do computations since i was a chemistry student and thought i could do homework and build models of molecules. The fact that i could also play Zork and prank computer stores was purely coincidental.</p>
 <p>When we think about math and physics, we might also think calculus, differential equations, statistics– things that need real numbers with stuff after the decimal point. Computers weren’t particularly good at that type of math though in the early days. Although ENIAC used a decimal encoding, computers quickly converged on binary numbers. Dealing with naturals numbers (integers &gt;=0) is pretty simple, the only problem being that the numbers can only get so large within the boundaries of the computer’s word size or register size. Beyond the natual numbers though, things get sorta weird.</p>
 <p>Before getting into details let’s look at a new assembly language program that builds on what we started way back in the Registers episode.</p>
-<pre><code>.global _start
-.align 4
-
-_start: 
-
-    MOVZ W0, #0x8405
-    MOVK W0, #0x0808, LSL 16
-    MOV W1, #1
-    MOV W3, #111  ; Arbitrary seed value
-    ; Calculate the next state
-
-    MOV W5, #1000  ; Number of iterations
-
-    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
-    ADD X6, X6, randos@PAGEOFF
-
-loop:
-    MUL W4, W3, W0  ; R4 = a * current_state
-    ADD W3, W4, W1  ; R4 = (a * current_state) + c
-
-    STR W3, [X6]    ; Store the new value in the array
-    ADD X6, X6, #4
-    SUBS W5, W5, #1
-    B.NE loop
-
-bail:
-    mov     X0, #0      // Use 0 return code
-    mov     X16, #1     // Service command code 1 terminates this program
-    svc     0           // Call MacOS to terminate the program
-
-.data
-randos:     .fill   1000, 4, 0
-</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>.global _start</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    MOVZ W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x8405</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    MOVK W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x0808</span><span class="op">,</span> LSL <span class="dv">16</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W1<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W3<span class="op">,</span> <span class="op">#</span><span class="dv">111</span>  <span class="co">; Arbitrary seed value</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">; Calculate the next state</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">1000</span>  <span class="co">; Number of iterations</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ADRP X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGE  <span class="co">; Load the page address of randos into X6</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X6<span class="op">,</span> X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">loop:</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MUL</span> W4<span class="op">,</span> W3<span class="op">,</span> W0  <span class="co">; R4 = a * current_state</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> W3<span class="op">,</span> W4<span class="op">,</span> W1  <span class="co">; R4 = (a * current_state) + c</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">STR</span> W3<span class="op">,</span> <span class="op">[</span>X6<span class="op">]</span>    <span class="co">; Store the new value in the array</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X6<span class="op">,</span> X6<span class="op">,</span> <span class="op">#</span><span class="dv">4</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    SUBS W5<span class="op">,</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    B<span class="op">.</span>NE loop</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     X0<span class="op">,</span> <span class="op">#</span><span class="dv">0</span>      <span class="op">//</span> Use <span class="dv">0</span> return code</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     X16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>     <span class="op">//</span> Service command code <span class="dv">1</span> terminates this program</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    svc     <span class="dv">0</span>           <span class="op">//</span> Call MacOS to terminate the program</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>.<span class="bu">data</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">randos:</span>     .fill   <span class="dv">1000</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This one is a bit more complicated but here’s what’s happening. The bit at the top of the loop (the MUL and ADD) effectively implement a pseudo-random number generator (PRNG), though not a particularly good one<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. We run through this loop 1000 times, storing the 4-byte value in register W3 into memory and successive 4 byte long memory locations. So we end up with 1000 pseudo random numbers. But what exactly do we mean by “numbers”?</p>
 <p>If we run the program in the debugger up to the <em>bail</em> label, we can look at the data.</p>
-<pre><code>$ lldb ./random
-(lldb) target create "./random"
-Current executable set to '/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random' (arm64).
-(lldb) break set -n bail
-Breakpoint 1: where = random`bail, address = 0x0000000100003f94
-(lldb) run
-Process 19029 launched: '/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random' (arm64)
-Process 19029 stopped
-* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
-    frame #0: 0x0000000100003f94 random`bail
-random`bail:
--&gt;  0x100003f94 &lt;+0&gt;: mov    x0, #0x0 ; =0 
-    0x100003f98 &lt;+4&gt;: mov    x16, #0x1 ; =1 
-    0x100003f9c &lt;+8&gt;: svc    #0
-    0x100003fa0:      udf    #0x1
-Target 0: (random) stopped.
-(lldb) x &amp;randos
-0x100004000: 2c 3e b1 7b dd e6 e4 1f 52 76 6a c5 9b 97 a6 02  ,&gt;.{....Rvj.....
-0x100004010: 08 e2 44 88 29 8a 24 7e ce d6 3b e7 07 6a 5d 85  ..D.).$~..;..j].</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>$ lldb <span class="op">./</span>random</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>(lldb<span class="op">)</span> target create <span class="st">"./random"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Current executable set to <span class="st">'/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random'</span> <span class="op">(</span>arm64<span class="op">).</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>(lldb<span class="op">)</span> break set <span class="op">-</span>n bail</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Breakpoint <span class="dv">1</span><span class="op">:</span> where <span class="op">=</span> random<span class="op">`</span>bail<span class="op">,</span> address <span class="op">=</span> <span class="bn">0x0000000100003f94</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>(lldb<span class="op">)</span> run</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Process <span class="dv">19029</span> launched<span class="op">:</span> <span class="st">'/Users/mikemull/Documents/Dev/hdmcw_book/examples/random/random'</span> <span class="op">(</span>arm64<span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Process <span class="dv">19029</span> stopped</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>* thread <span class="op">#</span><span class="dv">1</span><span class="op">,</span> queue <span class="op">=</span> <span class="st">'com.apple.main-thread'</span><span class="op">,</span> stop reason <span class="op">=</span> breakpoint <span class="fl">1.1</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    frame <span class="op">#</span><span class="dv">0</span><span class="op">:</span> <span class="bn">0x0000000100003f94</span> random<span class="op">`</span>bail</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>random<span class="op">`</span>bail<span class="op">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>-&gt;  0x100003f94 &lt;+0&gt;: <span class="bu">mov</span>    x0<span class="op">,</span> <span class="op">#</span><span class="bn">0x0</span> <span class="co">; =0 </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    0x100003f98 &lt;+4&gt;: <span class="bu">mov</span>    x16<span class="op">,</span> <span class="op">#</span><span class="bn">0x1</span> <span class="co">; =1 </span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    0x100003f9c &lt;+8&gt;: svc    <span class="op">#</span><span class="dv">0</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    0x100003fa0:      udf    <span class="op">#</span><span class="bn">0x1</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>Target <span class="dv">0</span><span class="op">:</span> <span class="op">(</span>random<span class="op">)</span> stopped<span class="op">.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>(lldb<span class="op">)</span> x <span class="op">&amp;</span>randos</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>0x100004000: 2c 3e b1 <span class="dv">7</span><span class="er">b</span> <span class="dt">dd</span> e6 e4 <span class="fl">1</span><span class="bn">f</span> <span class="dv">52</span> <span class="dv">76</span> <span class="dv">6</span><span class="er">a</span> c5 <span class="dv">9</span><span class="er">b</span> <span class="dv">97</span> a6 <span class="dv">02</span>  <span class="op">,&gt;.{....</span>Rvj<span class="op">.....</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>0x100004010: 08 e2 <span class="dv">44</span> <span class="dv">88</span> <span class="dv">29</span> <span class="dv">8</span><span class="er">a</span> <span class="dv">24</span> <span class="dv">7</span><span class="er">e</span> ce d6 <span class="dv">3</span><span class="er">b</span> e7 <span class="dv">07</span> <span class="dv">6</span><span class="er">a</span> <span class="dv">5</span><span class="bn">d</span> <span class="dv">85</span>  <span class="op">..</span>D<span class="op">.).$~..</span><span class="co">;..j].</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Ok, so those are numbers and they look pretty darned random alright. Instead of hex bytes, let’s look at them as decimal numbers:</p>
 <pre><code>(lldb) x -fd &amp;randos
 0x100004000: 2075213356
@@ -350,6 +389,8 @@ Python 3.12.8
 1164605010</code></pre>
 <p>Hmmm, that’s not quite the same.</p>
 <p>Anyway, the punchline here is that ARM processors (most processors) use what’s called <em>twos complement</em> to represent negative decimal numbers. This is a tricky notion with a not-great name.</p>
+<section id="twos-complement" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Two’s Complement</h1>
 <p>Imagine that you have 8 bits of data and you want to represent both positive and negative integers. You’d pick up on the idea of using one bit to represent the sign, so that you’ve got 2^7 non-negative numbers (0 to 127) and 2^7 negative numbers (-128 to -1). You could then of course use the same values for the other 7 bits and just use the 8th bit for the sign, but this has the problem that the processor would need special circuitry to do basic arithmetic for signed numbers. Ideally you want the normal adding circuitry of the processor to compute zero if you add 50 and -50.</p>
 <p>One thing you might think of is simply to invert all of the bits. So, 50 decimal would be 00110010 and -50 would be 11001101. Let’s add those and see what we get:</p>
 <pre><code>  00110010
@@ -374,54 +415,55 @@ Python 3.12.8
 0x100004018: 3879458510
 0x10000401c: 2237491719</code></pre>
 <p>Let’s extend the program above so that after generating the numbers we also add them up.</p>
-<pre><code>.global _start
-.align 4
-
-_start: 
-
-    MOVZ W0, #0x8405
-    MOVK W0, #0x0808, LSL 16
-    MOV W1, #1
-    MOV W3, #111
-    ; Calculate the next state
-
-    MOV W5, #1000  ; Number of iterations
-
-    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
-    ADD X6, X6, randos@PAGEOFF
-
-loop:
-    MUL W4, W3, W0  ; R4 = a * current_state
-    ADD W3, W4, W1  ; R4 = (a * current_state) + c
-
-    STR W3, [X6]    ; Store the new value in the array
-    ADD X6, X6, #4
-    SUBS W5, W5, #1
-    B.NE loop
-
-    MOV W5, #10  ; Reset the counter for summation
-    ADRP X6, randos@PAGE  ; Load the page address of randos into X6
-    ADD X6, X6, randos@PAGEOFF
-
-    MOV X3, #0      ; Initialize sum to 0
-sum:
-    LDR W4, [X6], 4    ; Load the value from the array
-    ADD X3, X3, W4, SXTW  ; Add it to the sum
-    SUBS W5, W5, #1
-    B.NE sum
-
-bail:
-    mov     X0, #0      // Use 0 return code
-    mov     X16, #1     // Service command code 1 terminates this program
-    svc     0           // Call MacOS to terminate the program
-
-.data
-randos:     .fill   10, 4, 0</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>.global _start</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    MOVZ W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x8405</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    MOVK W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x0808</span><span class="op">,</span> LSL <span class="dv">16</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W1<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W3<span class="op">,</span> <span class="op">#</span><span class="dv">111</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">; Calculate the next state</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">1000</span>  <span class="co">; Number of iterations</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    ADRP X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGE  <span class="co">; Load the page address of randos into X6</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X6<span class="op">,</span> X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">loop:</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MUL</span> W4<span class="op">,</span> W3<span class="op">,</span> W0  <span class="co">; R4 = a * current_state</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> W3<span class="op">,</span> W4<span class="op">,</span> W1  <span class="co">; R4 = (a * current_state) + c</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">STR</span> W3<span class="op">,</span> <span class="op">[</span>X6<span class="op">]</span>    <span class="co">; Store the new value in the array</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X6<span class="op">,</span> X6<span class="op">,</span> <span class="op">#</span><span class="dv">4</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    SUBS W5<span class="op">,</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    B<span class="op">.</span>NE loop</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">10</span>  <span class="co">; Reset the counter for summation</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    ADRP X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGE  <span class="co">; Load the page address of randos into X6</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X6<span class="op">,</span> X6<span class="op">,</span> randos<span class="fu">@</span><span class="er">P</span>AGEOFF</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> X3<span class="op">,</span> <span class="op">#</span><span class="dv">0</span>      <span class="co">; Initialize sum to 0</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="fu">sum:</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    LDR W4<span class="op">,</span> <span class="op">[</span>X6<span class="op">],</span> <span class="dv">4</span>    <span class="co">; Load the value from the array</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ADD</span> X3<span class="op">,</span> X3<span class="op">,</span> W4<span class="op">,</span> SXTW  <span class="co">; Add it to the sum</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    SUBS W5<span class="op">,</span> W5<span class="op">,</span> <span class="op">#</span><span class="dv">1</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    B<span class="op">.</span>NE sum</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     X0<span class="op">,</span> <span class="op">#</span><span class="dv">0</span>      <span class="op">//</span> Use <span class="dv">0</span> return code</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     X16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>     <span class="op">//</span> Service command code <span class="dv">1</span> terminates this program</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    svc     <span class="dv">0</span>           <span class="op">//</span> Call MacOS to terminate the program</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>.<span class="bu">data</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="fu">randos:</span>     .fill   <span class="dv">10</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For the most part, the <strong>sum</strong> loop is simple. It loops through the random values and adds them up in the <strong>X3</strong> register. However, that <strong>ADD</strong> instruction has a weird appendage, <strong>SXTW</strong>. We want to keep the sum in the 64-bit register because it will possibly overflow a 32-bit register. However, the high-order bit used for the sign in the 32-bit value wouldn’t be the high-order bit in a 64-bit register, so we have to <em>extend</em> the 32-bit value to a 64-bit value with the same sign bit.</p>
 <p>Success! We did a math! I’ll leave verifying that the sum is correct as an exercise for the reader (I’ve always wanted to say that).</p>
 <p>You’re probably thinking that integer math is boring. It is generally used for basic things like counters, indexing, memory address calculation, etc. There are some cases where integer arithemetic is used for more complex computations using what’s called <em>fixed point</em> arithmetic. In the good ol’ days this was common (because there wasn’t an option), but now things like scientific computing, simulation, and data science use <em>floating point</em> arithmetic, which is the topic of the next episode.</p>
 
 
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -852,13 +894,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-files.html" class="pagination-link" aria-label="Files (WIP)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span>
+      <a href="./hdmcw-files.html" class="pagination-link" aria-label="Files">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-math-float.html" class="pagination-link" aria-label="Math (Floats)(WIP)">
-        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-math-float.html" class="pagination-link" aria-label="Math (Floats)">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

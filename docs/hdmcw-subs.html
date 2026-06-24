@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>16&nbsp; Subroutines [WIP] – How Does My 🤬 Computer Work</title>
+<title>16&nbsp; Subroutines – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -102,7 +136,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-subs.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-subs.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -214,7 +248,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -226,25 +260,25 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -273,7 +307,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></h1>
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></h1>
 </div>
 
 
@@ -295,53 +329,52 @@ div.csl-indent {
 <p>A subroutine is a block of code that performs a task based on some arguments and optionally returns a result.</p>
 </blockquote>
 <p>The key thing about a subroutine is that it’s used more than once, meaning that you want to apply the same logic to a different set of data or parameters. Based on what we’ve learned so far about assembly language, you might be able to imagine ways to do this. For example, we know that we can put values in registers, including the program counter. We know that we can branch to a different part of the code. The only real trick then is to figure out how to get back to the place from which we branched to the subroutine.</p>
-<p>Suppose you want some code that multiplies two numbers and then adds a third. You could repeat those instructions every time you needed them but that’s <em>not how we professionals do it</em>(LOL, except when we do). For now, just think of this fairly trivial process as a proxy for something way more complicated that would be a bummer to repeat over and over again. You could probably do something like this:</p>
-<pre><code>.global _main             // Entry point for macOS
-.align 4
-
-_main:
-  mov x0, #5
-  mov x1, #10
-  adr x4, r1
-  b multiply_and_add
-r1:
-  mov x0, #2
-  mov x1, #3
-  adr x4, r2
-  b multiply_and_add
-r2:
-
-bail:
-  mov     x16, #1         // macOS syscall for exit
-  svc     #0x80           // Invoke supervisor call
-
-multiply_and_add:
-  mul x2, x0, x1
-  add x2, x2, #3
-  br x4</code></pre>
+<p>Suppose you want some code that multiplies two numbers and then adds a third. You could repeat those instructions every time you needed them but that’s _not how we professionals do it (LOL, except when we do). For now, just think of this fairly trivial process as a proxy for something way more complicated that would be a bummer to repeat over and over again. You could probably do something like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>.global _main             <span class="op">//</span> Entry point for macOS</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_main:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x0<span class="op">,</span> <span class="op">#</span><span class="dv">5</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x1<span class="op">,</span> <span class="op">#</span><span class="dv">10</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  adr x4<span class="op">,</span> r1</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  b multiply_and_add</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">r1:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x0<span class="op">,</span> <span class="op">#</span><span class="dv">2</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x1<span class="op">,</span> <span class="op">#</span><span class="dv">3</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  adr x4<span class="op">,</span> r2</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  b multiply_and_add</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">r2:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>     x16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>         <span class="op">//</span> macOS syscall for exit</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  svc     <span class="op">#</span><span class="bn">0x80</span>           <span class="op">//</span> Invoke supervisor call</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">multiply_and_add:</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mul</span> x2<span class="op">,</span> x0<span class="op">,</span> x1</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="bu">add</span> x2<span class="op">,</span> x2<span class="op">,</span> <span class="op">#</span><span class="dv">3</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  br x4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This works, but it’s ugly. There are fancier ways to set up the return address (ie, the thing we stick in X4) but since this is a very common thing to do, there are already instructions in the ARM64 instruction set for it. The proper way to write this code would be like this:</p>
-<pre><code>.global _main             // Entry point for macOS
-.align 4
-
-_main:
-  mov x0, #5
-  mov x1, #10
-  bl multiply_and_add
-
-ma2:
-  mov x0, #2
-  mov x1, #3
-  bl multiply_and_add
-
-bail:
-  mov     x16, #1         // macOS syscall for exit
-  svc     #0x80           // Invoke supervisor call
-
-multiply_and_add:
-  mul x2, x0, x1
-  add x2, x2, #3
-  ret
-</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>.global _main             <span class="op">//</span> Entry point for macOS</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_main:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x0<span class="op">,</span> <span class="op">#</span><span class="dv">5</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x1<span class="op">,</span> <span class="op">#</span><span class="dv">10</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  bl multiply_and_add</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ma2:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x0<span class="op">,</span> <span class="op">#</span><span class="dv">2</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x1<span class="op">,</span> <span class="op">#</span><span class="dv">3</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  bl multiply_and_add</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>     x16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>         <span class="op">//</span> macOS syscall for exit</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  svc     <span class="op">#</span><span class="bn">0x80</span>           <span class="op">//</span> Invoke supervisor call</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">multiply_and_add:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mul</span> x2<span class="op">,</span> x0<span class="op">,</span> x1</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="bu">add</span> x2<span class="op">,</span> x2<span class="op">,</span> <span class="op">#</span><span class="dv">3</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">ret</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The key instructions here are <code>bl</code> and <code>ret</code>. The <code>bl</code> instruction stands for “branch with link”. It does two things: it branches to the specified address, and it saves the return address in the link register (LR, which is X30). The <code>ret</code> instruction simply branches to the address in the link register, which is where we want to return to after the subroutine is done. That saves us from needing to stick in weird labels or try to figure out the return address ourselves.</p>
 <p>If we run this with the debugger, we can see that we get the two results we expect (5 * 10 + 3 = 53, and 2 * 3 + 3 = 9).</p>
 <pre><code>$ lldb ./subs2
@@ -382,29 +415,29 @@ Target 0: (subs2) stopped.
 (lldb) re read -fd x2
       x2 = 9</code></pre>
 <p>Obviously multiply_and_add is super basic, but a subroutine could be quite complicated and it’s even possible that it would call its own subroutines, and so forth. A subroutine could even <em>call itself</em> if structured properly (recursion: see recursion). As we’ll see, those types of subroutines require more machinery, but the basic idea is the same.</p>
-<p>As in bowling, with subroutines there are <em>rules</em>. One is that you should only use certain registers for passing arguments and returning values, and you should save and restore any registers that you use in the subroutine. The ARM64 calling convention specifies that X0-X7 are used for passing arguments and returning values, and that X19-X28 are callee-saved registers (meaning that if a subroutine uses them, it must save their original values and restore them before returning). The link register (X30) is used for storing the return address. One of the best bugs I ever had was caused by forgetting to restore a register in an assembly language subroutine that was called by a C function. The result was that memory was afterward allocated in the video buffer. Ah, the good ol’d days.</p>
+<p>As in bowling, with subroutines there are <em>rules</em>. One is that you should only use certain registers for passing arguments and returning values, and you should save and restore any registers that you use in the subroutine. The ARM64 calling convention specifies that X0-X7 are used for passing arguments and returning values, and that X19-X28 are callee-saved registers (meaning that if a subroutine uses them, it must save their original values and restore them before returning). The link register (X30) is used for storing the return address. One of the best bugs I ever had was caused by forgetting to restore a register in an assembly language subroutine that was called by a C function. The result was that memory was afterward allocated in the video buffer. Ah, the good ol’ days.</p>
 <section id="the-stack" class="level2" data-number="16.1">
 <h2 data-number="16.1" class="anchored" data-anchor-id="the-stack"><span class="header-section-number">16.1</span> The Stack</h2>
-<p>Since subroutine calls can be nested and recursive, sometimes relying on registers to hold state is not enough. We need a place we can stash things that can grow abritrarily large. Remember way back in the Chapter on Memory where we talked about the <em>stack</em>? The stack sits at the top of the virtual memory space and it grows downwards. It’s called “the stack” because it’s like a stack of books: the last thing you put on top is the first thing you take off. The operations of putting something on the stack and taking it off are called “pushing” and “popping”. On my first computer with 8086 assembly language there were literal PUSH and POP instructions, but ARM64 uses a different approach. Also note that processor keeps track of the stack with a special register called the stack pointer (SP, which is X31). The stack pointer points to the top of the stack, and it is automatically updated when we push or pop values.</p>
+<p>Since subroutine calls can be nested and recursive, sometimes relying on registers to hold state is not enough. We need a place we can stash things that can grow abritrarily large. Remember way back in <a href="hdmcw-memory.html" class="quarto-xref">Episode&nbsp;<span>3</span></a> where we talked about the <em>stack</em>? The stack sits at the top of the virtual memory space and it grows downwards. It’s called “the stack” because it’s like a stack of books: the last thing you put on top is the first thing you take off. The operations of putting something on the stack and taking it off are called “pushing” and “popping”. On my first computer with 8086 assembly language there were literal PUSH and POP instructions, but ARM64 uses a different approach. Also note that processor keeps track of the stack with a special register called the stack pointer (SP, which is X31). The stack pointer points to the top of the stack, and it is automatically updated when we push or pop values.</p>
 <p>Using the stack, we could write our multiply_and_add subroutine like this:</p>
-<pre><code>.global _main             // Entry point for macOS
-.align 4
-
-_main:
-  mov x0, #5
-  mov x1, #10
-  stp x0, x1, [sp, #-0x10]!
-  bl multiply_and_add
-
-bail:
-  mov     x16, #1         // macOS syscall for exit
-  svc     #0x80           // Invoke supervisor call
-
-multiply_and_add:
-  ldp x3, x4, [sp], #0x10
-  mul x2, x3, x4
-  add x2, x2, #3
-  ret</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>.global _main             <span class="op">//</span> Entry point for macOS</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_main:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x0<span class="op">,</span> <span class="op">#</span><span class="dv">5</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span> x1<span class="op">,</span> <span class="op">#</span><span class="dv">10</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  stp x0<span class="op">,</span> x1<span class="op">,</span> <span class="op">[</span><span class="kw">sp</span><span class="op">,</span> <span class="op">#-</span><span class="bn">0x10</span><span class="op">]!</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  bl multiply_and_add</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mov</span>     x16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>         <span class="op">//</span> macOS syscall for exit</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  svc     <span class="op">#</span><span class="bn">0x80</span>           <span class="op">//</span> Invoke supervisor call</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">multiply_and_add:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  ldp x3<span class="op">,</span> x4<span class="op">,</span> <span class="op">[</span><span class="kw">sp</span><span class="op">],</span> <span class="op">#</span><span class="bn">0x10</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="bu">mul</span> x2<span class="op">,</span> x3<span class="op">,</span> x4</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="bu">add</span> x2<span class="op">,</span> x2<span class="op">,</span> <span class="op">#</span><span class="dv">3</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">ret</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The key bits here are the STP and LDP instructions. These are a bit wonky. You can see that both of them operate on pairs of registers (X0 and X1 in the first case, X3 and X4 in the second case). The STP instruction stands for “store pair”, and it stores the values of the two registers on the stack. The LDP instruction stands for “load pair”, and it loads the values from the stack into the two registers. The <code>!</code> at the end of the STP instruction means that we want to update the stack pointer after storing the values, that is we want to store the 16 bytes from the registers and then move the stack pointer down by 16 bytes so that it points at the new “top”. What seems like weirdness here comes from the fact the the ARM64 processor wants the stack to 16-byte aligned (aka “quad-word aligned”). We can also use more conventional instructions to save and retrieve values from the stack (after all, it’s just memory), but you have to be careful to keep the stack pointer aligned.</p>
 <p>In practice, we have to be more careful about saving certain registers when creating a subroutine, especially when there are multiple levels of subroutine calls.<br>
 Recall from above that the BR instruction stores the return address in the link register (LR, which is X30). If we have a subroutine that calls another subroutine, we need to make sure to save the LR before calling the next subroutine, and then restore it before returning. Similarly, the ARM64 standard uses register X29 as what’s called the frame pointer (FP). The frame pointer is used to keep track of the current stack frame, which is a section of the stack that is used for a particular subroutine call. When we enter a subroutine, we typically save the current frame pointer on the stack and then set the frame pointer to the current stack pointer. This allows us to easily access local variables and function arguments using fixed offsets from the frame pointer. When we exit the subroutine, we restore the previous frame pointer from the stack.</p>
@@ -851,13 +884,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-math-float.html" class="pagination-link" aria-label="Math (Floats)(WIP)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span>
+      <a href="./hdmcw-math-float.html" class="pagination-link" aria-label="Math (Floats)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-advanced.html" class="pagination-link" aria-label="Advanced Processor Features [WIP]">
-        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-advanced.html" class="pagination-link" aria-label="Advanced Processor Features">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
