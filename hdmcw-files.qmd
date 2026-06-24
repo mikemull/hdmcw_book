@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Files (WIP)
+# Files
 
 Files have been the key metaphor for computer data since, like, the 1950s.  Conceptually they seem
 simple: a collection of bits stored on some semi-permanent device with some associated metadata that identifies

@@ -214,7 +214,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -226,25 +226,25 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -286,11 +286,16 @@ div.csl-indent {
 
 <p>About 45 years ago i discovered computers. There were a few personal computers on the market already. The Altair 8800 had been out for a while. The Commodore PET and the Apple II were both for sale, as was the TRS-80. I personally coveted the Heathkit H8, because it seemed to me that assembling the computer from a kit was vastly more impressive than merely buying it. I couldn’t afford any of those. I religiously read the homebrew computer magazine Kilobaud Microcomputing, which advertised the Timex Sinclair 1000, the $99 computer that i was convinced i could save up for. I never did. To be honest i couldn’t even afford the subscription to the magazine.</p>
 <p>By the time i started high school in 1979 one of the shop teachers had acquired an Atari computer (probably the Atari 400). I wrote my first program on that machine, in BASIC. I stored it on a cassette tape (i swear). I stayed interested in computers through high school, but didn’t really do much serious programming until college, when i combined all of the money i had with a generous loan from my grandparents to buy one of the original IBM PCs.</p>
-<p>Even though the IBM PC was a “business” machine, there was still a strong hobbyist vibe through at least the mid 80s. Borland came out with Turbo Pascal in 1983, but you couldn’t get a cheap C compiler. You could still buy magazines on the newstand that would show you cool assembly language tricks and details about the hardware. I bought a book by Steve Ciarcia on how to build your own Z80-based computer, including how to build a power supply. You could download free utility programs from bulletin-board sites, if you could afford the 300 baud modem.</p>
+<p>Even though the IBM PC was a “business” machine, there was still a strong hobbyist vibe through the mid 80s. Borland came out with Turbo Pascal in 1983, but you couldn’t get a cheap C compiler. You could buy magazines on the newstand that would show you cool assembly language tricks and details about the hardware. I bought a book by Steve Ciarcia on how to build your own Z80-based computer, including how to build a power supply. You could download free utility programs from bulletin-board sites, if you could afford the 300 baud modem.</p>
 <p>Of course, there were professional computer programmers by that time (one college friend wrote Ada code for a defense contractor, and also was hired to write a Forth interpreter). There were mainframes running Cobol, and Digital mini-computers, and Unix machines in research environments. But in the PC world there was much less distinction between hardware and software. There were just computers. While some people were much more adept at hardware and others at software, being a “programmer” in that world implied a fairly deep knowledge of the whole system.</p>
 <p>The decades since have seen more and more abstraction, which was accelerated by the emergence of cloud platforms. Now toward the end of my career, I work with sophisticated senior engineers who have never run a compiler, let alone written the bit-twiddling assembly language that was common back in the 80s. Quite often the machine on which a developer is writing code bears little resemblance to the underlying hardware of the server to which the application is being deployed. The extent to which many programmers think about hardware might only be at the level of estimating the requirements and limits of CPU or memory.</p>
 <p>Which is cool. I mean, if it doesn’t affect the performance or function of your application why clutter your brain with the details of CPUs, memory, and device drivers? Unless you want to, which i do. I’m still fascinated by the actual, physical computing device. But in the 40 years since i bought my first PC, the devices have changed radically even if the fundamental computing architecture is similar. I will probably never achieve the level of comfort i had with those early machines, but this book is my attempt to reeducate myself about as much of the hardware and operating system as i can. I’m sharing it in the hope that there are one or two other weirdos out there who might also get a kick out of it.</p>
-<p>One difficulty with trying to figure out how your computer works is where to stop. At one time i thought i might try to dive down all the way to the circuitry, maybe even the <em>physics</em> of the CPU. Ultimately i decided to stay at a slightly higher level because (1) i don’t know much about those things and (2) once you start down that rabbit hole you can’t stop until you start talking about quantum mechanics. If you want to check out some books on computer architecture, i’d recommend <a href="https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196">Essentials of Computer Architecture</a> by Douglas Comer <span class="citation" data-cites="comer2017essentials">(<a href="references.html#ref-comer2017essentials" role="doc-biblioref">Comer 2017</a>)</span>, and <a href="https://codehiddenlanguage.com/">Code</a> by Charles Petzold <span class="citation" data-cites="petzold2000code">(<a href="references.html#ref-petzold2000code" role="doc-biblioref">Petzold 2000</a>)</span>. Also checkout CPU.Land [<span class="citation" data-cites="cpuland">Mattick (<a href="references.html#ref-cpuland" role="doc-biblioref">2023</a>)</span>), which covers a lot of the same ground that I do, but better and for Linux. I don’t have any recommendations for learning quantum mechanics.</p>
+<p>One difficulty with trying to figure out how your computer works is where to stop. At one time i thought i might try to dive down all the way to the circuitry, maybe even the <em>physics</em> of the CPU. Ultimately i decided to stay at a slightly higher level because</p>
+<ol type="1">
+<li>I don’t know much about those things, and</li>
+<li>Once you start down that rabbit hole you can’t stop until you start talking about quantum mechanics.</li>
+</ol>
+<p>If you want to check out some books on computer architecture, i’d recommend <a href="https://www.routledge.com/Essentials-of-Computer-Architecture/Comer/p/book/9781032727196">Essentials of Computer Architecture</a> by Douglas Comer <span class="citation" data-cites="comer2017essentials">(<a href="references.html#ref-comer2017essentials" role="doc-biblioref">Comer 2017</a>)</span>, and <a href="https://codehiddenlanguage.com/">Code</a> by Charles Petzold <span class="citation" data-cites="petzold2000code">(<a href="references.html#ref-petzold2000code" role="doc-biblioref">Petzold 2000</a>)</span>. Also checkout CPU Land<span class="citation" data-cites="cpuland">(<a href="references.html#ref-cpuland" role="doc-biblioref">Mattick 2023</a>)</span>, which covers a lot of the same ground that I do, but better and for Linux. I don’t have any recommendations for learning quantum mechanics.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">

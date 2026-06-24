@@ -248,7 +248,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -260,25 +260,25 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -293,8 +293,14 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#immediate-values-and-register-encoding" id="toc-immediate-values-and-register-encoding" class="nav-link active" data-scroll-target="#immediate-values-and-register-encoding"><span class="header-section-number">4.1</span> Immediate Values and Register Encoding</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -332,20 +338,20 @@ div.csl-indent {
 </blockquote>
 <p>The general purpose registers are what we’ve seen the most of so far. The program counter appears in every program, even if you don’t realize it. This register points at the current instruction in memory, so it gets automatically changed on jumps/branching. I’ll discuss the other types of registers in future episodes.</p>
 <p>The general purpose registers are unusual in this architecture, because they have both <strong>W</strong> versions and <strong>X</strong> versions. The <strong>W</strong> version is the lower 32 bits of <strong>X</strong> register, but it’s important to know that the <strong>W</strong> registers <em>act like</em> 32-bit registers, not just like the lower-order bits of the <strong>X</strong> register. For example, consider this short program:</p>
-<pre><code>; wregs.s
-
-.global _start
-.align 4
-
-_start: 
-    MOVZ W0, #0x8405
-    MOVK W0, #0x0808, LSL 16
-    MOV W3, #111
-
-    MUL W4, W3, W0
-
-    BRK #2</code></pre>
-<p>This multiplies the number 134775813 (hex 0x08088405) times 111, which gives 14960115243 (the reason for using these apparently weird numbers will eventually become clear). The two operands are put in the W0 and W3 registers and the result ends up in register W4.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">; wregs.s</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>.global _start</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">_start:</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    MOVZ W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x8405</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    MOVK W0<span class="op">,</span> <span class="op">#</span><span class="bn">0x0808</span><span class="op">,</span> LSL <span class="dv">16</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MOV</span> W3<span class="op">,</span> <span class="op">#</span><span class="dv">111</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">MUL</span> W4<span class="op">,</span> W3<span class="op">,</span> W0</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    BRK <span class="op">#</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This multiplies the number 134775813 (hex 0x08088405) times 111, which gives 14960115243 (the reason for using these apparently weird numbers will be explained later). The two operands are put in the W0 and W3 registers and the result ends up in register W4.</p>
 <p>So let’s assemble and run this program.</p>
 <pre class="console"><code>
 $ as -o wregs.o wregs.s
@@ -370,20 +376,22 @@ Target 0: (wregs) stopped.
       x4 = 0x000000007bb13e2b</code></pre>
 <p>So, as you can see the value in W4 is 0x7bb13e2b or 2075213355, just like we said.</p>
 <p>Psych! It’s not even close to what we said it would be, which is just up above there (14960115243).</p>
-<p>Given the setup, you’ve probably already figured out the problem. The binary rendering of 14960115243 is 1101111011101100010011111000101011, which you can see is 34 bits (lol, i had to copy and paste it into <strong>wc</strong>). If you lop off the top two bits you’re left with 2075213355. Interestingly, you’ll get the same number if you do the following computation in Python:</p>
+<p>Given the setup, you’ve probably already figured out the problem. The binary rendering of 14960115243 is 1101111011101100010011111000101011, which you can easily see is 34 bits <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. If you lop off the top two bits you’re left with 2075213355. Interestingly, you’ll get the same number if you do the following computation in Python:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="bn">0x08088405</span> <span class="op">*</span> <span class="dv">111</span>) <span class="op">%</span> <span class="dv">2</span><span class="op">**</span><span class="dv">32</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Do you see why? This is important. It will be on the test.</p>
 <p>Also notice that the value of <strong>X</strong> form register is the same, just with 4 bytes of zeros in the left part, which means that when we do the addition in the into W4 it’s not just putting the leftmost two bits into the upper part of the register.</p>
+<section id="immediate-values-and-register-encoding" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="immediate-values-and-register-encoding"><span class="header-section-number">4.1</span> Immediate Values and Register Encoding</h2>
 <p>There’s one oddity here that I have to clear up. You’ll notice that that <strong>W0</strong> register is loaded with two instructions (MOVZ and MOVK, which you can think of as “move and zero” and “move and keep”) in order to get one number into the register (0x08088405). The first instruction loads the lower two bytes and zeros out the rest of the register. The second instruction loads the leftmost two bytes by <em>left-shifting</em> the value (0x0808), but keeps the other bits alone. This is because a “logical immediate”, a literal number used in the instruction, can only be so many bits long. Why?</p>
 <p>To answer, let’s first disassemble our program in lldb:</p>
-<pre><code>(lldb) di -b
+<pre class="console"><code>(lldb) di -b
 wregs`start:
     0x100003fa0 &lt;+0&gt;:  0x529080a0   mov    w0, #0x8405 ; =33797 
     0x100003fa4 &lt;+4&gt;:  0x72a10100   movk   w0, #0x808, lsl #16
     0x100003fa8 &lt;+8&gt;:  0x52800de3   mov    w3, #0x6f ; =111 
     0x100003fac &lt;+12&gt;: 0x1b007c64   mul    w4, w3, w0
 -&gt;  0x100003fb0 &lt;+16&gt;: 0xd4200040   brk    #0x2</code></pre>
-<p>The hex values to the left of the instruction are the actual machine language instructions<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. You can see that all of the op codes are 4 bytes (32 bits). What this implies is that the literal data value has to fit in the opcode. For example the binary values of the opcode and the literal 0x8405 are shown below, with the value aligned:</p>
+<p>The hex values to the left of the instruction are the actual machine language instructions<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. You can see that all of the op codes are 4 bytes (32 bits). What this implies is that the literal data value has to fit in the opcode. For example the binary values of the opcode and the literal 0x8405 are shown below, with the value aligned:</p>
 <pre><code>01010010100100001000000010100000  (0x529080a0)
            1000010000000101       (0x8405)</code></pre>
 <p>So, the size of the literal has to be limited so that it can fit into the opcode. The other bits in there describe the instruction, the register and various other things that I’ll describe later.</p>
@@ -396,11 +404,13 @@ wregs`start:
 <span>“ARM Developer.”</span> 2025. 2025. <a href="https://developer.arm.com/">https://developer.arm.com/</a>.
 </div>
 </div>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p><a href="https://developer.arm.com/documentation/dui0801/l/Overview-of-AArch64-state/Registers-in-AArch64-state">Registers in AArch64 state</a> <span class="citation" data-cites="armdeveloper">(<a href="references.html#ref-armdeveloper" role="doc-biblioref"><span>“ARM Developer”</span> 2025</a>)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Note that MOVZ is an alias for MOV so when <em>disassembling</em>, MOVZ might be shown as just MOV.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>LOL, i had to copy and paste it into <strong>wc</strong><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Note that MOVZ is an alias for MOV so when <em>disassembling</em>, MOVZ might be shown as just MOV.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

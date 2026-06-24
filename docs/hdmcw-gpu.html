@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>18&nbsp; GPUs [WIP] – How Does My 🤬 Computer Work</title>
+<title>18&nbsp; GPUs – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -116,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-gpu.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-gpu.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -228,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -240,25 +260,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -289,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></h1>
+<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></h1>
 </div>
 
 
@@ -306,13 +326,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>GPUs are now so intimately connected to the world of AI that it’s hard to remember that the “G” in GPU stands for “graphics”. It might be obvious how these two things are connected, but let me state it outright. GPUs are really good at doing a bunch of things all at once. So, if you’re trying to render a 3D scene there’s a bunch of calculation that needs to happen to figure out what color/shade each pixel should be. When I first started tinkering with 3D graphics in the early 90s a ray tracer would literally calculate every pixel one at a time. Not long after than I saw a project at UNC Chapel Hill called “Pixel-Planes” that was custom hardware with a bunch of processors that could calculate many pixels at once. This works great for ray tracing case because the problem is “embarrassingly parallel”, meaning that the calculation for each pixel is independent of the others.</p>
-<p>The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems, like doing matrix multiplications. The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI.</p>
+<p>GPUs are now so intimately connected to the world of AI that it’s hard to remember that the “G” in GPU stands for “graphics”. It might be obvious how these two things are connected, but let me state it outright. GPUs are really good at doing a bunch of the same computation all at once. So, if you’re trying to render a 3D scene there’s a bunch of calculation that needs to happen to figure out what color/shade each pixel should be. When I first started tinkering with 3D graphics in the early 90s a ray tracer would literally calculate every pixel one at a time. Not long after than I saw a project at UNC Chapel Hill called “Pixel-Planes” that was custom hardware with a bunch of processors that could calculate many pixels at once. This works great for ray tracing case because the problem is “embarrassingly parallel”, meaning that the calculation for each pixel is independent of the others.</p>
+<p>The first GPUs were basically like a shrunk down version of Pixel-Planes, but programmers soon realized that they were useful for other embarassingly parallel problems, like doing matrix multiplications. The first non-graphics use of GPUs was for scientific computing, but the linear algebra used in those applications also works for deep learning, thus the connection to AI. See <span class="citation" data-cites="horowitz2024origins">(<a href="references.html#ref-horowitz2024origins" role="doc-biblioref">Horowitz et al. 2024</a>)</span> for more history of GPUs.</p>
 <section id="metal" class="level2" data-number="18.1">
 <h2 data-number="18.1" class="anchored" data-anchor-id="metal"><span class="header-section-number">18.1</span> Metal</h2>
 <p>The main reason I bring this up is because the technology that Apple provides for programming the GPUs in my computer is called “Metal”, and the description of this technology has a bit of a graphics flavor (Metal is kind of like NVidia’s CUDA or Microsoft’s D3D). For example, the language used to write GPU code is called “Metal Shader Language” (MSL). However, you can do general purpose computation. FWIW, I think Metal is a cool name and I’d totally wear that t-shirt, but it’s a little weird to switch to a different language to write code for the GPU. Also, note that while the GPUs are used for things like PyTorch, many programmers (most?) are using them to make video games faster.</p>
 <p>[Note: My example code will be using Metal 3. Apple introduced Metal 4 in 2025, but most example code I see out in the world is still using 3.]</p>
-<p>Although it’s still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel. We saw a version of that in [Chapter on Advanced CPU Features] in the discussion of SIMD. The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency. The memory situation with respect to the GPU in my computer is different than typical GPU setups however. In my M2 Mac, the GPU shares memory with the CPU, what Apple calls the <em>unified memory model</em>. The more common arrangement for GPUs is that data has to be copied from the CPU memory to the GPU memory before computation and then copied back again after computation. My computer gets to avoid the copying, but the GPU still has to pull data from a buffer in memory.</p>
+<p>Although it’s still Apple Silicon, the GPU is a separate processor whose purpose is to speed up code that does calculations in parallel. We saw a version of that in the <a href="hdmcw-advanced.html" class="quarto-xref">Episode on&nbsp;<span>17</span></a> in the discussion of SIMD. The GPU does a lot more computations in parallel than SIMD in the CPU, with the tradeoff that it has higher memory latency. The memory situation with respect to the GPU in my computer is different than typical GPU setups however. In my M2 Mac, the GPU shares memory with the CPU, what Apple calls the <em>unified memory model</em>. The more common arrangement for GPUs is that data has to be copied from the CPU memory to the GPU memory before computation and then copied back again after computation. My computer gets to avoid the copying, but the GPU still has to pull data from a buffer in memory.</p>
 <p>The GPU is usually a good choice if you have a 1, 2, or 3-dimensional grid where the computation on each element can be done independently. As mentioned above that works well for graphics because you can treat every pixel separately, and it works well for matrix multiplication because even though each element depends on multiple elements from the input matrices, the computation for each element can still be done independently once the necessary input elements are available. Maybe less intuitively it can also be used to filter data.</p>
 <p>Consider this C function:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> threshold_cpu<span class="op">(</span><span class="dt">const</span> <span class="dt">float</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">int</span><span class="op">*</span> output<span class="op">,</span> <span class="dt">float</span> threshold<span class="op">,</span> <span class="dt">int</span> length<span class="op">)</span> <span class="op">{</span></span>
@@ -349,31 +369,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>There are two categories of things here. The first is preparing our kernel to be used by metal and then adding it to the <em>pipeline state</em>. This is a confusing term but the “pipeline” is the set of functions that are going to be applied to the data. We only have one computation here so it’s not a very full pipeline, but if there were several steps as would be common in graphics processing, each step would be a stage in the pipeline.</p>
 <p>To set up the pipeline we need this code:</p>
-<pre><code>MTL::Device* device = MTL::CreateSystemDefaultDevice();
-MTL::Library* library = device-&gt;newDefaultLibrary();
-NS::String* functionName = NS::String::string("threshold_kernel", NS::UTF8StringEncoding);
-MTL::Function* kernelFunction = library-&gt;newFunction(functionName);
-// Create compute pipeline state
-MTL::ComputePipelineState* pipelineState = device-&gt;newComputePipelineState(kernelFunction, &amp;error);</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c++ code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>Device<span class="op">*</span> device <span class="op">=</span> MTL<span class="op">::</span>CreateSystemDefaultDevice<span class="op">();</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>Library<span class="op">*</span> library <span class="op">=</span> device<span class="op">-&gt;</span>newDefaultLibrary<span class="op">();</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>NS<span class="op">::</span>String<span class="op">*</span> functionName <span class="op">=</span> NS<span class="op">::</span>String<span class="op">::</span>string<span class="op">(</span><span class="st">"threshold_kernel"</span><span class="op">,</span> NS<span class="op">::</span>UTF8StringEncoding<span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>Function<span class="op">*</span> kernelFunction <span class="op">=</span> library<span class="op">-&gt;</span>newFunction<span class="op">(</span>functionName<span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Create compute pipeline state</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>ComputePipelineState<span class="op">*</span> pipelineState <span class="op">=</span> device<span class="op">-&gt;</span>newComputePipelineState<span class="op">(</span>kernelFunction<span class="op">,</span> <span class="op">&amp;</span>error<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that we haven’t really used the GPU yet. All of this code is running on the CPU.</p>
 <p>The other category of Metal commands are for setting up the the command queue and adding commands to the buffer. Again all of this is run on the CPU. The GPU is a separate processor. It has it’s own cores, within those cores it can also do SIMD like the regular CPU. Usually though, you don’t want to completely hand over control to the GPU so it has to play nice with the CPU. The coordination happens through a command queue. The GPU looks in the command queue for work to do, but it’s the CPUs job to add things to that queue. Ideally, the GPU can be kept busy without requiring the CPU to be constantly feeding it new commands.</p>
 <p>The thing that you want to run and the data it requires is encoded into a command via a command encoder and added to the command buffer. The buffer is then <em>commited</em>, which tells the GPU that there’s something to run. This all gets code like this, san error checks <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<pre><code>MTL::CommandQueue* commandQueue = device-&gt;newCommandQueue();
-
-MTL::CommandBuffer* commandBuffer = commandQueue-&gt;commandBuffer();
-        
-// Create a compute command encoder
-MTL::ComputeCommandEncoder* computeEncoder = commandBuffer-&gt;computeCommandEncoder();
-computeEncoder-&gt;setComputePipelineState(pipelineState);
-computeEncoder-&gt;setBuffer(inputBuffer, 0, 0);
-computeEncoder-&gt;setBuffer(outputBuffer, 0, 1);
-computeEncoder-&gt;setBuffer(thresholdBuffer, 0, 2);
-        
-// Dispatch threads
-computeEncoder-&gt;dispatchThreads(gridSize, threadgroupSize);
-computeEncoder-&gt;endEncoding();
-        
-commandBuffer-&gt;commit();</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c++ code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>CommandQueue<span class="op">*</span> commandQueue <span class="op">=</span> device<span class="op">-&gt;</span>newCommandQueue<span class="op">();</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>CommandBuffer<span class="op">*</span> commandBuffer <span class="op">=</span> commandQueue<span class="op">-&gt;</span>commandBuffer<span class="op">();</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Create a compute command encoder</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>MTL<span class="op">::</span>ComputeCommandEncoder<span class="op">*</span> computeEncoder <span class="op">=</span> commandBuffer<span class="op">-&gt;</span>computeCommandEncoder<span class="op">();</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>setComputePipelineState<span class="op">(</span>pipelineState<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>inputBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>outputBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>setBuffer<span class="op">(</span>thresholdBuffer<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Dispatch threads</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>dispatchThreads<span class="op">(</span>gridSize<span class="op">,</span> threadgroupSize<span class="op">);</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>computeEncoder<span class="op">-&gt;</span>endEncoding<span class="op">();</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>commandBuffer<span class="op">-&gt;</span>commit<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Some things to note here. First, we’re creating a <em>computeCommandEncoder</em> because we’re just doing compute. Second, the encoder connects the pipeline state (and so the kernel) and the data that it will operate on. Third, note again that this is a very simple example. More complex cases might have multiple command queues, multiple command buffers per queue, and multiple encoders per buffer. Finally, there’s this command <em>dispatchThreads</em>. Roughly, this determines how the work will get divided across threads, but to understand that we need to first discuss <em>threadgroups</em>.</p>
 </section>
 <section id="threadgroups" class="level2" data-number="18.2">
@@ -716,11 +736,16 @@ commandBuffer-&gt;commit();</code></pre>
 <span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-horowitz2024origins" class="csl-entry" role="listitem">
+Horowitz, Mark A., William J. Dally, Stephen W. Keckler, and David B. Kirk. 2024. <span>“The Origins of GPU Computing.”</span> <em>Communications of the ACM</em> 67 (4): 32–35. <a href="https://doi.org/10.1145/3649133">https://doi.org/10.1145/3649133</a>.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Sadly, Apple does not provided developer documentation for the machine code of the GPU, so this is about as low-level as we’ll get.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Sadly, Apple does not provide developer documentation for the machine code of the GPU, so this is about as low-level as we’ll get.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1147,8 +1172,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hdmcw-advanced.html" class="pagination-link" aria-label="Advanced Processor Features [WIP]">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span>
+      <a href="./hdmcw-advanced.html" class="pagination-link" aria-label="Advanced Processor Features">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

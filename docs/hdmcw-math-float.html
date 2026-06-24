@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>15&nbsp; Math (Floats)(WIP) – How Does My 🤬 Computer Work</title>
+<title>15&nbsp; Math (Floats) – How Does My 🤬 Computer Work</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -82,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-math-float.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hdmcw-math-float.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -194,7 +248,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files (WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Files</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -206,25 +260,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-math-float.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-subs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-advanced.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Advanced Processor Features</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hdmcw-gpu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs [WIP]</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GPUs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -239,15 +293,21 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#rounding-error" id="toc-rounding-error" class="nav-link active" data-scroll-target="#rounding-error"><span class="header-section-number">16</span> Rounding Error</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)(WIP)</span></h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Math (Floats)</span></h1>
 </div>
 
 
@@ -268,36 +328,33 @@ ul.task-list li input[type="checkbox"] {
 Again, the general idea is that the bits in a register have to somehow represent the number, but rational numbers have a vastly larger range of values. But before we get into the details, let’s dredge up uncomfortable memories of your high school science classes.</p>
 <p>You probably took a class at some point where instead of writing out numbers the normal way, like 0.0000001234, you would write them in scientific notation, like 1.234 x 10^-7. You might have also learned that the “parts” of the number in scientific notation have special names. The 1.234 is called the “mantissa” or “significand” and the -7 is called the “exponent”. This notation lets you represent both very large (both positive and negative) and very small numbers in a compact way, but also retain precision.</p>
 <p>You might know arbitrary rationals as “floating point” numbers, so called because the decimal point can “float” to different places to represent different precisions. Believe it or not back when I bought my first computer, it didn’t support that concept natively. There were two options then. The first was to use fixed point math, where you would decide that a certain number of bits would represent the fractional part. For example, you might decide that in a 16-bit number, the first 8 bits would represent the integer part, and the last 8 bits would represent the fractional part. So the number 00000001 10000000 would represent 1.5 (more on binary fractions below). The second option was to use software libraries that would implement rational number math in software. At some point after i bought my original computer, Intel introduced the 8087 math coprocessor which could be added to the system to handle floating point math. It was a separate chip that plugged into the motherboard and had its own instruction set.</p>
-<p>Now of course, essentially all computers support floating point and floating point math is part of the standard instruction set. In ARM64, there are a set of registers that are specifically designed for floating point math, and a set of instructions that operate on those registers. They use a representation for floating point numbers that like scientific notation, but in binary instead of decimal. So that this representation would be fairly consistent across different platforms, the IEEE 754 standard was developed. This standard defines the format for single precision (32-bit) and double precision (64-bit) floating point numbers. In single precision, there are 1 bit for the sign, 8 bits for the exponent, and 23 bits for the mantissa. In double precision, there are 1 bit for the sign, 11 bits for the exponent, and 52 bits for the mantissa. The exponent is stored in a “biased” form, which means that a certain value (called the bias) is added to the actual exponent to get the stored exponent. For single precision, the bias is 127, and for double precision, the bias is 1023. This allows for both positive and negative exponents. The value of a floating point number can be calculated using the following formula:</p>
+<p>Now of course, essentially all computers support floating point and floating point math is part of the standard instruction set. In ARM64, there are a set of registers that are specifically designed for floating point math, and a set of instructions that operate on those registers. They use a representation for floating point numbers that’s like scientific notation, but in binary instead of decimal. So that this representation would be fairly consistent across different platforms, the IEEE 754 standard was developed. This standard defines the format for single precision (32-bit) and double precision (64-bit) floating point numbers. In single precision, there are 1 bit for the sign, 8 bits for the exponent, and 23 bits for the mantissa. In double precision, there are 1 bit for the sign, 11 bits for the exponent, and 52 bits for the mantissa. The exponent is stored in a “biased” form, which means that a certain value (called the bias) is added to the actual exponent to get the stored exponent. For single precision, the bias is 127, and for double precision, the bias is 1023. This allows for both positive and negative exponents. The value of a floating point number can be calculated using the following formula:</p>
 <p>(-1)^sign * (1 + mantissa) * 2^(exponent - bias)</p>
 <p>The 1 that’s added to the mantissa might be confusing. Basically since all IEEE 754 floating point numbers are represented as 1.xxxxx in binary, the 1 is implicit and doesn’t need to be stored. This allows for an extra bit of precision in the mantissa.</p>
 <p>Let’s look at some of these things in the wild. Below is an example program that just multiplies two floating point constants. Note that the ARM processor has special registers for floating point, denoted by s0, s1, etc for single precision and d0, d1, etc for double precision. The instructions that operate on these registers are also different from the integer instructions. For example, to multiply two floating point numbers, you would use the FMUL instruction instead of the MUL instruction, and FADD for addition, etc.</p>
-<pre><code>.global _main             // Entry point for macOS
-.align 4
-
-_main:
-    // 1. Load the first constant into register s0
-    adrp    x0, const1@PAGE
-    ldr     s0, [x0, const1@PAGEOFF]
-
-    // 2. Load the second constant into register s1
-    adrp    x0, const2@PAGE
-    ldr     s1, [x0, const2@PAGEOFF]
-
-    // 3. Multiply: s2 = s0 * s1
-    fmul    s2, s0, s1
-bail:
-    mov     x16, #1         // macOS syscall for exit
-    svc     #0x80           // Invoke supervisor call
-
-.section __DATA,__data
-.align 3
-const1: .float 22.5
-const2: .float 4.0
-</code></pre>
-<p>Registers: We use s0, s1, and s2. These are 32-bit “Single” precision registers. If you wanted double precision, you would use d0, d1, and d2.</p>
-<p>ADRP/LDR: ARM64 cannot load a 64-bit memory address in a single instruction. adrp finds the 4KB “page” where your data lives, and the ldr offset grabs the specific value.</p>
-<p>FMUL: This is the specific instruction for Floating-point Multiplication.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode asm code-with-copy"><code class="sourceCode fasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>.global _main             <span class="op">//</span> Entry point for macOS</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">4</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">_main:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    // 1. <span class="bu">Load</span> the first constant into register s0</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    adrp    x0<span class="op">,</span> const1<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    ldr     s0<span class="op">,</span> <span class="op">[</span>x0<span class="op">,</span> const1<span class="fu">@</span><span class="er">P</span>AGEOFF<span class="op">]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    // 2. <span class="bu">Load</span> the second constant into register s1</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    adrp    x0<span class="op">,</span> const2<span class="fu">@</span><span class="er">P</span>AGE</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    ldr     s1<span class="op">,</span> <span class="op">[</span>x0<span class="op">,</span> const2<span class="fu">@</span><span class="er">P</span>AGEOFF<span class="op">]</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    // 3. Multiply<span class="op">:</span> s2 <span class="op">=</span> s0 <span class="op">*</span> s1</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">fmul</span>    s2<span class="op">,</span> s0<span class="op">,</span> s1</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">bail:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">mov</span>     x16<span class="op">,</span> <span class="op">#</span><span class="dv">1</span>         <span class="op">//</span> macOS syscall for exit</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    svc     <span class="op">#</span><span class="bn">0x80</span>           <span class="op">//</span> Invoke supervisor call</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>.<span class="bu">section</span> __DATA<span class="op">,</span>__data</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>.<span class="bu">align</span> <span class="dv">3</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">const1:</span> .float <span class="fl">22.5</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">const2:</span> .float <span class="fl">4.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We use the <strong>s0</strong>, <strong>s1</strong>, and <strong>s2</strong> registers. These are 32-bit “Single” precision registers. If you wanted double precision, you would use <strong>d0</strong>, <strong>d1</strong>, and <strong>d2</strong>. Note thatARM64 cannot load a 64-bit memory address in a single instruction. ADRP finds the 4KB “page” where your data lives, and the LDR offset grabs the specific value. FMUL is the specific instruction for Floating-point Multiplication.</p>
 <p>Let’s build this and run it in the debugger.</p>
 <pre><code>$ lldb ./multiply
 (lldb) target create "./multiply"
@@ -322,10 +379,12 @@ Target 0: (multiply) stopped.
 <p>22.5 = 0 10000011 01101000000000000000000</p>
 <p>4.0 = 0 10000001 00000000000000000000000</p>
 <p>90.0 = 0 10000101 01101000000000000000000</p>
-<p>For 22.5, the integer part is 22, which we can easily turn into binary as 10110 = (16 + 4 + 2). The fractional part is maybe a littler trickier. In decimal 0.5 is 5/10, or 1/2. To get the same fraction in binary (ie, base2) we need to express the fraction 1/2 in base 2. This is one of the easy cases since 1/2 is 2^-1, so we can just write it as 0.1 in binary. So the full number is 10110.1 in binary, which we can also write as 1.01101 x 2^4. If you look at the binary representation above you’ll see that the leftmost bits in the mantissa part are 01101. The 1 to the left of the decimal point is implicit in the IEEE 754 representation, so we don’t need to store it.</p>
+<p>For 22.5, the integer part is 22, which we can easily turn into binary as 10110 = (16 + 4 + 2). The fractional part is maybe a littler trickier. In decimal 0.5 is 5/10, or 1/2. To get the same fraction in binary (ie, base 2) we need to express the fraction 1/2 in base 2. This is one of the easy cases since 1/2 is 2^-1, so we can just write it as 0.1 in binary. So the full number is 10110.1 in binary, which we can also write as 1.01101 x 2^4. If you look at the binary representation above you’ll see that the leftmost bits in the mantissa part are 01101. Again, the 1 to the left of the decimal point is implicit in the IEEE 754 representation, so we don’t need to store it.</p>
 <p>More complex fractions are harder to explain. Take the 0.234 part from the 1.234 above. Basically we need to approximate this fraction as a sum of negative powers of 2 (1/2, 1/4, 1/8, etc). Conceptually, you can think of comparing the fraction to 1/2, then 1/4, then 1/8, etc, and if the fraction is greater than or equal to that value, you would add a 1 to the mantissa and subtract that value from the fraction. If the fraction is less than that value, you would add a 0 to the mantissa and move on to the next value. This process continues until you have filled all the bits in the mantissa or until the fraction becomes zero.</p>
 <p>Since our number is 1.01101 x 2^4 in binary, the exponent part is 4, but as you can see the bits in the exponent part do not make 4. That’s because of the bias used by the IEEE 754 standard, which means that we need to add a bias value to the actual exponent to get the stored exponent. For single precision, the bias is 127, so we need to add 127 to our exponent of 4 to get the stored exponent of 131. In binary, 131 is 10000011.</p>
 <p>It’s not surprising probably that 4.0 only has bits in the exponent part since it’s just 2^2. But maybe it’s harder to understand why 90.0 has the same mantissa as 22.5. In decimal 90.0 has no fractional part, but of course we’re not looking at a decimal number. In binary, 90.0 is 1011010.0, which we can write as 1.01101 x 2^6. Note that this differs from 22.5 only in the exponent part. One of the tricks of multiplying by a power of 2 is that it just shifts the decimal point, so the mantissa stays the same.</p>
+<section id="rounding-error" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> Rounding Error</h1>
 <p>Floating point numbers are only approximations of real numbers, with some fun consequences. Suppose for example that we change the first constant in our program to 0.1. We’d expect a result of 0.4. Let’s see what the registers show us:</p>
 <pre><code>(lldb) re read s0
       s0 = 0.100000001
@@ -334,8 +393,15 @@ Target 0: (multiply) stopped.
 (lldb) re read -fb s0
       s0 = 0b00111101110011001100110011001101</code></pre>
 <p>Our 0.1 has mysteriously turned into 0.100000001. This is because 0.1 cannot be represented exactly in binary, just like 1/3 cannot be represented exactly in decimal. The closest we can get to 0.1 in binary is 0.0001100110011001100110011001101, which is what we see in the mantissa part of the binary representation above. When we multiply this by 4, we get 0.400000006, which is the closest we can get to 0.4 in binary. Most of the time this is good enough since in a lot of computations we don’t report the results to the full precision, but it can lead to rounding errors if you’re doing a lot of computations.</p>
+<p>If you want to learn more about floating point numbers, I recommend reaading <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> by David Goldberg <span class="citation" data-cites="goldberg1991floatingpoint">(<a href="references.html#ref-goldberg1991floatingpoint" role="doc-biblioref">Goldberg 1991</a>)</span>, which is a classic paper on the topic.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-goldberg1991floatingpoint" class="csl-entry" role="listitem">
+Goldberg, David. 1991. <span>“What Every Computer Scientist Should Know about Floating-Point Arithmetic.”</span> <em>ACM Computing Surveys</em> 23. <a href="https://doi.org/10.1145/103162.103163">https://doi.org/10.1145/103162.103163</a>.
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -765,8 +831,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./hdmcw-subs.html" class="pagination-link" aria-label="Subroutines [WIP]">
-        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines [WIP]</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hdmcw-subs.html" class="pagination-link" aria-label="Subroutines">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Subroutines</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

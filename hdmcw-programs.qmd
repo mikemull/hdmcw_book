@@ -133,7 +133,7 @@ foo@bar:~$ ld -o adder adder.o -e _start -arch arm64
 
 First, it's using __-o adder__ to say that we want the executable program to be called __adder__.  Then it takes the name of our object file as input.  The option __-e \_start__ tells the linker where the executable starts, and here we need to go back to the source code.  Recall that in both of our programs so far we've had this bit at the beginning:
 
-```
+```asm
 .global _start             // Provide program starting address to linker
 .align 4
 

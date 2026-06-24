@@ -4,7 +4,7 @@ format:
     css: styles.css
 ---
 
-# Advanced Processor Features [WIP]
+# Advanced Processor Features {#sec-advanced}
 
 The first microprocessors I worked on, mostly the Intel 8086 and Z80s, were marvels of technology.  I didn't understand how they were made and I
 had pretty vague notions of the basic electronics (I bought a book in the early 80s by the legendary Steve Ciarcia called "Build Your Own Z80 Computer", but I 
@@ -53,7 +53,7 @@ vec_b:  .float  1.0,  2.0,  3.0,  4.0
 
 ```
 
-The Neon unit has 128-bit registers rather than the normal 64-bit registers.  These registers are divided into "lanes" based on the suffix added to the register name.  Here for example, the v0, v1, and v2 registers use the suffix .4s, which means that each register is treated as 4 separate lanes of 32 bits each.  The fadd instruction then adds the corresponding lanes of v0 and v1 together and puts the result in the corresponding lanes of v2.  So, in this case, the first lane of v2 will be 11.0 (10.0 + 1.0), the second lane will be 22.0 (20.0 + 2.0), and so on.  The options for the lane suffixes include everything from 16 half-word data elements to 2 
+The Neon unit has 128-bit registers rather than the normal 64-bit registers.  These registers are divided into "lanes" based on the suffix added to the register name.  Here for example, the __v0__, __v1__, and __v2__ registers use the suffix .4s, which means that each register is treated as 4 separate lanes of 32 bits each.  The fadd instruction then adds the corresponding lanes of __v0__ and __v1__ together and puts the result in the corresponding lanes of __v2__.  So, in this case, the first lane of __v2__ will be 11.0 (10.0 + 1.0), the second lane will be 22.0 (20.0 + 2.0), and so on.  The options for the lane suffixes include everything from 16 half-word data elements to 2 
 double-word values (probably double precision floats).
 
 As written here it looks the same instructions we've seen before but operation on different registers.  But the instruction are really specific to the Neon unit.

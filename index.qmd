@@ -24,6 +24,9 @@ Since this is a project of self-directed learning undertaken by someone who's no
 system expert, there will probably be mistakes and oversimplifications.  If you have constructive comments, or non-constructive 
 criticisms that i might find amusing, please feel free to <a href="https://giraffasaur.us/coords">contact me</a>.
 
+_Note:  This project was started in 2024, when LLM tools were still in their infancy.  I have used LLMs to help me understand some things, but i have not used them to write any of the text of this book (which is likely to be obvious).
+I did however, use tools like Claude Code to generate some of the later example code, most notably the stuff related to SIMD
+and GPU programming._
 
 This is a Quarto book.
 
